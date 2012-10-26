@@ -5,7 +5,7 @@ if __name__ == "__main__":
     pass
 
 # each person or alien in the game is represented by this class
-class Person(pygame.sprite.Sprite):
+class Person():
 
     def __init__(self, sheet_file, pos, anim_delay, move_delay):
 
@@ -25,8 +25,6 @@ class Person(pygame.sprite.Sprite):
 
         frames = self._frames
         
-        pygame.sprite.Sprite.__init__(self)
-
         # be sure to convert_alpha() on the original sprite sheet
         self.sheet = pygame.image.load(sheet_file).convert_alpha()
         sheet = self.sheet
