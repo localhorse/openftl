@@ -8,7 +8,8 @@ if __name__ == "__main__":
 
     window = pygame.display.set_mode((640, 480))
     # use os.path.join()
-    human = Person("/home/mothra/Projects/openftl/resources/img/people/engi_player_green.png")
+    human = Person("./resources/img/people/human_player_green.png", (100, 100), 150, 20)
+    rock = Person("./resources/img/people/rock_player_green.png", (150, 150), 300, 40)
 
     clock = pygame.time.Clock()
 
@@ -34,6 +35,7 @@ if __name__ == "__main__":
                     human.seek_pos(event.pos)
 
         human.draw(window)
+        rock.draw(window)
         pygame.display.flip()
         human.animate(pygame.time.get_ticks())
         human.move(pygame.time.get_ticks())

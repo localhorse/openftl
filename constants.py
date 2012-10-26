@@ -15,7 +15,4 @@ MAX_ANIM_FRAME = 3
 # it) in init() because there will be different speeds for different
 # Persons.
 
-ANIM_DELAY = 150
-MOVE_DELAY = 20
-
 SPEED = 1

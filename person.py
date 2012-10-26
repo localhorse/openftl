@@ -7,19 +7,21 @@ if __name__ == "__main__":
 # each person or alien in the game is represented by this class
 class Person(pygame.sprite.Sprite):
 
-    _frames = []
-    _dir = DOWN
-    _next_animate = 0
-    _anim_frame = 0
-    _next_move = 0
+    def __init__(self, sheet_file, pos, anim_delay, move_delay):
 
-    _cur_x = 100
-    _cur_y = 100
+        self._anim_delay = anim_delay
+        self._move_delay = move_delay
+        self._frames = []
+        self._dir = DOWN
+        self._next_animate = 0
+        self._anim_frame = 0
+        self._next_move = 0
 
-    _dst_x = _cur_x
-    _dst_y = _cur_y
-
-    def __init__(self, sheet_file):
+        x, y = pos
+        self._cur_x = x
+        self._cur_y = y
+        self._dst_x = self._cur_x
+        self._dst_y = self._cur_y
 
         frames = self._frames
         
@@ -53,7 +55,7 @@ class Person(pygame.sprite.Sprite):
                 elif self._cur_y < self._dst_y:
                     self._cur_y += SPEED
                     self.walk_down()
-            self._next_move = cur_time + MOVE_DELAY
+            self._next_move = cur_time + self._move_delay
         
     def animate(self, cur_time):
         if self._next_animate < cur_time:
@@ -63,7 +65,7 @@ class Person(pygame.sprite.Sprite):
                     self._anim_frame = 0
             else:
                 self._anim_frame = 0
-            self._next_animate = cur_time + ANIM_DELAY
+            self._next_animate = cur_time + self._anim_delay
 
     # this is just for debugging, to draw any arbitrary frame from our
     # sprite
