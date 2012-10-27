@@ -9,7 +9,7 @@ class Person():
 
     def __init__(self, species, pos, anim_delay, move_delay):
 
-        self._selected = True
+        self._selected = False
 
         self._anim_delay = anim_delay
         self._move_delay = move_delay
@@ -97,10 +97,22 @@ class Person():
         x_pos, y_pos = pos
         # make sure the actual guy ends up pretty much dead center in
         # the mouse click
-        self._dst_x = self._round_speed(x_pos - SPRITE_WIDTH / 2)
-        self._dst_y = self._round_speed(y_pos - SPRITE_HEIGHT / 2)
+        if self._selected:
+            self._dst_x = self._round_speed(x_pos - SPRITE_WIDTH / 2)
+            self._dst_y = self._round_speed(y_pos - SPRITE_HEIGHT / 2)
 
     # makes sure we round the x and y to the proper increment (based
     # on speed) so we don't get stuck running back and forth
     def _round_speed(self, x):
         return divmod(x, SPEED)[0] * SPEED
+
+    def bound_box(self):
+        # (hopefully) return a rect with the actual drawn character in
+        # the center
+        return pygame.Rect(self._cur_x, self._cur_y, SPRITE_WIDTH, SPRITE_HEIGHT)
+
+    def toggle_selected(self):
+        if self._selected:
+            self._selected = False
+        else:
+            self._selected = True

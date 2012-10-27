@@ -31,6 +31,12 @@ if __name__ == "__main__":
                 # right mouse button
                 if event.button == 3:
                     human.seek_pos(event.pos)
+                    rock.seek_pos(event.pos)
+                elif event.button == 1:
+                    if human.bound_box().collidepoint(event.pos):
+                        human.toggle_selected()
+                    elif rock.bound_box().collidepoint(event.pos):
+                        rock.toggle_selected()                        
 
         # this is kind of ridiculous performance wise, we need to
         # reimplement code that will draw only portions of the
@@ -44,7 +50,9 @@ if __name__ == "__main__":
         pygame.display.flip()
         
         human.animate(pygame.time.get_ticks())
+        rock.animate(pygame.time.get_ticks())
         human.move(pygame.time.get_ticks())
+        rock.move(pygame.time.get_ticks())
 
         clock.tick()
 
