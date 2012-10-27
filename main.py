@@ -17,6 +17,8 @@ if __name__ == "__main__":
 
     clock = pygame.time.Clock()
 
+    kestral.draw(window)
+
     while True:
 
         for event in pygame.event.get():
@@ -30,10 +32,14 @@ if __name__ == "__main__":
                 if event.button == 3:
                     human.seek_pos(event.pos)
 
-        kestral.draw(window)
+        # erase the human
+        kestral.draw(window, human.cur_pos(), human.get_rect())
+        
         human.draw(window)
         rock.draw(window)
+        
         pygame.display.flip()
+        
         human.animate(pygame.time.get_ticks())
         human.move(pygame.time.get_ticks())
 
