@@ -25,14 +25,6 @@ if __name__ == "__main__":
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
-                elif event.key == pygame.K_a:
-                    human.walk_left()
-                elif event.key == pygame.K_d:
-                    human.walk_right()
-                elif event.key == pygame.K_w:
-                    human.walk_up()
-                elif event.key == pygame.K_s:
-                    human.walk_down()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # right mouse button
                 if event.button == 3:
