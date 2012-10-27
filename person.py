@@ -7,11 +7,13 @@ if __name__ == "__main__":
 # each person or alien in the game is represented by this class
 class Person():
 
-    def __init__(self, sheet_file, pos, anim_delay, move_delay):
+    def __init__(self, species, pos, anim_delay, move_delay):
 
         self._anim_delay = anim_delay
         self._move_delay = move_delay
         self._frames = []
+        frames = self._frames
+
         self._dir = DOWN
         self._next_animate = 0
         self._anim_frame = 0
@@ -23,11 +25,12 @@ class Person():
         self._dst_x = self._cur_x
         self._dst_y = self._cur_y
 
-        frames = self._frames
-        
+        # use os.join, also make sure species is valid
+        self._sheet_file = "./resources/img/people/%s_player_green.png" % species
+
         # be sure to convert_alpha() on the original sprite sheet
-        self.sheet = pygame.image.load(sheet_file).convert_alpha()
-        sheet = self.sheet
+        self._sheet = pygame.image.load(self._sheet_file).convert_alpha()
+        sheet = self._sheet
         
         # go through each column in the top row of the sprite sheet,
         # and load each walking animation
@@ -35,8 +38,8 @@ class Person():
 
             temp_rect = pygame.Rect((index * SPRITE_WIDTH, 0),
                                     (SPRITE_WIDTH, SPRITE_HEIGHT))
-            frames.append(pygame.Surface(temp_rect.size).convert())
-            frames[len(frames) - 1].blit(sheet, (0, 0), temp_rect)
+            frames.append(pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha())
+            frames[len(frames) - 1].blit(sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
 
     def move(self, cur_time):
         if self._next_move < cur_time:
@@ -68,7 +71,7 @@ class Person():
     # this is just for debugging, to draw any arbitrary frame from our
     # sprite
     def draw_frame(self, surface, frame_num):
-        surface.blit(self._frames[frame_num], (0, 0))
+        surface.blit(self._frames[frame_num], (0, 0), special_flags=BLEND_TYPE)
 
     def walk_left(self):
         self._dir = LEFT
@@ -83,7 +86,7 @@ class Person():
         self._dir = DOWN
 
     def draw(self, surface):
-        surface.blit(self._frames[self._dir * 4 + self._anim_frame], (self._cur_x, self._cur_y))
+        surface.blit(self._frames[self._dir * 4 + self._anim_frame], (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
 
     def seek_pos(self, pos):
         x_pos, y_pos = pos

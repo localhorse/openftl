@@ -1,3 +1,5 @@
+import pygame
+
 SPRITE_WIDTH =  35
 SPRITE_HEIGHT = 35
 SPRITE_COLS = 16
@@ -16,3 +18,6 @@ MAX_ANIM_FRAME = 3
 # Persons.
 
 SPEED = 1
+
+##BLEND_TYPE = pygame.BLEND_SUB
+BLEND_TYPE = 0

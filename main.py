@@ -2,14 +2,18 @@ import sys
 import time
 import pygame
 from person import Person
+from ship import Ship
 from constants import *
 
 if __name__ == "__main__":
 
-    window = pygame.display.set_mode((640, 480))
-    # use os.path.join()
-    human = Person("./resources/img/people/human_player_green.png", (100, 100), 150, 20)
-    rock = Person("./resources/img/people/rock_player_green.png", (150, 150), 300, 40)
+    window = pygame.display.set_mode((800, 600))
+    window.convert_alpha()
+    window.set_alpha(0)
+
+    human = Person("human", (250, 250), 150, 20)
+    rock = Person("rock", (300, 300), 300, 40)
+    kestral = Ship("kestral", (50, 50))
 
     clock = pygame.time.Clock()
 
@@ -34,6 +38,7 @@ if __name__ == "__main__":
                 if event.button == 3:
                     human.seek_pos(event.pos)
 
+        kestral.draw(window)
         human.draw(window)
         rock.draw(window)
         pygame.display.flip()
