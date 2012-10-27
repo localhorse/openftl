@@ -32,8 +32,11 @@ if __name__ == "__main__":
                 if event.button == 3:
                     human.seek_pos(event.pos)
 
-        # erase the human
-        kestral.draw(window, human.cur_pos(), human.get_rect())
+        # this is kind of ridiculous performance wise, we need to
+        # reimplement code that will draw only portions of the
+        # background
+        window.fill((0, 0, 0))
+        kestral.draw(window)
         
         human.draw(window)
         rock.draw(window)

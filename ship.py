@@ -14,12 +14,6 @@ class Ship():
         self._hull_file = "./resources/img/ship/%s_base.png" % (type)
         self._hull_img = pygame.image.load(self._hull_file).convert_alpha()
 
-    def draw(self, surface, pos=0, rect=0):
-        if rect:
-            # only draw part of the ship
-            surface.blit(self._hull_img, pos, rect, special_flags=BLEND_TYPE)
-            print("*** %s ***" % rect)
-        else:
-            # draw it all
-            surface.blit(self._hull_img, self._pos, special_flags=BLEND_TYPE)
+    def draw(self, surface):
+        surface.blit(self._hull_img, self._pos, special_flags=BLEND_TYPE)
         

@@ -88,20 +88,6 @@ class Person():
     def draw(self, surface):
         surface.blit(self._frames[self._dir * 4 + self._anim_frame], (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
 
-    def get_rect(self):
-        # Surface.get_rect() returns basically the size of the
-        # frame... I guess we could easily use the SPRITE_WIDTH and
-        # SPRITE_HEIGHT in the constants...
-        x1, y1, x2, y2 = self._frames[self._dir * 4 + self._anim_frame].get_rect()
-        x1 += self._cur_x
-        x2 += self._cur_x
-        ##y1 += self._cur_y
-        ##y2 += self._cur_y
-        return pygame.Rect(x1, y1, x2, y2)
-
-    def cur_pos(self):
-        return (self._cur_x, self._cur_y)
-
     def seek_pos(self, pos):
         x_pos, y_pos = pos
         # make sure the actual guy ends up pretty much dead center in
