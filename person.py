@@ -9,6 +9,8 @@ class Person():
 
     def __init__(self, species, pos, anim_delay, move_delay):
 
+        self._selected = True
+
         self._anim_delay = anim_delay
         self._move_delay = move_delay
         self._frames = []
@@ -26,21 +28,23 @@ class Person():
         self._dst_y = self._cur_y
 
         # use os.join, also make sure species is valid
-        self._sheet_file = "./resources/img/people/%s_player_green.png" % species
+        self._green_file = "./resources/img/people/%s_player_green.png" % species
+        self._yellow_file = "./resources/img/people/%s_player_yellow.png" % species
 
         # be sure to convert_alpha() on the original sprite sheet
-        self._sheet = pygame.image.load(self._sheet_file).convert_alpha()
-        sheet = self._sheet
-        
+        self._green_sheet = pygame.image.load(self._green_file).convert_alpha()
+        self._yellow_sheet = pygame.image.load(self._yellow_file).convert_alpha()
         # go through each column in the top row of the sprite sheet,
         # and load each walking animation
         for index in range(0, SPRITE_COLS):
 
             temp_rect = pygame.Rect((index * SPRITE_WIDTH, 0),
                                     (SPRITE_WIDTH, SPRITE_HEIGHT))
-            frames.append(pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha())
-            frames[len(frames) - 1].blit(sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
-
+            frames.append((pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha(), pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha()))
+            yellow_surf, green_surf = frames[len(frames) - 1]
+            yellow_surf.blit(self._yellow_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
+            green_surf.blit(self._green_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
+            
     def move(self, cur_time):
         if self._next_move < cur_time:
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
@@ -68,11 +72,6 @@ class Person():
                 self._anim_frame = 0
             self._next_animate = cur_time + self._anim_delay
 
-    # this is just for debugging, to draw any arbitrary frame from our
-    # sprite
-    def draw_frame(self, surface, frame_num):
-        surface.blit(self._frames[frame_num], (0, 0), special_flags=BLEND_TYPE)
-
     def walk_left(self):
         self._dir = LEFT
 
@@ -86,7 +85,13 @@ class Person():
         self._dir = DOWN
 
     def draw(self, surface):
-        surface.blit(self._frames[self._dir * 4 + self._anim_frame], (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
+        yellow_frame, green_frame = self._frames[self._dir * 4 + self._anim_frame]
+        if self._selected:
+            temp_frame = green_frame
+        else:
+            temp_frame = yellow_frame
+            
+        surface.blit(temp_frame, (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
 
     def seek_pos(self, pos):
         x_pos, y_pos = pos
