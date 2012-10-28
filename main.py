@@ -5,6 +5,7 @@ from person import Person
 from ship import Ship
 from constants import *
 from selection import SelectionRect
+from pygame.locals import *
 
 if __name__ == "__main__":
 
@@ -32,17 +33,30 @@ if __name__ == "__main__":
     draw_selection = False
     selection = None
 
+    # move this somewhere else afterwards --FIXME
+    rshift_pressed = False
+    lshift_pressed = False
+
     while True:
 
         clock.tick(60)
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+            elif event.type == KEYDOWN:
+                if event.key ==  K_RSHIFT:
+                    rshift_pressed = True
+                if event.key == K_LSHIFT:
+                    lshift_pressed = True
+                if event.key == K_ESCAPE:
                     sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == KEYUP:
+                if event.key == K_RSHIFT:
+                    rshift_pressed = False
+                if event.key == K_LSHIFT:
+                    lshift_pressed = False
+            elif event.type == MOUSEBUTTONDOWN:
                 # right mouse button
                 if event.button == 3:
                     for alien in [human, rock, slug]:
@@ -51,16 +65,14 @@ if __name__ == "__main__":
                     if not select_on:
                         select_on = True
                         selection = SelectionRect(window, event.pos, col=(0, 255, 0))
-            elif event.type == pygame.MOUSEMOTION:
+            elif event.type == MOUSEMOTION:
                 if select_on:
                     rect = selection.updateRect(event.pos)
-                    ##selection.draw(window)
                     draw_selection = True
-            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            elif event.type == MOUSEBUTTONUP and event.button == 1:
                 if select_on:
                     select_on = False
                     rect = selection.updateRect(event.pos)
-                    ##selection.hide(window)
                     draw_selection = False
                     for alien in [human, rock, slug]:
                         if alien.bound_box().colliderect(rect):
@@ -68,7 +80,6 @@ if __name__ == "__main__":
                         else:
                             alien.deselect()
 
-        
         window.fill((0, 0, 0))
         kestral.draw(window)
 

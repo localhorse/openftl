@@ -1,2 +1,8 @@
-- While shift is being held, selecting something should not deselect
-  anything currently selected...
+- While shift is being held, clicking an entity that is not selected
+  should not deselect anything _else_ currently selected.
+
+- While shift is being held, clicking an already selected entity
+  should deselect it.
+
+-
+
