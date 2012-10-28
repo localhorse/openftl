@@ -35,6 +35,9 @@ if __name__ == "__main__":
     rshift_pressed = False
     lshift_pressed = False
 
+    # just testing something (remove) --FIXME
+    kestrel.load_rooms()    
+
     while True:
 
         clock.tick(60)
