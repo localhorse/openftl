@@ -4,8 +4,12 @@ from constants import *
 if __name__ == "__main__":
     pass
 
+# WARNING: since Person was converted to inherit stuff from Sprite
+# class, there isn't any timing information being used, species
+# specified speeds are being ignored, etc. --FIXME
+
 # each person or alien in the game is represented by this class
-class Person():
+class Person(pygame.sprite.Sprite):
 
     def __init__(self, species, pos, anim_delay, move_delay):
 
@@ -17,9 +21,7 @@ class Person():
         frames = self._frames
 
         self._dir = DOWN
-        self._next_animate = 0
         self._anim_frame = 0
-        self._next_move = 0
 
         x, y = pos
         self._cur_x = x
@@ -27,9 +29,7 @@ class Person():
         self._dst_x = self._cur_x
         self._dst_y = self._cur_y
 
-        self._update_required = False
-
-        self._bg_copy = None
+        pygame.sprite.Sprite.__init__(self)
 
         # use os.join, also make sure species is valid --FIXME
         self._selected_file = "./resources/img/people/%s_player_green.png" % species
@@ -47,46 +47,59 @@ class Person():
             unselected_surf, selected_surf = frames[len(frames) - 1]
             unselected_surf.blit(self._unselected_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
             selected_surf.blit(self._selected_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
-            
-    def move(self, cur_time):
-        if self._next_move < cur_time:
-            self._update_required = True
-            if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
-                if self._cur_x > self._dst_x:
-                    self._cur_x -= SPEED
-                    self._dir = LEFT
-                elif self._cur_x < self._dst_x:
-                    self._cur_x += SPEED
-                    self._dir = RIGHT
-                elif self._cur_y > self._dst_y:
-                    self._cur_y -= SPEED
-                    self._dir = UP
-                elif self._cur_y < self._dst_y:
-                    self._cur_y += SPEED
-                    self._dir = DOWN
-            self._next_move = cur_time + self._move_delay
-        
-    def animate(self, cur_time):
-        if self._next_animate < cur_time:
-            self._update_required = True
-            if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
-                self._anim_frame += 1
-                if self._anim_frame > MAX_ANIM_FRAME:
-                    self._anim_frame = 0
-            else:
-                self._anim_frame = 0
-            self._next_animate = cur_time + self._anim_delay
 
-    def draw(self, surface):
+        # discarding some values as we just want basically the first
+        # image in here to begin with, then setting Sprite specific
+        # values
+        (self.image, _) = frames[0]
+        (temp_frame, _) = frames[0]
+        self.rect = temp_frame.get_rect()
+            
+    def update(self):
+        self._move()
+        self._animate()
+        self._cur_frame()
+
+    def _move(self):
+
+        if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
+
+            if self._cur_x > self._dst_x:
+                self._cur_x -= SPEED
+                self._dir = LEFT
+            elif self._cur_x < self._dst_x:
+                self._cur_x += SPEED
+                self._dir = RIGHT
+
+            if self._cur_y > self._dst_y:
+                self._cur_y -= SPEED
+                self._dir = UP
+            elif self._cur_y < self._dst_y:
+                self._cur_y += SPEED
+                self._dir = DOWN
+
+        self.rect = self.bound_box()
+            
+    def _animate(self):
+        if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
+            self._anim_frame += 1
+            if self._anim_frame > MAX_ANIM_FRAME:
+                self._anim_frame = 0
+        else:
+            self._anim_frame = 0
+
+    def _cur_frame(self):
+
         unselected_frame, selected_frame = self._frames[self._dir * 4 + self._anim_frame]
+
         if self._selected:
             temp_frame = selected_frame
         else:
             temp_frame = unselected_frame
-            
-        if self._update_required:
-            surface.blit(temp_frame, (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
-            self._update_required = False
+
+        # hopefully Sprite will use this as the current frame?
+        self.image = temp_frame
+        
 
     def seek_pos(self, pos):
         x_pos, y_pos = pos
@@ -121,3 +134,5 @@ class Person():
 
     def get_pos(self):
         return (self._cur_x, self._cur_y)
+
+

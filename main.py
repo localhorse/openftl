@@ -8,6 +8,8 @@ from selection import SelectionRect
 
 if __name__ == "__main__":
 
+    clock = pygame.time.Clock()
+
     window = pygame.display.set_mode((800, 600))
     window.convert_alpha()
     window.set_alpha(0)
@@ -16,6 +18,8 @@ if __name__ == "__main__":
     rock = Person("rock", (300, 300), 300, 40)
     slug = Person("slug", (325, 275), 100, 15)
 
+    all_chars = pygame.sprite.RenderPlain((human, rock, slug))
+
     kestral = Ship("kestral", (50, 50))
 
     clock = pygame.time.Clock()
@@ -23,8 +27,11 @@ if __name__ == "__main__":
     kestral.draw(window)
 
     select_on = False
+    first_iter = True
 
     while True:
+
+        clock.tick(60)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -56,19 +63,9 @@ if __name__ == "__main__":
                         else:
                             alien.deselect()
 
-        for alien in [human, rock, slug]:
-            alien.move(pygame.time.get_ticks())
 
-        for alien in [human, rock, slug]:
-            alien.animate(pygame.time.get_ticks())
-
-        # erase the sprites here, then save a copy of the empty
-        # backgrounds, THEN draw --FIXME
-
-        for alien in [human, rock, slug]:
-            alien.draw(window)
-
+        all_chars.update()
+        all_chars.draw(window)
         pygame.display.flip()
         
-        clock.tick()
 
