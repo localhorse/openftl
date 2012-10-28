@@ -21,7 +21,20 @@ class Ship(pygame.sprite.Sprite):
         (self._ship_width, self._ship_height, _, _) = self.image.get_rect()
         self.rect = self.bounding_box()
 
+        # not sure what the purpose of the offsets are?
         self._rooms_file = "./resources/data/%s.txt" % ship_type
+        self._x_offset = 0
+        self._y_offset = 2
+
+        # this is actually going to be loaded from a file as well
+        self._rooms = [{'id': 0, 'x': 14, 'y': 2, 'width': 1, 'height': 2, 'img': pygame.Surface(pygame.Rect((0, 0, TILE_WIDTH, TILE_HEIGHT)).size, flags=pygame.SRCALPHA).convert_alpha()}]
+        self._rooms[0]['img'].fill(GRID_COLOR)
+        x1, y1, x2, y2 = self._rooms[0]['img'].get_rect()
+        x1 += 1
+        y1 += 1
+        x2 -= 1
+        y2 -= 1
+        pygame.draw.rect(self._rooms[0]['img'], ROOM_COLOR, pygame.Rect((x1, y1, x2, y2)))
 
     def bounding_box(self):
         # return a rect with the actual drawn character in the center
@@ -30,5 +43,25 @@ class Ship(pygame.sprite.Sprite):
         return pygame.Rect(self._cur_x, self._cur_y, self._ship_width, self._ship_height)
 
     def update(self):
-        # we'd update the position here if it moved
-        pass
+
+        # make sure any added rooms get drawn
+        for room in self._rooms:
+
+            for index in range(0, room['width']):
+                temp_x = (room['x'] + self._x_offset + index) * TILE_WIDTH
+                temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT
+
+                temp_x += self._cur_x
+                temp_y += self._cur_y
+
+                self._hull_img.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+
+            for index in range(0, room['height']):
+                temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
+                temp_y = (room['y'] + self._y_offset + index) * TILE_HEIGHT
+                
+                temp_x += self._cur_x
+                temp_y += self._cur_y
+                
+                self._hull_img.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+
