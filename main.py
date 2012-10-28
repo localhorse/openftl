@@ -4,6 +4,7 @@ import pygame
 from person import Person
 from ship import Ship
 from constants import *
+from selection import SelectionRect
 
 if __name__ == "__main__":
 
@@ -13,12 +14,15 @@ if __name__ == "__main__":
 
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)
-    slug = Person("slug", (325, 275), 100, 20)
+    slug = Person("slug", (325, 275), 100, 15)
+
     kestral = Ship("kestral", (50, 50))
 
     clock = pygame.time.Clock()
 
     kestral.draw(window)
+
+    select_on = False
 
     while True:
 
@@ -31,42 +35,43 @@ if __name__ == "__main__":
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # right mouse button
                 if event.button == 3:
-                    human.seek_pos(event.pos)
-                    rock.seek_pos(event.pos)
-                    slug.seek_pos(event.pos)
+                    for alien in [human, rock, slug]:
+                        alien.seek_pos(event.pos)
                 elif event.button == 1:
-                    if human.bound_box().collidepoint(event.pos):
-                        human.select()
-                        rock.deselect()
-                        slug.deselect()
-                    elif rock.bound_box().collidepoint(event.pos):
-                        rock.select()
-                        human.deselect()
-                        slug.deselect()
-                    elif slug.bound_box().collidepoint(event.pos):
-                        slug.select()
-                        human.deselect()
-                        rock.deselect()
+                    if not select_on:
+                        select_on = True
+                        selection = SelectionRect(window, event.pos, col=(0, 255, 0))
+            elif event.type == pygame.MOUSEMOTION:
+                if select_on:
+                    rect = selection.updateRect(event.pos)
+                    selection.draw(window)
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                if select_on:
+                    select_on = False
+                    rect = selection.updateRect(event.pos)
+                    selection.hide(window)
+                    for alien in [human, rock, slug]:
+                        if alien.bound_box().colliderect(rect):
+                            alien.select()
+                        else:
+                            alien.deselect()
 
         # this is kind of ridiculous performance wise, we need to
         # reimplement code that will draw only portions of the
         # background
-        window.fill((0, 0, 0))
-        kestral.draw(window)
+        ##window.fill((0, 0, 0))
+        ##kestral.draw(window)
         
-        human.draw(window)
-        rock.draw(window)
-        slug.draw(window)
+        for alien in [human, rock, slug]:
+            alien.draw(window)
         
         pygame.display.flip()
         
-        human.animate(pygame.time.get_ticks())
-        rock.animate(pygame.time.get_ticks())
-        slug.animate(pygame.time.get_ticks())
-        
-        human.move(pygame.time.get_ticks())
-        rock.move(pygame.time.get_ticks())
-        slug.move(pygame.time.get_ticks())
+        for alien in [human, rock, slug]:
+            alien.animate(pygame.time.get_ticks())
+
+        for alien in [human, rock, slug]:
+            alien.move(pygame.time.get_ticks())
 
         clock.tick()
 
