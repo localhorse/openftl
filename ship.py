@@ -17,3 +17,4 @@ class Ship():
     def draw(self, surface):
         surface.blit(self._hull_img, self._pos, special_flags=BLEND_TYPE)
         
+

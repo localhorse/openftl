@@ -27,11 +27,14 @@ class Person():
         self._dst_x = self._cur_x
         self._dst_y = self._cur_y
 
-        # use os.join, also make sure species is valid
+        self._update_required = False
+
+        self._bg_copy = None
+
+        # use os.join, also make sure species is valid --FIXME
         self._selected_file = "./resources/img/people/%s_player_green.png" % species
         self._unselected_file = "./resources/img/people/%s_player_yellow.png" % species
 
-        # be sure to convert_alpha() on the original sprite sheet
         self._selected_sheet = pygame.image.load(self._selected_file).convert_alpha()
         self._unselected_sheet = pygame.image.load(self._unselected_file).convert_alpha()
         # go through each column in the top row of the sprite sheet,
@@ -47,23 +50,25 @@ class Person():
             
     def move(self, cur_time):
         if self._next_move < cur_time:
+            self._update_required = True
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
                 if self._cur_x > self._dst_x:
                     self._cur_x -= SPEED
-                    self.walk_left()
+                    self._dir = LEFT
                 elif self._cur_x < self._dst_x:
                     self._cur_x += SPEED
-                    self.walk_right()
+                    self._dir = RIGHT
                 elif self._cur_y > self._dst_y:
                     self._cur_y -= SPEED
-                    self.walk_up()
+                    self._dir = UP
                 elif self._cur_y < self._dst_y:
                     self._cur_y += SPEED
-                    self.walk_down()
+                    self._dir = DOWN
             self._next_move = cur_time + self._move_delay
         
     def animate(self, cur_time):
         if self._next_animate < cur_time:
+            self._update_required = True
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
                 self._anim_frame += 1
                 if self._anim_frame > MAX_ANIM_FRAME:
@@ -72,18 +77,6 @@ class Person():
                 self._anim_frame = 0
             self._next_animate = cur_time + self._anim_delay
 
-    def walk_left(self):
-        self._dir = LEFT
-
-    def walk_right(self):
-        self._dir = RIGHT
-
-    def walk_up(self):
-        self._dir = UP
-
-    def walk_down(self):
-        self._dir = DOWN
-
     def draw(self, surface):
         unselected_frame, selected_frame = self._frames[self._dir * 4 + self._anim_frame]
         if self._selected:
@@ -91,7 +84,9 @@ class Person():
         else:
             temp_frame = unselected_frame
             
-        surface.blit(temp_frame, (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
+        if self._update_required:
+            surface.blit(temp_frame, (self._cur_x, self._cur_y), special_flags=BLEND_TYPE)
+            self._update_required = False
 
     def seek_pos(self, pos):
         x_pos, y_pos = pos
@@ -107,8 +102,9 @@ class Person():
         return divmod(x, SPEED)[0] * SPEED
 
     def bound_box(self):
-        # (hopefully) return a rect with the actual drawn character in
-        # the center
+        # return a rect with the actual drawn character in the center
+        # (just thinking that we could just as easily return the image
+        # rect, duh... not sure why I did this? take a look --FIXME)
         return pygame.Rect(self._cur_x, self._cur_y, SPRITE_WIDTH, SPRITE_HEIGHT)
 
     def toggle_selected(self):
@@ -122,3 +118,6 @@ class Person():
 
     def deselect(self):
         self._selected = False
+
+    def get_pos(self):
+        return (self._cur_x, self._cur_y)

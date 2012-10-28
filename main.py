@@ -56,17 +56,14 @@ if __name__ == "__main__":
                         else:
                             alien.deselect()
 
-        # this is kind of ridiculous performance wise, we need to
-        # reimplement code that will draw only portions of the
-        # background
-        ##window.fill((0, 0, 0))
-        ##kestral.draw(window)
-        
         for alien in [human, rock, slug]:
             alien.move(pygame.time.get_ticks())
 
         for alien in [human, rock, slug]:
             alien.animate(pygame.time.get_ticks())
+
+        # erase the sprites here, then save a copy of the empty
+        # backgrounds, THEN draw --FIXME
 
         for alien in [human, rock, slug]:
             alien.draw(window)
