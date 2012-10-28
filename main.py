@@ -63,15 +63,15 @@ if __name__ == "__main__":
         ##kestral.draw(window)
         
         for alien in [human, rock, slug]:
-            alien.draw(window)
-        
-        pygame.display.flip()
-        
+            alien.move(pygame.time.get_ticks())
+
         for alien in [human, rock, slug]:
             alien.animate(pygame.time.get_ticks())
 
         for alien in [human, rock, slug]:
-            alien.move(pygame.time.get_ticks())
+            alien.draw(window)
 
+        pygame.display.flip()
+        
         clock.tick()
 
