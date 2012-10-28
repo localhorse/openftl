@@ -18,13 +18,14 @@ if __name__ == "__main__":
     rock = Person("rock", (300, 300), 300, 40)
     slug = Person("slug", (325, 275), 100, 15)
 
-    all_chars = pygame.sprite.RenderPlain((human, rock, slug))
+    all_chars = pygame.sprite.RenderUpdates((human, rock, slug))
 
     kestral = Ship("kestral", (50, 50))
 
     clock = pygame.time.Clock()
 
     kestral.draw(window)
+    pygame.display.flip()
 
     select_on = False
     first_iter = True
@@ -64,8 +65,9 @@ if __name__ == "__main__":
                             alien.deselect()
 
 
+        all_chars.clear(window, kestral.get_hull_img())
         all_chars.update()
-        all_chars.draw(window)
-        pygame.display.flip()
+        update_rects = all_chars.draw(window)
+        pygame.display.update(update_rects)
         
 

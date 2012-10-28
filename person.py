@@ -4,10 +4,6 @@ from constants import *
 if __name__ == "__main__":
     pass
 
-# WARNING: since Person was converted to inherit stuff from Sprite
-# class, there isn't any timing information being used, species
-# specified speeds are being ignored, etc. --FIXME
-
 # each person or alien in the game is represented by this class
 class Person(pygame.sprite.Sprite):
 
@@ -17,6 +13,9 @@ class Person(pygame.sprite.Sprite):
 
         self._anim_delay = anim_delay
         self._move_delay = move_delay
+        self._next_anim = 0
+        self._next_move = 0
+
         self._frames = []
         frames = self._frames
 
@@ -62,32 +61,40 @@ class Person(pygame.sprite.Sprite):
 
     def _move(self):
 
-        if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
+        cur_time = pygame.time.get_ticks()
 
-            if self._cur_x > self._dst_x:
-                self._cur_x -= SPEED
-                self._dir = LEFT
-            elif self._cur_x < self._dst_x:
-                self._cur_x += SPEED
-                self._dir = RIGHT
+        if self._next_move < cur_time:
 
-            if self._cur_y > self._dst_y:
-                self._cur_y -= SPEED
-                self._dir = UP
-            elif self._cur_y < self._dst_y:
-                self._cur_y += SPEED
-                self._dir = DOWN
+            if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
 
-        self.rect = self.bound_box()
+                if self._cur_x > self._dst_x:
+                    self._cur_x -= SPEED
+                    self._dir = LEFT
+                elif self._cur_x < self._dst_x:
+                    self._cur_x += SPEED
+                    self._dir = RIGHT
+
+                if self._cur_y > self._dst_y:
+                    self._cur_y -= SPEED
+                    self._dir = UP
+                elif self._cur_y < self._dst_y:
+                    self._cur_y += SPEED
+                    self._dir = DOWN
+
+            self._next_move = cur_time + self._move_delay
+            self.rect = self.bound_box()
             
     def _animate(self):
-        if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
-            self._anim_frame += 1
-            if self._anim_frame > MAX_ANIM_FRAME:
+        cur_time = pygame.time.get_ticks()
+        if self._next_anim < cur_time:
+            if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
+                self._anim_frame += 1
+                if self._anim_frame > MAX_ANIM_FRAME:
+                    self._anim_frame = 0
+            else:
                 self._anim_frame = 0
-        else:
-            self._anim_frame = 0
-
+            self._next_anim = cur_time + self._anim_delay
+            
     def _cur_frame(self):
 
         unselected_frame, selected_frame = self._frames[self._dir * 4 + self._anim_frame]
