@@ -21,7 +21,6 @@ class Ship(pygame.sprite.Sprite):
         (self._ship_width, self._ship_height, _, _) = self.image.get_rect()
         self.rect = self.bounding_box()
 
-        # not sure what the purpose of the offsets are?
         self._rooms_filename = "./resources/data/%s.txt" % ship_type
 
         # prepare the empty room tile (just a beige box with grey
@@ -48,7 +47,7 @@ class Ship(pygame.sprite.Sprite):
     def update(self):
 
         # make sure any added rooms get drawn. (do we really want to
-        # do this every time? no --FIXME)
+        # do this every time? no) --FIXME
 
         for room in self._rooms:
 
