@@ -29,6 +29,8 @@ if __name__ == "__main__":
 
     select_on = False
     first_iter = True
+    draw_selection = False
+    selection = None
 
     while True:
 
@@ -52,22 +54,34 @@ if __name__ == "__main__":
             elif event.type == pygame.MOUSEMOTION:
                 if select_on:
                     rect = selection.updateRect(event.pos)
-                    selection.draw(window)
+                    ##selection.draw(window)
+                    draw_selection = True
             elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 if select_on:
                     select_on = False
                     rect = selection.updateRect(event.pos)
-                    selection.hide(window)
+                    ##selection.hide(window)
+                    draw_selection = False
                     for alien in [human, rock, slug]:
                         if alien.bound_box().colliderect(rect):
                             alien.select()
                         else:
                             alien.deselect()
 
+        
+        window.fill((0, 0, 0))
+        kestral.draw(window)
 
-        all_chars.clear(window, kestral.get_hull_img())
+        ##all_chars.clear(window, kestral.get_hull_img())
         all_chars.update()
         update_rects = all_chars.draw(window)
+
+        if draw_selection:
+            selection.draw(window)
+        else:
+            if selection:
+                selection.hide(window)
+
         pygame.display.update(update_rects)
-        
+        all_chars.clear(window, kestral.get_hull_img())
 
