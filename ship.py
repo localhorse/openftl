@@ -42,8 +42,6 @@ class Ship(pygame.sprite.Sprite):
 
         self._rooms = self.load_rooms()
 
-        pygame.draw.rect(self._rooms[0]['img'], ROOM_COLOR, pygame.Rect((x1, y1, x2, y2)))
-
     def bounding_box(self):
         # return a rect with the actual drawn character in the center
         # (just thinking that we could just as easily return the image
@@ -52,7 +50,9 @@ class Ship(pygame.sprite.Sprite):
 
     def update(self):
 
-        # make sure any added rooms get drawn
+        # make sure any added rooms get drawn. (do we really want to
+        # do this every time? no --FIXME)
+
         for room in self._rooms:
 
             for index in range(0, room['width']):
@@ -76,29 +76,25 @@ class Ship(pygame.sprite.Sprite):
     def load_rooms(self):
 
         rooms_file = open(self._rooms_filename, "r")
-        line = ""
         rooms_list = []
         
-        while True:
-            line = rooms_file.readline().strip()
-            if not line:
-                break
-            if line == "ROOM":
-                line = None
-                while line != "ROOM":
-                    # stick it in a dict
-                    room_id = int(rooms_file.readline().strip())
-                    room_x = int(rooms_file.readline().strip())
-                    room_y = int(rooms_file.readline().strip())
-                    room_width = int(rooms_file.readline().strip())
-                    room_height = int(rooms_file.readline().strip())
-                    rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': self._room_img})
-                    if not line:
-                        break
+        lines = rooms_file.readlines()
 
+        for line in lines:
+            temp = line.strip()
+            line = temp
+        
         rooms_file.close()
+
+        for index, line in enumerate(lines):
+            if "ROOM" in line:
+                room_id = int(lines[index + 1])
+                room_x = int(lines[index + 2])
+                room_y = int(lines[index + 3])
+                room_width = int(lines[index + 4])
+                room_height = int(lines[index + 5])
+                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': self._room_img})
+
         return rooms_list
 
-
-        
         
