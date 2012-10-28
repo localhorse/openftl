@@ -12,9 +12,7 @@ class Ship(pygame.sprite.Sprite):
 
         # os.join(), also check proper ship type --FIXME
         self._hull_filename = "./resources/img/ship/%s_base.png" % ship_type
-        self._hull_img = pygame.image.load(self._hull_filename).convert_alpha()
-
-        self.image = self._hull_img
+        self.image = pygame.image.load(self._hull_filename).convert_alpha()
 
         self._cur_x, self._cur_y = pos
         # just grab the width and height
@@ -41,34 +39,22 @@ class Ship(pygame.sprite.Sprite):
 
         self._rooms = self.load_rooms()
 
+        for index, room in enumerate(self._rooms):
+            pygame.image.save(room['img'], "room_img-%s.png" % index)
+
     def bounding_box(self):
         return pygame.Rect(self._cur_x, self._cur_y, self._ship_width, self._ship_height)
 
     def update(self):
 
-        # make sure any added rooms get drawn. (do we really want to
-        # do this every time? no) --FIXME
-
+        # draw the rooms to the proper place (later we'll avoid doing
+        # this every time) --FIXME
         for room in self._rooms:
-
-            for index in range(0, room['width']):
-
-                temp_x = (room['x'] + self._x_offset + index) * TILE_WIDTH
-                temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT
-
-                temp_x += self._cur_x
-                temp_y += self._cur_y
-
-                self._hull_img.blit(room['tile_img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
-
-            for index in range(0, room['height']):
-                temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
-                temp_y = (room['y'] + self._y_offset + index) * TILE_HEIGHT
-                
-                temp_x += self._cur_x
-                temp_y += self._cur_y
-                
-                self._hull_img.blit(room['tile_img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+            temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
+            temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT
+            temp_x += self._cur_x
+            temp_y += self._cur_y
+            self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
 
     def load_rooms(self):
 
@@ -90,9 +76,24 @@ class Ship(pygame.sprite.Sprite):
                 room_y = int(lines[index + 3])
                 room_width = int(lines[index + 4])
                 room_height = int(lines[index + 5])
-                # I don't know if the tile images will be different, I
-                # guess that extra key might not be necessary --FIXME
-                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'tile_img': self._tile_img})
+
+                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()})
+
+        for room in rooms_list:
+
+            for index in range(0, room['width']):
+
+                temp_x = index * TILE_WIDTH
+                temp_y = 0
+
+                room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+
+            for index in range(0, room['height']):
+
+                temp_x = 0
+                temp_y = index * TILE_HEIGHT
+                
+                room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
 
         return rooms_list
 
