@@ -15,18 +15,16 @@ if __name__ == "__main__":
     window.convert_alpha()
     window.set_alpha(0)
 
+    # kestrel is mispelled only in the data files
+    kestrel = Ship("kestral", (50, 50))
+
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)
     slug = Person("slug", (325, 275), 100, 15)
 
-    all_chars = pygame.sprite.RenderUpdates((human, rock, slug))
-
-    kestral = Ship("kestral", (50, 50))
+    all_chars = pygame.sprite.OrderedUpdates((kestrel, human, rock, slug))
 
     clock = pygame.time.Clock()
-
-    kestral.draw(window)
-    pygame.display.flip()
 
     select_on = False
     first_iter = True
@@ -75,15 +73,15 @@ if __name__ == "__main__":
                     rect = selection.updateRect(event.pos)
                     draw_selection = False
                     for alien in [human, rock, slug]:
-                        if alien.bound_box().colliderect(rect):
+                        if alien.bounding_box().colliderect(rect):
                             alien.select()
                         else:
                             alien.deselect()
 
         window.fill((0, 0, 0))
-        kestral.draw(window)
 
-        ##all_chars.clear(window, kestral.get_hull_img())
+        # we would clear here with Group.clear() if (didn't seem to
+        # work properly, will attempt again --FIXME
         all_chars.update()
         update_rects = all_chars.draw(window)
 
@@ -94,5 +92,4 @@ if __name__ == "__main__":
                 selection.hide(window)
 
         pygame.display.update(update_rects)
-        all_chars.clear(window, kestral.get_hull_img())
 

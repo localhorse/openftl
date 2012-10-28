@@ -4,5 +4,6 @@
 - While shift is being held, clicking an already selected entity
   should deselect it.
 
--
+- Selection box doesn't properly erase itself when drawn over a moving
+  sprite!
 

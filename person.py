@@ -38,10 +38,10 @@ class Person(pygame.sprite.Sprite):
         self._unselected_sheet = pygame.image.load(self._unselected_file).convert_alpha()
         # go through each column in the top row of the sprite sheet,
         # and load each walking animation
-        for index in range(0, SPRITE_COLS):
+        for index in range(0, ALIEN_COLS):
 
-            temp_rect = pygame.Rect((index * SPRITE_WIDTH, 0),
-                                    (SPRITE_WIDTH, SPRITE_HEIGHT))
+            temp_rect = pygame.Rect((index * ALIEN_WIDTH, 0),
+                                    (ALIEN_WIDTH, ALIEN_HEIGHT))
             frames.append((pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha(), pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha()))
             unselected_surf, selected_surf = frames[len(frames) - 1]
             unselected_surf.blit(self._unselected_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
@@ -82,7 +82,7 @@ class Person(pygame.sprite.Sprite):
                     self._dir = DOWN
 
             self._next_move = cur_time + self._move_delay
-            self.rect = self.bound_box()
+            self.rect = self.bounding_box()
             
     def _animate(self):
         cur_time = pygame.time.get_ticks()
@@ -113,19 +113,19 @@ class Person(pygame.sprite.Sprite):
         # make sure the actual guy ends up pretty much dead center in
         # the mouse click
         if self._selected:
-            self._dst_x = self._round_speed(x_pos - SPRITE_WIDTH / 2)
-            self._dst_y = self._round_speed(y_pos - SPRITE_HEIGHT / 2)
+            self._dst_x = self._round_speed(x_pos - ALIEN_WIDTH / 2)
+            self._dst_y = self._round_speed(y_pos - ALIEN_HEIGHT / 2)
 
     # makes sure we round the x and y to the proper increment (based
     # on speed) so we don't get stuck running back and forth
     def _round_speed(self, x):
         return divmod(x, SPEED)[0] * SPEED
 
-    def bound_box(self):
+    def bounding_box(self):
         # return a rect with the actual drawn character in the center
         # (just thinking that we could just as easily return the image
         # rect, duh... not sure why I did this? take a look --FIXME)
-        return pygame.Rect(self._cur_x, self._cur_y, SPRITE_WIDTH, SPRITE_HEIGHT)
+        return pygame.Rect(self._cur_x, self._cur_y, ALIEN_WIDTH, ALIEN_HEIGHT)
 
     def toggle_selected(self):
         if self._selected:
