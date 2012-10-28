@@ -68,17 +68,17 @@ class Person(pygame.sprite.Sprite):
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
 
                 if self._cur_x > self._dst_x:
-                    self._cur_x -= SPEED
+                    self._cur_x -= 1
                     self._dir = LEFT
                 elif self._cur_x < self._dst_x:
-                    self._cur_x += SPEED
+                    self._cur_x += 1
                     self._dir = RIGHT
 
                 if self._cur_y > self._dst_y:
-                    self._cur_y -= SPEED
+                    self._cur_y -= 1
                     self._dir = UP
                 elif self._cur_y < self._dst_y:
-                    self._cur_y += SPEED
+                    self._cur_y += 1
                     self._dir = DOWN
 
             self._next_move = cur_time + self._move_delay
@@ -113,13 +113,8 @@ class Person(pygame.sprite.Sprite):
         # make sure the actual guy ends up pretty much dead center in
         # the mouse click
         if self._selected:
-            self._dst_x = self._round_speed(x_pos - ALIEN_WIDTH / 2)
-            self._dst_y = self._round_speed(y_pos - ALIEN_HEIGHT / 2)
-
-    # makes sure we round the x and y to the proper increment (based
-    # on speed) so we don't get stuck running back and forth
-    def _round_speed(self, x):
-        return divmod(x, SPEED)[0] * SPEED
+            self._dst_x = x_pos - ALIEN_WIDTH / 2
+            self._dst_y = y_pos - ALIEN_HEIGHT / 2
 
     def bounding_box(self):
         # return a rect with the actual drawn character in the center

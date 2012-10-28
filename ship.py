@@ -10,7 +10,7 @@ class Ship(pygame.sprite.Sprite):
 
         pygame.sprite.Sprite.__init__(self)
 
-        # os.join(), also check proper ship type
+        # os.join(), also check proper ship type --FIXME
         self._hull_filename = "./resources/img/ship/%s_base.png" % ship_type
         self._hull_img = pygame.image.load(self._hull_filename).convert_alpha()
 
