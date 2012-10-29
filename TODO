@@ -7,10 +7,7 @@
 - Selection box doesn't properly erase itself when drawn over a moving
   sprite!
 
-- Forget about Ship._rooms['tile_img']. Should make a
-  Ship._rooms['img'] key that is the size of the room itself (not the
-  tile). Create and draw the room while loading from file. This would
-  be helpful when drawing room details and icons, as well as drawing
-  the black border around each room.
+- Framerate seems to be bogging down slightly as compared to earlier
+  today, it deserves looking into
 
-- Add "Ctrl-Left Click" as right-mouse button option for Mac.
+
