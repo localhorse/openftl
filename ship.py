@@ -38,11 +38,15 @@ class Ship(pygame.sprite.Sprite):
         self._y_offset = 2
 
         self._rooms = self.load_rooms()
+        self._draw_rooms()
 
     def bounding_box(self):
         return pygame.Rect(self._cur_x, self._cur_y, self._ship_width, self._ship_height)
 
     def update(self):
+        pass
+
+    def _draw_rooms(self):
 
         # draw the rooms to the proper place (later we'll avoid doing
         # this every update) --FIXME
@@ -60,14 +64,14 @@ class Ship(pygame.sprite.Sprite):
             x1 = temp_x
             y1 = temp_y
 
-            x1 -= 1
-            y1 -= 1
+            x1 -= 2
+            y1 -= 2
 
-            x2 += 1
-            y2 += 1
+            x2 += 4
+            y2 += 4
             
             temp_rect = pygame.Rect((x1, y1, x2, y2))
-            pygame.draw.rect(self.image, (0, 0, 0), temp_rect, 4)
+            pygame.draw.rect(self.image, (0, 0, 0), temp_rect)
 
             # draw room
             self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
