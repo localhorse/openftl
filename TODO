@@ -13,10 +13,7 @@
   into, though. It appears to only be for the Kestrel so it may just
   be an unused image.
 
-- In the Engi cruiser ("circle_scout") data file there is no X_OFFSET
-  or Y_OFFSET. The ship loading needs to be more robust and check for
-  each field, and giving default values of zero when fields are not
-  present.
+- Doors won't have to be drawn manually, I found a sprite sheet. We'll
+  have to leave a gap of that size, however, in the room borders.
 
-
-
+- 

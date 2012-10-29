@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    stealth = Ship("stealth", (2, 2))
+    stealth = Ship("circle_scout", (2, 2))
 
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)

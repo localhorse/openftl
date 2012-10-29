@@ -80,16 +80,32 @@ class Ship(pygame.sprite.Sprite):
     # describe how much the rooms are offset from (0, 0) of the ship
     # image
     def _load_offsets(self):
+
         ship_data = open(self._shipdata_filename, "r")
         lines = ship_data.readlines()
         ship_data.close()
+
+        x_offset = None
+        y_offset = None
+        vertical = None
+
         for index, line in enumerate(lines):
             temp = line.strip()
             line = temp
             if "X_OFFSET" in line:
                 x_offset = int(lines[index + 1])
-                y_offset = int(lines[index + 3])
-                vertical = int(lines[index + 5])
+            if "Y_OFFSET" in line:
+                y_offset = int(lines[index + 1])
+            if "VERTICAL" in line:
+                vertical = int(lines[index + 1])
+
+        if not x_offset:
+            x_offset = 0
+        if not y_offset:
+            y_offset = 0
+        if not vertical:
+            vertical = 0
+
         return (x_offset, y_offset, vertical)
             
     def _load_rooms(self):
