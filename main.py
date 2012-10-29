@@ -12,8 +12,6 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     window = pygame.display.set_mode((800, 600))
-    ##window.convert_alpha()
-    ##window.set_alpha(0)
 
     # kestrel is mispelled only in the data files
     kestrel = Ship("kestral", (50, 50))
