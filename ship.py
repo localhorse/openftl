@@ -39,9 +39,6 @@ class Ship(pygame.sprite.Sprite):
 
         self._rooms = self.load_rooms()
 
-        for index, room in enumerate(self._rooms):
-            pygame.image.save(room['img'], "room_img-%s.png" % index)
-
     def bounding_box(self):
         return pygame.Rect(self._cur_x, self._cur_y, self._ship_width, self._ship_height)
 
