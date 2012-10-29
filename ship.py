@@ -85,9 +85,9 @@ class Ship(pygame.sprite.Sprite):
         lines = ship_data.readlines()
         ship_data.close()
 
-        x_offset = None
-        y_offset = None
-        vertical = None
+        x_offset = 0
+        y_offset = 0
+        vertical = 0
 
         for index, line in enumerate(lines):
             temp = line.strip()
@@ -98,13 +98,6 @@ class Ship(pygame.sprite.Sprite):
                 y_offset = int(lines[index + 1])
             if "VERTICAL" in line:
                 vertical = int(lines[index + 1])
-
-        if not x_offset:
-            x_offset = 0
-        if not y_offset:
-            y_offset = 0
-        if not vertical:
-            vertical = 0
 
         return (x_offset, y_offset, vertical)
             
