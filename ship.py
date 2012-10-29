@@ -56,6 +56,9 @@ class Ship(pygame.sprite.Sprite):
             temp_x += self._cur_x
             temp_y += self._cur_y
 
+            # draw room
+            self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+
             # draw border
 
             temp_rect = room['img'].get_rect()
@@ -64,17 +67,10 @@ class Ship(pygame.sprite.Sprite):
             x1 = temp_x
             y1 = temp_y
 
-            x1 -= 2
-            y1 -= 2
-
-            x2 += 4
-            y2 += 4
+            x2 += x1
+            y2 += y1
             
-            temp_rect = pygame.Rect((x1, y1, x2, y2))
-            pygame.draw.rect(self.image, (0, 0, 0), temp_rect)
-
-            # draw room
-            self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+            pygame.draw.lines(self.image, (0, 0, 0), True, [(x1, y1), (x2, y1), (x2, y1), (x2, y2), (x2, y2), (x1, y2), (x1, y2), (x1, y1)], 2)
 
     def load_rooms(self):
 
