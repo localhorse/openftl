@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    kestrel = Ship("circle_scout", (2, 2))
+    stealth = Ship("stealth", (2, 2))
 
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # the sprites in the order they were added, and optionally returns
     # a list of rects which represent where the screen needs to be
     # redrawn
-    all_sprites = pygame.sprite.OrderedUpdates((kestrel, human, rock, slug))
+    all_sprites = pygame.sprite.OrderedUpdates((stealth, human, rock, slug))
 
     clock = pygame.time.Clock()
 
