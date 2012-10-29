@@ -12,8 +12,8 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     window = pygame.display.set_mode((800, 600))
-    window.convert_alpha()
-    window.set_alpha(0)
+    ##window.convert_alpha()
+    ##window.set_alpha(0)
 
     # kestrel is mispelled only in the data files
     kestrel = Ship("kestral", (50, 50))
@@ -60,6 +60,7 @@ if __name__ == "__main__":
             elif event.type == MOUSEBUTTONDOWN:
                 # right mouse button
                 if event.button == 3:
+                    # put these in a sprite group instead --FIXME
                     for alien in [human, rock, slug]:
                         alien.seek_pos(event.pos)
                 elif event.button == 1:
@@ -75,6 +76,7 @@ if __name__ == "__main__":
                     select_on = False
                     rect = selection.updateRect(event.pos)
                     draw_selection = False
+                    # these should be in a sprite group
                     for alien in [human, rock, slug]:
                         if alien.bounding_box().colliderect(rect):
                             alien.select()

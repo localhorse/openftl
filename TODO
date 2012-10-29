@@ -12,3 +12,5 @@
   tile). Create and draw the room while loading from file. This would
   be helpful when drawing room details and icons, as well as drawing
   the black border around each room.
+
+- Add "Ctrl-Left Click" as right-mouse button option for Mac.
