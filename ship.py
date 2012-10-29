@@ -45,12 +45,31 @@ class Ship(pygame.sprite.Sprite):
     def update(self):
 
         # draw the rooms to the proper place (later we'll avoid doing
-        # this every time) --FIXME
+        # this every update) --FIXME
         for room in self._rooms:
             temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
             temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT
             temp_x += self._cur_x
             temp_y += self._cur_y
+
+            # draw border
+
+            temp_rect = room['img'].get_rect()
+            x1, y1, x2, y2 = temp_rect
+
+            x1 = temp_x
+            y1 = temp_y
+
+            x1 -= 1
+            y1 -= 1
+
+            x2 += 1
+            y2 += 1
+            
+            temp_rect = pygame.Rect((x1, y1, x2, y2))
+            pygame.draw.rect(self.image, (0, 0, 0), temp_rect, 4)
+
+            # draw room
             self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
 
     def load_rooms(self):
@@ -74,8 +93,9 @@ class Ship(pygame.sprite.Sprite):
                 room_y = int(lines[index + 3])
                 room_width = int(lines[index + 4])
                 room_height = int(lines[index + 5])
+                room_img = pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()
 
-                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()})
+                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img})
 
         # draw the tiles in each room image
         for room in rooms_list:
