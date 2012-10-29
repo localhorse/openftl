@@ -33,6 +33,9 @@ if __name__ == "__main__":
     rshift_pressed = False
     lshift_pressed = False
 
+    lctrl_pressed = False
+    rctrl_pressed = False
+
     # just testing something (remove) --FIXME
     kestrel.load_rooms()    
 
@@ -48,6 +51,10 @@ if __name__ == "__main__":
                     rshift_pressed = True
                 if event.key == K_LSHIFT:
                     lshift_pressed = True
+                if event.key == K_RCTRL:
+                    rctrl_pressed = True
+                if event.key == K_LCTRL:
+                    lctrl_pressed = True
                 if event.key == K_ESCAPE:
                     sys.exit()
             elif event.type == KEYUP:
@@ -55,16 +62,20 @@ if __name__ == "__main__":
                     rshift_pressed = False
                 if event.key == K_LSHIFT:
                     lshift_pressed = False
+                if event.key == K_RCTRL:
+                    rctrl_pressed = False
+                if event.key == K_LCTRL:
+                    lctrl_pressed = False
             elif event.type == MOUSEBUTTONDOWN:
-                # right mouse button
-                if event.button == 3:
+                # right mouse button (or left + ctrl for Mac users)
+                if event.button == 3 or (event.button == 1 and (lctrl_pressed or rctrl_pressed)):
                     # put these in a sprite group instead --FIXME
                     for alien in [human, rock, slug]:
                         alien.seek_pos(event.pos)
                 elif event.button == 1:
                     if not select_on:
                         select_on = True
-                        selection = SelectionRect(window, event.pos, col=(0, 255, 0))
+                        selection = SelectionRect(window, event.pos, col=(255, 255, 255))
             elif event.type == MOUSEMOTION:
                 if select_on:
                     rect = selection.updateRect(event.pos)
