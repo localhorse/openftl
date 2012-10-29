@@ -90,7 +90,7 @@ if __name__ == "__main__":
                     select_on = False
                     rect = selection.updateRect(event.pos)
                     draw_selection = False
-                    # these should be in a sprite group
+                    # these should be in a sprite group --FIXME
                     for alien in [human, rock, slug]:
                         if alien.bounding_box().colliderect(rect):
                             alien.select()

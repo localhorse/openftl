@@ -7,8 +7,5 @@
 - Selection box doesn't properly erase itself when drawn over a moving
   sprite!
 
-- Framerate seems to be bogging down slightly as compared to earlier
-  today, it deserves looking into
 
-- Somehow we have lost individual species speeds?
 
