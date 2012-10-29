@@ -66,6 +66,7 @@ class Ship(pygame.sprite.Sprite):
         
         rooms_file.close()
 
+        # load each room from file
         for index, line in enumerate(lines):
             if "ROOM" in line:
                 room_id = int(lines[index + 1])
@@ -76,21 +77,17 @@ class Ship(pygame.sprite.Sprite):
 
                 rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()})
 
+        # draw the tiles in each room image
         for room in rooms_list:
 
-            for index in range(0, room['width']):
+            for width_index in range(0, room['width']):
 
-                temp_x = index * TILE_WIDTH
-                temp_y = 0
+                for height_index in range(0, room['height']):
 
-                room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
-
-            for index in range(0, room['height']):
-
-                temp_x = 0
-                temp_y = index * TILE_HEIGHT
+                    temp_x = width_index * TILE_WIDTH
+                    temp_y = height_index * TILE_HEIGHT
                 
-                room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+                    room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
 
         return rooms_list
 
