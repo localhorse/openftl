@@ -20,10 +20,15 @@ if __name__ == "__main__":
     rock = Person("rock", (300, 300), 300, 40)
     slug = Person("slug", (325, 275), 100, 15)
 
-    all_chars = pygame.sprite.OrderedUpdates((kestrel, human, rock, slug))
+    # add all sprites into this render group, OrderedUpdates() draws
+    # the sprites in the order they were added, and optionally returns
+    # a list of rects which represent where the screen needs to be
+    # redrawn
+    all_sprites = pygame.sprite.OrderedUpdates((kestrel, human, rock, slug))
 
     clock = pygame.time.Clock()
 
+    # a bunch of booleans involved in the click/drag selection process
     select_on = False
     first_iter = True
     draw_selection = False
@@ -32,13 +37,13 @@ if __name__ == "__main__":
     # move this somewhere else afterwards --FIXME
     rshift_pressed = False
     lshift_pressed = False
-
     lctrl_pressed = False
     rctrl_pressed = False
 
-    # just testing something (remove) --FIXME
-    kestrel.load_rooms()    
-
+    # the main game loop... we'll just check for input events, update
+    # based on input, clear the screen entirely, update sprite
+    # movement & animation, draw the selection box if it's being used,
+    # and finally update the display
     while True:
 
         clock.tick(60)
@@ -94,11 +99,14 @@ if __name__ == "__main__":
 
         window.fill((0, 0, 0))
 
-        # we would clear here with Group.clear() if (didn't seem to
-        # work properly, will attempt again --FIXME
-        all_chars.update()
-        update_rects = all_chars.draw(window)
+        # we would clear here with Group.clear() if it worked (didn't
+        # seem to work properly, will attempt again --FIXME
+        all_sprites.update()
+        update_rects = all_sprites.draw(window)
 
+
+        # if the user is currently selecting something, we should draw
+        # the box now, on top of everything else
         if draw_selection:
             selection.draw(window)
         else:

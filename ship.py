@@ -19,7 +19,7 @@ class Ship(pygame.sprite.Sprite):
         (self._ship_width, self._ship_height, _, _) = self.image.get_rect()
         self.rect = self.bounding_box()
 
-        self._rooms_filename = "./resources/data/%s.txt" % ship_type
+        self._shipdata_filename = "./resources/data/%s.txt" % ship_type
 
         # prepare the empty room tile (just a beige box with grey
         # border)
@@ -32,12 +32,16 @@ class Ship(pygame.sprite.Sprite):
         y2 -= 1
         pygame.draw.rect(self._tile_img, ROOM_COLOR, pygame.Rect((x1, y1, x2, y2)))
         
-        # these need to be loaded from file... what is hardcoded here
-        # should be in kestral.txt
-        self._x_offset = 0
-        self._y_offset = 2
+        # somehow these aren't exactly right, they're not lining up
+        # with the ship the way they do in FTL... although the rooms
+        # are fine relative to each other, it must be the offsets
+        # somehow
+        self._x_offset, self._y_offset = self._load_offsets()
 
-        self._rooms = self.load_rooms()
+        # load the rooms from the data file
+        self._rooms = self._load_rooms()
+        # draw the rooms into the main ship graphic (not to the
+        # screen)
         self._draw_rooms()
 
     def bounding_box(self):
@@ -48,8 +52,6 @@ class Ship(pygame.sprite.Sprite):
 
     def _draw_rooms(self):
 
-        # draw the rooms to the proper place (later we'll avoid doing
-        # this every update) --FIXME
         for room in self._rooms:
             temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
             temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT
@@ -59,7 +61,7 @@ class Ship(pygame.sprite.Sprite):
             # draw room
             self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
 
-            # draw border
+            # draw room borders
 
             temp_rect = room['img'].get_rect()
             x1, y1, x2, y2 = temp_rect
@@ -72,9 +74,24 @@ class Ship(pygame.sprite.Sprite):
             
             pygame.draw.lines(self.image, (0, 0, 0), True, [(x1, y1), (x2, y1), (x2, y1), (x2, y2), (x2, y2), (x1, y2), (x1, y2), (x1, y1)], 2)
 
-    def load_rooms(self):
+    # loads the x and y offsets from the data file... these values
+    # describe how much the rooms are offset from (0, 0) of the ship
+    # image
+    def _load_offsets(self):
+        ship_data = open(self._shipdata_filename, "r")
+        lines = ship_data.readlines()
+        ship_data.close()
+        for index, line in enumerate(lines):
+            temp = line.strip()
+            line = temp
+            if "X_OFFSET" in line:
+                x_offset = int(lines[index + 1])
+                y_offset = int(lines[index + 3])
+        return (x_offset, y_offset)
+            
+    def _load_rooms(self):
 
-        rooms_file = open(self._rooms_filename, "r")
+        rooms_file = open(self._shipdata_filename, "r")
         rooms_list = []
         
         lines = rooms_file.readlines()
@@ -97,16 +114,12 @@ class Ship(pygame.sprite.Sprite):
 
                 rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img})
 
-        # draw the tiles in each room image
+        # draw the tiles into each room image
         for room in rooms_list:
-
             for width_index in range(0, room['width']):
-
                 for height_index in range(0, room['height']):
-
                     temp_x = width_index * TILE_WIDTH
                     temp_y = height_index * TILE_HEIGHT
-                
                     room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
 
         return rooms_list

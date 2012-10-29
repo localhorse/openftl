@@ -11,6 +11,9 @@ class Person(pygame.sprite.Sprite):
 
         self._selected = False
 
+        # anim and move delays are used when determining if enough
+        # time has passed to perform the next movement or animation
+        # frame
         self._anim_delay = anim_delay
         self._move_delay = move_delay
         self._next_anim = 0
@@ -37,7 +40,7 @@ class Person(pygame.sprite.Sprite):
         self._selected_sheet = pygame.image.load(self._selected_file).convert_alpha()
         self._unselected_sheet = pygame.image.load(self._unselected_file).convert_alpha()
         # go through each column in the top row of the sprite sheet,
-        # and load each walking animation
+        # and load each walking animation for each cardinal direction
         for index in range(0, ALIEN_COLS):
 
             temp_rect = pygame.Rect((index * ALIEN_WIDTH, 0),
@@ -59,6 +62,8 @@ class Person(pygame.sprite.Sprite):
         self._animate()
         self._cur_frame()
 
+    # if enough time has passed and we're moving, then move and change
+    # the sprite direction
     def _move(self):
 
         cur_time = pygame.time.get_ticks()
@@ -84,6 +89,8 @@ class Person(pygame.sprite.Sprite):
             self._next_move = cur_time + self._move_delay
             self.rect = self.bounding_box()
             
+    # if enough time has passed and we're not idle, go to the next
+    # animation frame
     def _animate(self):
         cur_time = pygame.time.get_ticks()
         if self._next_anim < cur_time:
@@ -95,6 +102,8 @@ class Person(pygame.sprite.Sprite):
                 self._anim_frame = 0
             self._next_anim = cur_time + self._anim_delay
             
+    # returns the current frame (which would be different depending on
+    # whether or not this Person is selected
     def _cur_frame(self):
 
         unselected_frame, selected_frame = self._frames[self._dir * 4 + self._anim_frame]
@@ -104,7 +113,6 @@ class Person(pygame.sprite.Sprite):
         else:
             temp_frame = unselected_frame
 
-        # hopefully Sprite will use this as the current frame?
         self.image = temp_frame
         
 
@@ -117,9 +125,6 @@ class Person(pygame.sprite.Sprite):
             self._dst_y = y_pos - ALIEN_HEIGHT / 2
 
     def bounding_box(self):
-        # return a rect with the actual drawn character in the center
-        # (just thinking that we could just as easily return the image
-        # rect, duh... not sure why I did this? take a look --FIXME)
         return pygame.Rect(self._cur_x, self._cur_y, ALIEN_WIDTH, ALIEN_HEIGHT)
 
     def toggle_selected(self):
