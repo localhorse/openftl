@@ -7,5 +7,16 @@
 - Selection box doesn't properly erase itself when drawn over a moving
   sprite!
 
+- There's already an image for floor! I'm not sure what this is used
+  for though because it seems as though the floor layoung is generated
+  dynamically... that's how I'd rather do it, anyways. Needs looking
+  into, though. It appears to only be for the Kestrel so it may just
+  be an unused image.
+
+- In the Engi cruiser ("circle_scout") data file there is no X_OFFSET
+  or Y_OFFSET. The ship loading needs to be more robust and check for
+  each field, and giving default values of zero when fields are not
+  present.
+
 
 

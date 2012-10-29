@@ -13,8 +13,9 @@ if __name__ == "__main__":
 
     window = pygame.display.set_mode((800, 600))
 
-    # kestrel is mispelled only in the data files
-    kestrel = Ship("kestral", (50, 50))
+    # these coordinates are not screen coordinates, but rather X *
+    # TILE_WIDTH would be the X screen coordinate
+    kestrel = Ship("circle_scout", (2, 2))
 
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)

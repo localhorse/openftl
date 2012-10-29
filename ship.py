@@ -6,6 +6,9 @@ if __name__ == "__main__":
 
 class Ship(pygame.sprite.Sprite):
 
+    # the ship placement can only be in increments of (TILE_WIDTH,
+    # TILE_HEIGHT) so we'll need pos to not actually be screen
+    # coordinates
     def __init__(self, ship_type, pos):
 
         pygame.sprite.Sprite.__init__(self)
@@ -36,7 +39,7 @@ class Ship(pygame.sprite.Sprite):
         # with the ship the way they do in FTL... although the rooms
         # are fine relative to each other, it must be the offsets
         # somehow
-        self._x_offset, self._y_offset = self._load_offsets()
+        self._x_offset, self._y_offset, self._vert_offset = self._load_offsets()
 
         # load the rooms from the data file
         self._rooms = self._load_rooms()
@@ -45,18 +48,17 @@ class Ship(pygame.sprite.Sprite):
         self._draw_rooms()
 
     def bounding_box(self):
-        return pygame.Rect(self._cur_x, self._cur_y, self._ship_width, self._ship_height)
+        return pygame.Rect(self._cur_x * TILE_WIDTH, self._cur_y * TILE_HEIGHT, self._ship_width, self._ship_height)
 
     def update(self):
         pass
 
+    # draw the rooms to the Sprite image surface
     def _draw_rooms(self):
 
         for room in self._rooms:
-            temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
-            temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT
-            temp_x += self._cur_x
-            temp_y += self._cur_y
+            temp_x = ((room['x'] + self._x_offset) * TILE_WIDTH) + self._cur_x * TILE_WIDTH
+            temp_y = ((room['y'] + self._y_offset) * TILE_HEIGHT) + self._vert_offset + self._cur_y * TILE_HEIGHT
 
             # draw room
             self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
@@ -87,7 +89,8 @@ class Ship(pygame.sprite.Sprite):
             if "X_OFFSET" in line:
                 x_offset = int(lines[index + 1])
                 y_offset = int(lines[index + 3])
-        return (x_offset, y_offset)
+                vertical = int(lines[index + 5])
+        return (x_offset, y_offset, vertical)
             
     def _load_rooms(self):
 
