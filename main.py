@@ -23,6 +23,13 @@ if __name__ == "__main__":
     
     window = pygame.display.set_mode((screen_width, screen_height), display_flags, 32)
 
+    # this should probably be linked to the Door class somehow, but I
+    # don't really want to load a sound for every instance of Door and
+    # I'm not sure how else to do it right now --FIXME
+    pygame.mixer.init()
+    door_open_sound = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_open.ogg")
+    door_close_sound = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_close.ogg")
+    
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
     player_ship = Ship("kestral", (5, 4))
@@ -111,10 +118,27 @@ if __name__ == "__main__":
                     select_on = False
                     rect = selection.updateRect(event.pos)
                     draw_selection = False
+
+                    # here's where we'll check if they clicked a door
+                    # (might need to make it more tolerant than zero
+                    # width/height, though... also when a character
+                    # that occupies the same original tile the door
+                    # was supposed to be on is selected, it thinks
+                    # we're clicking the door as well... good start
+                    # though)
+                    (_, _, rect_width, rect_height) = rect
+                    door_clicked = False
+                    if rect_width < 15 and rect_height < 15:
+                        for door in player_ship.get_doors():
+                            if door.bounding_box().colliderect(rect):
+                                door_clicked = True
+                                door.toggle_door(door_open_sound, door_close_sound)
+
                     # these should be in a sprite group --FIXME
                     for alien in [human, rock, slug]:
                         if alien.bounding_box().colliderect(rect):
-                            alien.select()
+                            if not door_clicked:
+                                alien.select()
                         else:
                             alien.deselect()
 

@@ -20,8 +20,9 @@ class Door(pygame.sprite.Sprite):
         self._frames = []
         frames = self._frames
         self._next_anim = 0
-        self._anim_delay = 100
-        self._anim_frame = 0
+        self._anim_delay = 50
+        self._anim_frame = DOOR_CLOSED
+        self._dest_frame = DOOR_CLOSED
 
         self._x_offset = x_offset
         self._y_offset = y_offset
@@ -57,7 +58,7 @@ class Door(pygame.sprite.Sprite):
         self.rect = self.bounding_box()
             
     def update(self):
-        ##self._test_anim()
+        self._animate()
         self._cur_frame()
 
     def _cur_frame(self):
@@ -65,17 +66,33 @@ class Door(pygame.sprite.Sprite):
         # determine if we're drawing the regular or upgraded door
         (self.image, _) = self._frames[self._anim_frame]
 
-    def _test_anim(self):
+    def _animate(self):
         cur_time = pygame.time.get_ticks()
         if self._next_anim < cur_time:
-            self._anim_frame += 1
-            if self._anim_frame >= DOOR_FRAMES:
-                self._anim_frame = 0
+            # DOOR ANIM
+            if self._anim_frame < self._dest_frame:
+                self._anim_frame += 1
+            elif self._anim_frame > self._dest_frame:
+                self._anim_frame -= 1                                
             self._next_anim = cur_time + self._anim_delay
         # Group.update() doesn't seem concerned with redrawing this
         # unless the rect has changed!
         self.rect = self.bounding_box()
 
+    def open_door(self, open_sound):
+        self._dest_frame = DOOR_OPENED
+        open_sound.play()
+
+    def close_door(self, close_sound):
+        self._dest_frame = DOOR_CLOSED
+        close_sound.play()
+
+    def toggle_door(self, open_sound, close_sound):
+        if self._dest_frame == DOOR_CLOSED:
+            self.open_door(open_sound)
+        else:
+            self.close_door(close_sound)
+        
     def bounding_box(self):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as
