@@ -1,9 +1,6 @@
 import pygame
 from constants import *
 
-if __name__ == "__main__":
-    pass
-
 # each person or alien in the game is represented by this class
 class Person(pygame.sprite.Sprite):
 
@@ -142,4 +139,7 @@ class Person(pygame.sprite.Sprite):
     def get_pos(self):
         return (self._cur_x, self._cur_y)
 
+
+if __name__ == "__main__":
+    pass
 

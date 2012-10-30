@@ -3,6 +3,7 @@ import time
 import pygame
 from person import Person
 from ship import Ship
+from door import Door
 from constants import *
 from selection import SelectionRect
 from pygame.locals import *
@@ -16,8 +17,9 @@ if __name__ == "__main__":
     # run on platforms without that resolution.
     screen_width = 1280
     screen_height = screen_width / 16 * 9
-
-    window = pygame.display.set_mode((screen_width, screen_height))
+    display_flags = pygame.DOUBLEBUF | pygame.HWSURFACE
+    
+    window = pygame.display.set_mode((screen_width, screen_height), display_flags, 32)
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
@@ -26,12 +28,13 @@ if __name__ == "__main__":
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)
     slug = Person("slug", (325, 275), 100, 15)
+    door = Door((2, 2), 0, 0, 0)
 
     # add all sprites into this render group, OrderedUpdates() draws
     # the sprites in the order they were added, and optionally returns
     # a list of rects which represent where the screen needs to be
     # redrawn
-    all_sprites = pygame.sprite.OrderedUpdates((stealth, human, rock, slug))
+    all_sprites = pygame.sprite.OrderedUpdates((stealth, human, rock, slug, door))
 
     clock = pygame.time.Clock()
 

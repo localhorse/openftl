@@ -1,8 +1,6 @@
 import pygame
 from constants import *
-
-if __name__ == "__main__":
-    pass
+from door import Door
 
 class Ship(pygame.sprite.Sprite):
 
@@ -43,6 +41,10 @@ class Ship(pygame.sprite.Sprite):
 
         # load the rooms from the data file
         self._rooms = self._load_rooms()
+
+        # try loading the doors...
+        self._doors = self._load_doors()
+
         # draw the rooms into the main ship graphic (not to the
         # screen)
         self._draw_rooms()
@@ -136,9 +138,11 @@ class Ship(pygame.sprite.Sprite):
         return rooms_list
 
         
-    # this function is not complete and currently does nothing --FIXME
     def _load_doors(self):
 
+        # the cost of loading this file every time is probably
+        # trivial, but it would also be trivial to have it loaded and
+        # parsed all in one shot --FIXME
         doors_file = open(self._shipdata_filename, "r")
         doors_list = []
 
@@ -161,3 +165,10 @@ class Ship(pygame.sprite.Sprite):
                 # if this is 0, the rooms connect vertically, if 1
                 # they connect horizontally
                 connect = lines[index + 5]
+                # create a new Door object for each door found, this
+                # will contain an animated sprite as well as the info
+                # we just loaded from the file
+                doors_list.append(Door((door_x, door_y), room_left, room_right, connect))
+
+if __name__ == "__main__":
+    pass
