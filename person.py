@@ -1,8 +1,11 @@
 import pygame
 from constants import *
 
-# each person or alien in the game is represented by this class
 class Person(pygame.sprite.Sprite):
+    """Each person or alien in the game is represented by this
+    class. The constructor must be provided with species type as a
+    string, a tuple representing X, Y position, and an animation and
+    move delay."""
 
     def __init__(self, species, pos, anim_delay, move_delay):
 
@@ -23,8 +26,8 @@ class Person(pygame.sprite.Sprite):
         self._anim_frame = 0
 
         x, y = pos
-        self._cur_x = x
-        self._cur_y = y
+        self._cur_x = self._round_tile(x)
+        self._cur_y = self._round_tile(y)
         self._dst_x = self._cur_x
         self._dst_y = self._cur_y
 
@@ -62,6 +65,9 @@ class Person(pygame.sprite.Sprite):
     # if enough time has passed and we're moving, then move and change
     # the sprite direction
     def _move(self):
+        """This moves the sprite: if enough time has passed according
+        to move_delay, then the sprites position will be moved and the
+        rect updated."""
 
         cur_time = pygame.time.get_ticks()
 
@@ -89,6 +95,8 @@ class Person(pygame.sprite.Sprite):
     # if enough time has passed and we're not idle, go to the next
     # animation frame
     def _animate(self):
+        """If enough time has passed and our state is not idle, then
+        this method will go to the next animation frame."""
         cur_time = pygame.time.get_ticks()
         if self._next_anim < cur_time:
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
@@ -99,10 +107,10 @@ class Person(pygame.sprite.Sprite):
                 self._anim_frame = 0
             self._next_anim = cur_time + self._anim_delay
             
-    # returns the current frame (which would be different depending on
-    # whether or not this Person is selected
     def _cur_frame(self):
-
+        """This method returns the current frame that should be
+        drawn... this frame will be different depending on whether or
+        not the sprite has been selected."""
         unselected_frame, selected_frame = self._frames[self._dir * 4 + self._anim_frame]
 
         if self._selected:
@@ -114,12 +122,14 @@ class Person(pygame.sprite.Sprite):
         
 
     def seek_pos(self, pos):
+        """This method simply sets a destination for our sprite, which
+        will then seek that destination until it is reached."""
         x_pos, y_pos = pos
         # make sure the actual guy ends up pretty much dead center in
         # the mouse click
         if self._selected:
-            self._dst_x = x_pos - ALIEN_WIDTH / 2
-            self._dst_y = y_pos - ALIEN_HEIGHT / 2
+            self._dst_x = self._round_tile(x_pos)
+            self._dst_y = self._round_tile(y_pos)
 
     def bounding_box(self):
         return pygame.Rect(self._cur_x, self._cur_y, ALIEN_WIDTH, ALIEN_HEIGHT)
@@ -139,6 +149,16 @@ class Person(pygame.sprite.Sprite):
     def get_pos(self):
         return (self._cur_x, self._cur_y)
 
+    def _round_tile(self, coord):
+        """This method ensures that seek_pos() can't choose any old
+        arbitrary coordinates... given an X or Y value, _round_tile()
+        will return the corresponding value which would refer to the
+        center of the closest tile."""
+        # could have just as easily used TILE_HEIGHT, since they are
+        # the same, but if they ever become different, this will need
+        # to be changed (not really a concern, as a LOT would need
+        # changing)
+        return divmod(coord, TILE_WIDTH)[0] * TILE_WIDTH
 
 if __name__ == "__main__":
     pass

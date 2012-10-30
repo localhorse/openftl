@@ -3,10 +3,12 @@ from constants import *
 from door import Door
 
 class Ship(pygame.sprite.Sprite):
+    """The ship class represents every ship in the game. The
+    constructor only takes a string representing ship type and a tuple
+    representing the X, Y position. The ship placement can only be in
+    increments of (TILE_WIDTH, TILE_HEIGHT) so we'll need position to
+    not actually be screen coordinates, but rather tile coordinates."""
 
-    # the ship placement can only be in increments of (TILE_WIDTH,
-    # TILE_HEIGHT) so we'll need pos to not actually be screen
-    # coordinates
     def __init__(self, ship_type, pos):
 
         pygame.sprite.Sprite.__init__(self)
@@ -46,13 +48,17 @@ class Ship(pygame.sprite.Sprite):
         self._draw_rooms()
 
     def bounding_box(self):
+        """This method returns a rect that represents the position and
+        size of this sprite. We can't use Sprite.image.get_rect() as
+        that returns with a starting position of (0, 0)."""
         return pygame.Rect(self._cur_x * TILE_WIDTH, self._cur_y * TILE_HEIGHT, self._ship_width, self._ship_height)
 
     def update(self):
         pass
 
-    # draw the rooms to the Sprite image surface
     def _draw_rooms(self):
+        """Draw the rooms to the sprite image surface. Currently this
+        is done only once on initialization."""
 
         for room in self._rooms:
             temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
@@ -80,11 +86,11 @@ class Ship(pygame.sprite.Sprite):
 
             pygame.draw.lines(self.image, (0, 0, 0), True, plist, 4)
 
-    # loads the x and y offsets from the data file... these values
-    # describe how much the rooms are offset from (0, 0) of the ship
-    # image... for some reason they don't line up properly even after
-    # taking those calculations into account
     def _load_offsets(self):
+        """Load the X and Y offsets from the data file. These values
+        describe (supposedly) how much the rooms are offset from (0,
+        0) of the ship image. Still working on getting them to line up
+        properly."""
 
         ship_data = open(self._shipdata_filename, "r")
         lines = ship_data.readlines()
@@ -182,6 +188,8 @@ class Ship(pygame.sprite.Sprite):
         return (self._cur_x, self._cur_y)
 
     def get_room(self, room_id):
+        """This method returns the index of the room with ID
+        room_id. Might consider returning the actual room."""
         for index, room in enumerate(self._rooms):
             if room['id'] == room_id:
                 return index

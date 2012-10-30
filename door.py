@@ -3,10 +3,15 @@ from constants import *
 
 class Door(pygame.sprite.Sprite):
 
-    # again, this x, y position is not a screen pixel position but
-    # rather a grid of TILE_WIDTH by TILE_HEIGHT sized tiles - we'll
-    # do this eventually for everything but the Person class, it will
-    # be easier to scale
+    """The Door class represents, obviously, the doors on the
+    ship. This class is only ever instanced from Ship. Ship keeps a
+    running list of doors as it loads them from the file. Constructor
+    takes ship position, desired door position, the room ID to the
+    left/above the door, the room ID to the right/below the door,
+    whether it connects vertically or horizontally, and the offsets
+    from the ship file. As with ship, the positions are not pixel
+    coordinates but rather tile coordinates."""
+
     def __init__(self, ship_pos, pos, room_left, room_right, connect, x_offset, y_offset, vert_offset):
         
         self._cur_x, self._cur_y = pos        
@@ -52,7 +57,7 @@ class Door(pygame.sprite.Sprite):
         self.rect = self.bounding_box()
             
     def update(self):
-        self._test_anim()
+        ##self._test_anim()
         self._cur_frame()
 
     def _cur_frame(self):
@@ -72,6 +77,12 @@ class Door(pygame.sprite.Sprite):
         self.rect = self.bounding_box()
 
     def bounding_box(self):
+        """This method returns a rect that represents the position and
+        size of this sprite. We can't use Sprite.image.get_rect() as
+        that returns with a starting position of (0, 0). In this
+        particular class this method also shrinks the bounding box
+        below the size of the actual image, since the doors are much
+        thinner than the door image."""
         temp_x = (self._ship_x + self._cur_x + self._x_offset) * TILE_WIDTH
         temp_y = ((self._ship_y + self._cur_y + self._y_offset) * TILE_HEIGHT) + self._vert_offset
         # it would appear that in most cases the info in the data file
