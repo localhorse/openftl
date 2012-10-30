@@ -175,7 +175,8 @@ class Ship(pygame.sprite.Sprite):
                 # this is very convoluted, but we'll maintain a list
                 # in each room of the doors that connect to that room,
                 # this way when drawing the room border, we'll know
-                # where not to draw lines
+                # where not to draw lines - at least that's the idea,
+                # as they aren't currently being used! --FIXME
                 self._rooms[self.get_room(room_left)]['doors'].append(temp_door)
                 doors_list.append(temp_door)
 
