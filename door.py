@@ -93,7 +93,7 @@ class Door(pygame.sprite.Sprite):
         else:
             self.close_door(close_sound)
         
-    def bounding_box(self):
+    def bounding_box(self, collision=False):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as
         that returns with a starting position of (0, 0). In this
@@ -111,11 +111,27 @@ class Door(pygame.sprite.Sprite):
         # where there are 2 vertical or 2 horizontal doors per room,
         # in which case it would be more ambiguous... this will have
         # to be changed --FIXME
-        if self._connect == HORIZONTAL:
-            temp_x -= TILE_WIDTH / 2 - 1
-        elif self._connect == VERTICAL:
-            temp_y -= TILE_HEIGHT / 2
-        return pygame.Rect(temp_x, temp_y, TILE_WIDTH, TILE_HEIGHT)
+        if not collision:
+            # this determines precisely where the image will be drawn
+            # for the render group... this may or may not work when
+            # the doors are modeled properly --FIXME
+            if self._connect == HORIZONTAL:
+                temp_x -= TILE_WIDTH / 2 - 1
+            elif self._connect == VERTICAL:
+                temp_y -= TILE_HEIGHT / 2
+            return pygame.Rect(temp_x, temp_y, TILE_WIDTH, TILE_HEIGHT)
+        else:
+            # this determines the bounding box for collision detection
+            # purposes (in this case the selection box) - it's all
+            # kind of a hack and will have to be changed when I do the
+            # doors properly, but as of right now I'm playing around
+            # and it's functional --FIXME
+            if self._connect == HORIZONTAL:
+                temp_x -= 4
+                return pygame.Rect(temp_x, temp_y, TILE_WIDTH / 4 + 4, TILE_HEIGHT)
+            else:
+                temp_y -= 4
+                return pygame.Rect((temp_x, temp_y, TILE_WIDTH, TILE_HEIGHT / 4 + 4))
 
 if __name__ == "__main__":
     pass

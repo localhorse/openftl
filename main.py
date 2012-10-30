@@ -130,7 +130,7 @@ if __name__ == "__main__":
                     door_clicked = False
                     if rect_width < 15 and rect_height < 15:
                         for door in player_ship.get_doors():
-                            if door.bounding_box().colliderect(rect):
+                            if door.bounding_box(collision=True).colliderect(rect):
                                 door_clicked = True
                                 door.toggle_door(door_open_sound, door_close_sound)
 
