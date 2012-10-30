@@ -107,12 +107,11 @@ class Ship(pygame.sprite.Sprite):
         rooms_list = []
         
         lines = rooms_file.readlines()
-
+        rooms_file.close()
+        
         for line in lines:
             temp = line.strip()
             line = temp
-        
-        rooms_file.close()
 
         # load each room from file
         for index, line in enumerate(lines):
@@ -137,3 +136,28 @@ class Ship(pygame.sprite.Sprite):
         return rooms_list
 
         
+    # this function is not complete and currently does nothing --FIXME
+    def _load_doors(self):
+
+        doors_file = open(self._shipdata_filename, "r")
+        doors_list = []
+
+        lines = doors_file.readlines()
+        doors_file.close()
+
+        for line in lines:
+            temp = line.strip()
+            line = temp
+
+        # load each door from the file
+        for index, line in enumerate(lines):
+            if "DOOR" in line:
+                door_x = lines[index + 1]
+                door_y = lines[index + 2]
+                # the room above or to the left of this door
+                room_left = lines[index + 3]
+                # the room below or to the right
+                room_right = lines[index + 4]
+                # if this is 0, the rooms connect vertically, if 1
+                # they connect horizontally
+                connect = lines[index + 5]

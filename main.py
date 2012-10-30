@@ -11,7 +11,13 @@ if __name__ == "__main__":
 
     clock = pygame.time.Clock()
 
-    window = pygame.display.set_mode((800, 600))
+    # by default FTL is minimum 1280x720, I'd like to scale
+    # things... it might be fairly hard to see but it will at least
+    # run on platforms without that resolution.
+    screen_width = 1280
+    screen_height = screen_width / 16 * 9
+
+    window = pygame.display.set_mode((screen_width, screen_height))
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate

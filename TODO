@@ -16,4 +16,11 @@
 - Doors won't have to be drawn manually, I found a sprite sheet. We'll
   have to leave a gap of that size, however, in the room borders.
 
-- 
+- Started adding some door code, but I am thinking the doors should be
+  sprite objects. I can continue to load doors so the room border
+  function can avoid drawing where the doors should be, but I need to
+  think about this more.
+
+- Added a bit of code with regards to scaling, but need to think about
+  how we'll scale sprite images as well as coordinates.
+
