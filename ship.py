@@ -156,19 +156,27 @@ class Ship(pygame.sprite.Sprite):
         # load each door from the file
         for index, line in enumerate(lines):
             if "DOOR" in line:
-                door_x = lines[index + 1]
-                door_y = lines[index + 2]
+                door_x = int(lines[index + 1])
+                door_y = int(lines[index + 2])
                 # the room above or to the left of this door
-                room_left = lines[index + 3]
+                room_left = int(lines[index + 3])
                 # the room below or to the right
-                room_right = lines[index + 4]
+                room_right = int(lines[index + 4])
                 # if this is 0, the rooms connect vertically, if 1
                 # they connect horizontally
-                connect = lines[index + 5]
+                connect = int(lines[index + 5])
                 # create a new Door object for each door found, this
                 # will contain an animated sprite as well as the info
                 # we just loaded from the file
-                doors_list.append(Door((door_x, door_y), room_left, room_right, connect))
+                doors_list.append(Door(self.get_pos(), (door_x, door_y), room_left, room_right, connect, self._x_offset, self._y_offset, self._vert_offset))
 
+        return doors_list
+
+    def get_doors(self):
+        return self._doors
+
+    def get_pos(self):
+        return (self._cur_x, self._cur_y)
+        
 if __name__ == "__main__":
     pass

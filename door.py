@@ -7,14 +7,20 @@ class Door(pygame.sprite.Sprite):
     # rather a grid of TILE_WIDTH by TILE_HEIGHT sized tiles - we'll
     # do this eventually for everything but the Person class, it will
     # be easier to scale
-    def __init__(self, pos, room_left, room_right, connect):
+    def __init__(self, ship_pos, pos, room_left, room_right, connect, x_offset, y_offset, vert_offset):
         
         self._cur_x, self._cur_y = pos        
+        self._ship_x, self._ship_y = ship_pos
+
         self._frames = []
         frames = self._frames
         self._next_anim = 0
         self._anim_delay = 200
         self._anim_frame = 0
+
+        self._x_offset = x_offset
+        self._y_offset = y_offset
+        self._vert_offset = vert_offset
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -50,7 +56,7 @@ class Door(pygame.sprite.Sprite):
     def _cur_frame(self):
         # this only needs its own method because later we'll need to
         # determine if we're drawing the regular or upgraded door
-        (_, self.image) = self._frames[self._anim_frame]
+        (self.image, _) = self._frames[self._anim_frame]
 
     def _test_anim(self):
         cur_time = pygame.time.get_ticks()
@@ -64,8 +70,8 @@ class Door(pygame.sprite.Sprite):
         self.rect = self.bounding_box()
 
     def bounding_box(self):
-        return pygame.Rect(self._cur_x * TILE_WIDTH, self._cur_y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
-    
+        return pygame.Rect((self._ship_x + self._cur_x + self._x_offset) * TILE_WIDTH, ((self._ship_y + self._cur_y + self._y_offset) * TILE_HEIGHT) + self._vert_offset, TILE_WIDTH, TILE_HEIGHT)
+
 if __name__ == "__main__":
     pass
 
