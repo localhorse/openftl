@@ -67,8 +67,6 @@ class Person(pygame.sprite.Sprite):
         self._animate()
         self._cur_frame()
 
-    # if enough time has passed and we're moving, then move and change
-    # the sprite direction
     def _move(self):
         """This moves the sprite: if enough time has passed according
         to move_delay, then the sprites position will be moved and the
@@ -97,8 +95,6 @@ class Person(pygame.sprite.Sprite):
             self._next_move = cur_time + self._move_delay
             self.rect = self.bounding_box()
             
-    # if enough time has passed and we're not idle, go to the next
-    # animation frame
     def _animate(self):
         """If enough time has passed and our state is not idle, then
         this method will go to the next animation frame."""
