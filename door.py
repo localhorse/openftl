@@ -31,7 +31,7 @@ class Door(pygame.sprite.Sprite):
             frames.append((pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha(), pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha()))
             reg_surf, upg_surf = frames[len(frames) - 1]
             reg_surf.blit(self._door_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
-            temp_rect = pygame.Rect((index * TILE_WIDTH, 1),
+            temp_rect = pygame.Rect((index * TILE_WIDTH, TILE_HEIGHT),
                                     (TILE_WIDTH, TILE_HEIGHT))
             upg_surf.blit(self._door_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
 
@@ -45,7 +45,7 @@ class Door(pygame.sprite.Sprite):
     def _cur_frame(self):
         # this only needs its own method because later we'll need to
         # determine if we're drawing the regular or upgraded door
-        (self.image, _) = self._frames[self._anim_frame]
+        (_, self.image) = self._frames[self._anim_frame]
 
     def _test_anim(self):
         cur_time = pygame.time.get_ticks()
