@@ -6,7 +6,7 @@ class Ship(pygame.sprite.Sprite):
     """The ship class represents every ship in the game. The
     constructor only takes a string representing ship type and a tuple
     representing the X, Y position. The ship placement can only be in
-    increments of (TILE_WIDTH, TILE_HEIGHT) so we'll need position to
+    increments of TILE_WIDTH or TILE_HEIGHT so we'll need position to
     not actually be screen coordinates, but rather tile coordinates."""
 
     def __init__(self, ship_type, pos):
@@ -26,9 +26,7 @@ class Ship(pygame.sprite.Sprite):
 
         # prepare the empty room tile (just a beige box with grey
         # border)
-        self._tile_img = pygame.Surface(pygame.Rect((0, 0, TILE_WIDTH,
-                                                     TILE_HEIGHT)).size,
-                                                     flags=pygame.SRCALPHA).convert_alpha()
+        self._tile_img = pygame.Surface((TILE_WIDTH, TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()
         self._tile_img.fill(GRID_COLOR)
         x1, y1, x2, y2 = self._tile_img.get_rect()
         x1 += 1
@@ -43,7 +41,7 @@ class Ship(pygame.sprite.Sprite):
         # load the rooms from the data file
         self._rooms = self._load_rooms()
 
-        # try loading the doors...
+        # load the doors...
         self._doors = self._load_doors()
 
         # draw the rooms into the main ship graphic (not to the
@@ -164,7 +162,6 @@ class Ship(pygame.sprite.Sprite):
         # parsed all in one shot --FIXME
         doors_file = open(self._shipdata_filename, "r")
         doors_list = []
-
         lines = doors_file.readlines()
         doors_file.close()
 
@@ -204,7 +201,6 @@ class Ship(pygame.sprite.Sprite):
         """This method returns the room with ID room_id. Might
         consider returning index for internal class use."""
         for index, room in enumerate(self._rooms):
-            print("*** %s %s ***" % (index, room['id']))
             if room['id'] == room_id:
                 return room
 

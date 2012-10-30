@@ -29,7 +29,7 @@ class Person(pygame.sprite.Sprite):
         self._cur_x = self._round_tile(x)
         self._cur_y = self._round_tile(y)
         self._dst_x = self._cur_x
-7        self._dst_y = self._cur_y
+        self._dst_y = self._cur_y
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -60,7 +60,7 @@ class Person(pygame.sprite.Sprite):
         # values
         (self.image, _) = frames[0]
         (temp_frame, _) = frames[0]
-        self.rect = temp_frame.get_rect()
+        self.rect = self.bounding_box()
             
     def update(self):
         self._move()
@@ -69,7 +69,7 @@ class Person(pygame.sprite.Sprite):
 
     def _move(self):
         """This moves the sprite: if enough time has passed according
-        to move_delay, then the sprites position will be moved and the
+        to move_delay, then the sprite's position will be moved and the
         rect updated."""
 
         cur_time = pygame.time.get_ticks()
@@ -127,7 +127,8 @@ class Person(pygame.sprite.Sprite):
         will then seek that destination until it is reached."""
         x_pos, y_pos = pos
         # make sure the actual guy ends up pretty much dead center in
-        # the mouse click
+        # the tile where the mouse was clicked (this behavior will
+        # change)
         if self._selected:
             self._dst_x = self._round_tile(x_pos)
             self._dst_y = self._round_tile(y_pos)

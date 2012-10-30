@@ -40,9 +40,11 @@ class Door(pygame.sprite.Sprite):
         # go through each column in the top rown and load all 5 door
         # positions
         for index in range(0, DOOR_FRAMES):
+            # loading both the yellow and the (upgraded) grey
+            # door... first row contains the regular door, and we'll
+            # point our rectangle there
             temp_rect = pygame.Rect((index * TILE_WIDTH, 0),
                                     (TILE_WIDTH, TILE_HEIGHT))
-            # loading both the yellow and the (upgraded) grey door
             frames.append((pygame.Surface(temp_rect.size,
                                           flags=pygame.SRCALPHA).convert_alpha(),
                                           pygame.Surface(temp_rect.size,
@@ -50,11 +52,15 @@ class Door(pygame.sprite.Sprite):
             reg_surf, upg_surf = frames[len(frames) - 1]
             reg_surf.blit(self._door_sheet, (0, 0), temp_rect,
                           special_flags=BLEND_TYPE)
+            # adjust our "camera" rect one row down... the 2nd row
+            # will contain upgraded door frames
             temp_rect = pygame.Rect((index * TILE_WIDTH, TILE_HEIGHT),
                                     (TILE_WIDTH, TILE_HEIGHT))
             upg_surf.blit(self._door_sheet, (0, 0), temp_rect,
                           special_flags=BLEND_TYPE)
 
+            # these need to be oriented properly, so we'll rotate them
+            # if needed
             if connect == VERTICAL:
                 reg_surf = pygame.transform.rotate(reg_surf, 90)
                 upg_surf = pygame.transform.rotate(upg_surf, 90)

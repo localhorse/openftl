@@ -107,7 +107,8 @@ if __name__ == "__main__":
                 elif event.button == 1:
                     if not select_on:
                         select_on = True
-                        selection = SelectionRect(window, event.pos, col=(255, 255, 255))
+                        selection = SelectionRect(window, event.pos,
+                                                  col=(255, 255, 255))
             elif event.type == MOUSEMOTION:
                 if select_on:
                     rect = selection.updateRect(event.pos)
@@ -119,19 +120,14 @@ if __name__ == "__main__":
                     draw_selection = False
 
                     # here's where we'll check if they clicked a door
-                    # (might need to make it more tolerant than zero
-                    # width/height, though... also when a character
-                    # that occupies the same original tile the door
-                    # was supposed to be on is selected, it thinks
-                    # we're clicking the door as well... good start
-                    # though)
                     (_, _, rect_width, rect_height) = rect
                     door_clicked = False
                     if rect_width < 15 and rect_height < 15:
                         for door in player_ship.get_doors():
                             if door.bounding_box(collision=True).colliderect(rect):
                                 door_clicked = True
-                                door.toggle_door(door_open_sound, door_close_sound)
+                                door.toggle_door(door_open_sound,
+                                                 door_close_sound)
 
                     # these should be in a sprite group --FIXME
                     for alien in [human, rock]:
