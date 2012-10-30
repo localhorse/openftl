@@ -21,3 +21,9 @@
   Ship to know where the doors will be while drawing the room borders,
   and we need Person to know where the doors are for pathfinding
   purposes.
+
+- Instead of _not_ drawing certain areas of the border, we'll just
+  clear the spots under the doors... after some observation, it
+  appears that's what FTL does, anyways (BG colored gaps to the left of
+  some doors when sensors are down).
+

@@ -35,12 +35,14 @@ if __name__ == "__main__":
     # the sprites in the order they were added, and optionally returns
     # a list of rects which represent where the screen needs to be
     # redrawn
-    all_sprites = pygame.sprite.OrderedUpdates((player_ship, human, rock, slug))
+    all_sprites = pygame.sprite.OrderedUpdates(player_ship)
 
     # we need to add each item in player_ship.get_doors() to the
     # all_sprites group
     for door in player_ship.get_doors():
         all_sprites.add(door)
+
+    all_sprites.add((human, rock, slug))
     
     clock = pygame.time.Clock()
 
@@ -121,8 +123,12 @@ if __name__ == "__main__":
         # we would clear here with Group.clear() if it worked (didn't
         # seem to work properly, will attempt again --FIXME
         all_sprites.update()
-        update_rects = all_sprites.draw(window)
-
+        sprite_rects = all_sprites.draw(window)
+        
+        # instead of _not_ drawing certain areas of the border, we'll
+        # just clear the spots under the doors... after some
+        # observation, it appears that's what FTL does anyways (bg
+        # colored gaps to the left of some doors when sensors are down
 
         # if the user is currently selecting something, we should draw
         # the box now, on top of everything else
@@ -132,5 +138,5 @@ if __name__ == "__main__":
             if selection:
                 selection.hide(window)
 
-        pygame.display.update(update_rects)
+        pygame.display.update(sprite_rects)
 

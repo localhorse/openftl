@@ -78,7 +78,7 @@ class Ship(pygame.sprite.Sprite):
             p4 = (x1, y2)
             plist = [p1, p2, p2, p3, p3, p4, p4, p1]
 
-            pygame.draw.lines(self.image, (0, 0, 0), True, plist, 2)
+            pygame.draw.lines(self.image, (0, 0, 0), True, plist, 4)
 
     # loads the x and y offsets from the data file... these values
     # describe how much the rooms are offset from (0, 0) of the ship
@@ -128,7 +128,7 @@ class Ship(pygame.sprite.Sprite):
                 room_height = int(lines[index + 5])
                 room_img = pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()
 
-                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img, 'doors': []})
+                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img})
 
         # draw the tiles into each room image
         for room in rooms_list:
@@ -171,14 +171,7 @@ class Ship(pygame.sprite.Sprite):
                 # create a new Door object for each door found, this
                 # will contain an animated sprite as well as the info
                 # we just loaded from the file
-                temp_door = Door(self.get_pos(), (door_x, door_y), room_left, room_right, connect, self._x_offset, self._y_offset, self._vert_offset)
-                # this is very convoluted, but we'll maintain a list
-                # in each room of the doors that connect to that room,
-                # this way when drawing the room border, we'll know
-                # where not to draw lines - at least that's the idea,
-                # as they aren't currently being used! --FIXME
-                self._rooms[self.get_room(room_left)]['doors'].append(temp_door)
-                doors_list.append(temp_door)
+                doors_list.append(Door(self.get_pos(), (door_x, door_y), room_left, room_right, connect, self._x_offset, self._y_offset, self._vert_offset))
 
         return doors_list
 
