@@ -188,11 +188,28 @@ class Ship(pygame.sprite.Sprite):
         return (self._cur_x, self._cur_y)
 
     def get_room(self, room_id):
-        """This method returns the index of the room with ID
-        room_id. Might consider returning the actual room."""
+        """This method returns the room with ID room_id. Might
+        consider returning index for internal class use."""
         for index, room in enumerate(self._rooms):
+            print("*** %s %s ***" % (index, room['id']))
             if room['id'] == room_id:
-                return index
+                return room
+
+        return None
+
+    # sticking our Persons in a room at creation will make the
+    # pathfinding much easier to start with!
+    def get_room_pos(self, room_id):
+        room = self.get_room(room_id)
+        ship_x, ship_y = self.get_pos()
+        ship_x += self._x_offset
+        ship_y += self._y_offset
+        ship_x *= TILE_WIDTH
+        ship_y *= TILE_WIDTH
+        ship_y += self._vert_offset
+        room_x = room['x'] * TILE_WIDTH + ship_x
+        room_y = room['y'] * TILE_HEIGHT + ship_y
+        return (room_x, room_y)
 
 if __name__ == "__main__":
     pass

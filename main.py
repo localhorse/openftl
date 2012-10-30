@@ -32,11 +32,10 @@ if __name__ == "__main__":
     
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    player_ship = Ship("kestral", (5, 4))
+    player_ship = Ship("circle_cruiser", (5, 4))
 
-    human = Person("human", (250, 250), 150, 20)
-    rock = Person("rock", (300, 300), 300, 40)
-    slug = Person("slug", (325, 275), 100, 15)
+    human = Person("human", player_ship.get_room_pos(0), 150, 20)
+    rock = Person("rock", player_ship.get_room_pos(1), 300, 40)
 
     # add all sprites into this render group, OrderedUpdates() draws
     # the sprites in the order they were added, and optionally returns
@@ -49,7 +48,7 @@ if __name__ == "__main__":
     for door in player_ship.get_doors():
         all_sprites.add(door)
 
-    all_sprites.add((human, rock, slug))
+    all_sprites.add((human, rock))
     
     clock = pygame.time.Clock()
 
@@ -103,7 +102,7 @@ if __name__ == "__main__":
                 # right mouse button (or left + ctrl for Mac users)
                 if event.button == 3 or (event.button == 1 and (lctrl_pressed or rctrl_pressed)):
                     # put these in a sprite group instead --FIXME
-                    for alien in [human, rock, slug]:
+                    for alien in [human, rock]:
                         alien.seek_pos(event.pos)
                 elif event.button == 1:
                     if not select_on:
@@ -135,7 +134,7 @@ if __name__ == "__main__":
                                 door.toggle_door(door_open_sound, door_close_sound)
 
                     # these should be in a sprite group --FIXME
-                    for alien in [human, rock, slug]:
+                    for alien in [human, rock]:
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()

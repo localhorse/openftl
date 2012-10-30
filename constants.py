@@ -1,4 +1,4 @@
-import pygame
+##import pygame
 
 ALIEN_WIDTH =  35
 ALIEN_HEIGHT = 35

@@ -79,13 +79,18 @@ class Door(pygame.sprite.Sprite):
         # unless the rect has changed!
         self.rect = self.bounding_box()
 
-    def open_door(self, open_sound):
-        self._dest_frame = DOOR_OPENED
-        open_sound.play()
+    # we'll need methods in Ship: open_all_doors(), close_all_doors()
+    # --FIXME
 
-    def close_door(self, close_sound):
+    def open_door(self, open_sound=None):
+        self._dest_frame = DOOR_OPENED
+        if open_sound:
+            open_sound.play()
+
+    def close_door(self, close_sound=None):
         self._dest_frame = DOOR_CLOSED
-        close_sound.play()
+        if close_sound:
+            close_sound.play()
 
     def toggle_door(self, open_sound, close_sound):
         if self._dest_frame == DOOR_CLOSED:
