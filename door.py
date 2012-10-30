@@ -15,12 +15,14 @@ class Door(pygame.sprite.Sprite):
         self._frames = []
         frames = self._frames
         self._next_anim = 0
-        self._anim_delay = 200
+        self._anim_delay = 100
         self._anim_frame = 0
 
         self._x_offset = x_offset
         self._y_offset = y_offset
         self._vert_offset = vert_offset
+
+        self._connect = connect
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -47,7 +49,7 @@ class Door(pygame.sprite.Sprite):
                 frames[len(frames) - 1] = (reg_surf, upg_surf)
 
         (self.image, _) = frames[0]
-        self.rect = self.image.get_rect()
+        self.rect = self.bounding_box()
             
     def update(self):
         self._test_anim()
@@ -70,7 +72,22 @@ class Door(pygame.sprite.Sprite):
         self.rect = self.bounding_box()
 
     def bounding_box(self):
-        return pygame.Rect((self._ship_x + self._cur_x + self._x_offset) * TILE_WIDTH, ((self._ship_y + self._cur_y + self._y_offset) * TILE_HEIGHT) + self._vert_offset, TILE_WIDTH, TILE_HEIGHT)
+        temp_x = (self._ship_x + self._cur_x + self._x_offset) * TILE_WIDTH
+        temp_y = ((self._ship_y + self._cur_y + self._y_offset) * TILE_HEIGHT) + self._vert_offset
+        # it would appear that in most cases the info in the data file
+        # for the doors (specifically the ids of rooms the door is
+        # connecting to) is not actually needed... in most cases the
+        # doors belong to the room either directly above (in the case
+        # of horizontal doors) or directly to the left of (in the case
+        # of vertical) the door. I expect that there may be ships
+        # where there are 2 vertical or 2 horizontal doors per room,
+        # in which case it would be more ambiguous... this will have
+        # to be changed --FIXME
+        if self._connect == HORIZONTAL:
+            temp_x -= TILE_WIDTH / 2 - 1
+        elif self._connect == VERTICAL:
+            temp_y -= TILE_HEIGHT / 2
+        return pygame.Rect(temp_x, temp_y, TILE_WIDTH, TILE_HEIGHT)
 
 if __name__ == "__main__":
     pass

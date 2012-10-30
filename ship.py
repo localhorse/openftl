@@ -33,10 +33,6 @@ class Ship(pygame.sprite.Sprite):
         y2 -= 1
         pygame.draw.rect(self._tile_img, ROOM_COLOR, pygame.Rect((x1, y1, x2, y2)))
         
-        # somehow these aren't exactly right, they're not lining up
-        # with the ship the way they do in FTL... although the rooms
-        # are fine relative to each other, it must be the offsets
-        # somehow
         self._x_offset, self._y_offset, self._vert_offset = self._load_offsets()
 
         # load the rooms from the data file
@@ -59,8 +55,8 @@ class Ship(pygame.sprite.Sprite):
     def _draw_rooms(self):
 
         for room in self._rooms:
-            temp_x = ((room['x'] + self._x_offset) * TILE_WIDTH) + self._cur_x * TILE_WIDTH
-            temp_y = ((room['y'] + self._y_offset) * TILE_HEIGHT) + self._vert_offset + self._cur_y * TILE_HEIGHT
+            temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
+            temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT + self._vert_offset
 
             # draw room
             self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
@@ -76,11 +72,18 @@ class Ship(pygame.sprite.Sprite):
             x2 += x1
             y2 += y1
             
-            pygame.draw.lines(self.image, (0, 0, 0), True, [(x1, y1), (x2, y1), (x2, y1), (x2, y2), (x2, y2), (x1, y2), (x1, y2), (x1, y1)], 2)
+            p1 = (x1, y1)
+            p2 = (x2, y1)
+            p3 = (x2, y2)
+            p4 = (x1, y2)
+            plist = [p1, p2, p2, p3, p3, p4, p4, p1]
+
+            pygame.draw.lines(self.image, (0, 0, 0), True, plist, 2)
 
     # loads the x and y offsets from the data file... these values
     # describe how much the rooms are offset from (0, 0) of the ship
-    # image
+    # image... for some reason they don't line up properly even after
+    # taking those calculations into account
     def _load_offsets(self):
 
         ship_data = open(self._shipdata_filename, "r")
@@ -125,7 +128,7 @@ class Ship(pygame.sprite.Sprite):
                 room_height = int(lines[index + 5])
                 room_img = pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()
 
-                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img})
+                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img, 'doors': []})
 
         # draw the tiles into each room image
         for room in rooms_list:
@@ -168,7 +171,13 @@ class Ship(pygame.sprite.Sprite):
                 # create a new Door object for each door found, this
                 # will contain an animated sprite as well as the info
                 # we just loaded from the file
-                doors_list.append(Door(self.get_pos(), (door_x, door_y), room_left, room_right, connect, self._x_offset, self._y_offset, self._vert_offset))
+                temp_door = Door(self.get_pos(), (door_x, door_y), room_left, room_right, connect, self._x_offset, self._y_offset, self._vert_offset)
+                # this is very convoluted, but we'll maintain a list
+                # in each room of the doors that connect to that room,
+                # this way when drawing the room border, we'll know
+                # where not to draw lines
+                self._rooms[self.get_room(room_left)]['doors'].append(temp_door)
+                doors_list.append(temp_door)
 
         return doors_list
 
@@ -177,6 +186,11 @@ class Ship(pygame.sprite.Sprite):
 
     def get_pos(self):
         return (self._cur_x, self._cur_y)
-        
+
+    def get_room(self, room_id):
+        for index, room in enumerate(self._rooms):
+            if room['id'] == room_id:
+                return index
+
 if __name__ == "__main__":
     pass

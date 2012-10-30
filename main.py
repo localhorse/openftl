@@ -10,6 +10,8 @@ from pygame.locals import *
 
 if __name__ == "__main__":
 
+    bg_color = (0, 5, 10)
+
     clock = pygame.time.Clock()
 
     # by default FTL is minimum 1280x720, I'd like to scale
@@ -23,7 +25,7 @@ if __name__ == "__main__":
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    kestrel = Ship("kestral", (4, 4))
+    player_ship = Ship("kestral", (5, 4))
 
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)
@@ -33,11 +35,11 @@ if __name__ == "__main__":
     # the sprites in the order they were added, and optionally returns
     # a list of rects which represent where the screen needs to be
     # redrawn
-    all_sprites = pygame.sprite.OrderedUpdates((kestrel, human, rock, slug))
+    all_sprites = pygame.sprite.OrderedUpdates((player_ship, human, rock, slug))
 
-    # we need to add each item in kestrel.get_doors() to the
+    # we need to add each item in player_ship.get_doors() to the
     # all_sprites group
-    for door in kestrel.get_doors():
+    for door in player_ship.get_doors():
         all_sprites.add(door)
     
     clock = pygame.time.Clock()
@@ -53,6 +55,9 @@ if __name__ == "__main__":
     lshift_pressed = False
     lctrl_pressed = False
     rctrl_pressed = False
+
+    window.fill(bg_color)
+    pygame.display.update()
 
     # the main game loop... we'll just check for input events, update
     # based on input, clear the screen entirely, update sprite
@@ -111,7 +116,7 @@ if __name__ == "__main__":
                         else:
                             alien.deselect()
 
-        window.fill((0, 0, 0))
+        window.fill(bg_color)
 
         # we would clear here with Group.clear() if it worked (didn't
         # seem to work properly, will attempt again --FIXME
