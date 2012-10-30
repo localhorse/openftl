@@ -29,7 +29,7 @@ class Person(pygame.sprite.Sprite):
         self._cur_x = self._round_tile(x)
         self._cur_y = self._round_tile(y)
         self._dst_x = self._cur_x
-        self._dst_y = self._cur_y
+7        self._dst_y = self._cur_y
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -45,10 +45,15 @@ class Person(pygame.sprite.Sprite):
 
             temp_rect = pygame.Rect((index * ALIEN_WIDTH, 0),
                                     (ALIEN_WIDTH, ALIEN_HEIGHT))
-            frames.append((pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha(), pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha()))
+            frames.append((pygame.Surface(temp_rect.size,
+                                          flags=pygame.SRCALPHA).convert_alpha(),
+                                          pygame.Surface(temp_rect.size,
+                                                         flags=pygame.SRCALPHA).convert_alpha()))
             unselected_surf, selected_surf = frames[len(frames) - 1]
-            unselected_surf.blit(self._unselected_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
-            selected_surf.blit(self._selected_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
+            unselected_surf.blit(self._unselected_sheet, (0, 0),
+                                 temp_rect, special_flags=BLEND_TYPE)
+            selected_surf.blit(self._selected_sheet, (0, 0),
+                               temp_rect, special_flags=BLEND_TYPE)
 
         # discarding some values as we just want basically the first
         # image in here to begin with, then setting Sprite specific
@@ -132,6 +137,9 @@ class Person(pygame.sprite.Sprite):
             self._dst_y = self._round_tile(y_pos)
 
     def bounding_box(self):
+        """This method returns a rect that represents the position and
+        size of this sprite. We can't use Sprite.image.get_rect() as
+        that returns with a starting position of (0, 0)."""
         return pygame.Rect(self._cur_x, self._cur_y, ALIEN_WIDTH, ALIEN_HEIGHT)
 
     def toggle_selected(self):

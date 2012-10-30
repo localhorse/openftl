@@ -12,7 +12,8 @@ class Door(pygame.sprite.Sprite):
     from the ship file. As with ship, the positions are not pixel
     coordinates but rather tile coordinates."""
 
-    def __init__(self, ship_pos, pos, room_left, room_right, connect, x_offset, y_offset, vert_offset):
+    def __init__(self, ship_pos, pos, room_left, room_right, connect,
+                 x_offset, y_offset, vert_offset):
         
         self._cur_x, self._cur_y = pos        
         self._ship_x, self._ship_y = ship_pos
@@ -42,12 +43,17 @@ class Door(pygame.sprite.Sprite):
             temp_rect = pygame.Rect((index * TILE_WIDTH, 0),
                                     (TILE_WIDTH, TILE_HEIGHT))
             # loading both the yellow and the (upgraded) grey door
-            frames.append((pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha(), pygame.Surface(temp_rect.size, flags=pygame.SRCALPHA).convert_alpha()))
+            frames.append((pygame.Surface(temp_rect.size,
+                                          flags=pygame.SRCALPHA).convert_alpha(),
+                                          pygame.Surface(temp_rect.size,
+                                                         flags=pygame.SRCALPHA).convert_alpha()))
             reg_surf, upg_surf = frames[len(frames) - 1]
-            reg_surf.blit(self._door_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
+            reg_surf.blit(self._door_sheet, (0, 0), temp_rect,
+                          special_flags=BLEND_TYPE)
             temp_rect = pygame.Rect((index * TILE_WIDTH, TILE_HEIGHT),
                                     (TILE_WIDTH, TILE_HEIGHT))
-            upg_surf.blit(self._door_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
+            upg_surf.blit(self._door_sheet, (0, 0), temp_rect,
+                          special_flags=BLEND_TYPE)
 
             if connect == VERTICAL:
                 reg_surf = pygame.transform.rotate(reg_surf, 90)
@@ -133,10 +139,12 @@ class Door(pygame.sprite.Sprite):
             # and it's functional --FIXME
             if self._connect == HORIZONTAL:
                 temp_x -= 4
-                return pygame.Rect(temp_x, temp_y, TILE_WIDTH / 4 + 4, TILE_HEIGHT)
+                return pygame.Rect(temp_x, temp_y, TILE_WIDTH / 4 + 4,
+                                   TILE_HEIGHT)
             else:
                 temp_y -= 4
-                return pygame.Rect((temp_x, temp_y, TILE_WIDTH, TILE_HEIGHT / 4 + 4))
+                return pygame.Rect((temp_x, temp_y, TILE_WIDTH,
+                                    TILE_HEIGHT / 4 + 4))
 
 if __name__ == "__main__":
     pass

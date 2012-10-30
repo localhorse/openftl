@@ -26,14 +26,17 @@ class Ship(pygame.sprite.Sprite):
 
         # prepare the empty room tile (just a beige box with grey
         # border)
-        self._tile_img = pygame.Surface(pygame.Rect((0, 0, TILE_WIDTH, TILE_HEIGHT)).size, flags=pygame.SRCALPHA).convert_alpha()
+        self._tile_img = pygame.Surface(pygame.Rect((0, 0, TILE_WIDTH,
+                                                     TILE_HEIGHT)).size,
+                                                     flags=pygame.SRCALPHA).convert_alpha()
         self._tile_img.fill(GRID_COLOR)
         x1, y1, x2, y2 = self._tile_img.get_rect()
         x1 += 1
         y1 += 1
         x2 -= 1
         y2 -= 1
-        pygame.draw.rect(self._tile_img, ROOM_COLOR, pygame.Rect((x1, y1, x2, y2)))
+        pygame.draw.rect(self._tile_img, ROOM_COLOR, pygame.Rect((x1, y1,
+                                                                  x2, y2)))
         
         self._x_offset, self._y_offset, self._vert_offset = self._load_offsets()
 
@@ -51,7 +54,8 @@ class Ship(pygame.sprite.Sprite):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as
         that returns with a starting position of (0, 0)."""
-        return pygame.Rect(self._cur_x * TILE_WIDTH, self._cur_y * TILE_HEIGHT, self._ship_width, self._ship_height)
+        return pygame.Rect(self._cur_x * TILE_WIDTH, self._cur_y * TILE_HEIGHT,
+                           self._ship_width, self._ship_height)
 
     def update(self):
         pass
@@ -65,7 +69,8 @@ class Ship(pygame.sprite.Sprite):
             temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT + self._vert_offset
 
             # draw room
-            self.image.blit(room['img'], (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+            self.image.blit(room['img'], (temp_x, temp_y), area=None,
+                            special_flags=BLEND_TYPE)
 
             # draw room borders
 
@@ -132,9 +137,13 @@ class Ship(pygame.sprite.Sprite):
                 room_y = int(lines[index + 3])
                 room_width = int(lines[index + 4])
                 room_height = int(lines[index + 5])
-                room_img = pygame.Surface((room_width * TILE_WIDTH, room_height * TILE_HEIGHT), flags=pygame.SRCALPHA).convert_alpha()
+                room_img = pygame.Surface((room_width * TILE_WIDTH,
+                                           room_height * TILE_HEIGHT),
+                                           flags=pygame.SRCALPHA).convert_alpha()
 
-                rooms_list.append({'id': room_id, 'x': room_x, 'y': room_y, 'width': room_width, 'height': room_height, 'img': room_img})
+                rooms_list.append({'id': room_id, 'x': room_x,
+                                   'y': room_y, 'width': room_width,
+                                   'height': room_height, 'img': room_img})
 
         # draw the tiles into each room image
         for room in rooms_list:
@@ -142,7 +151,8 @@ class Ship(pygame.sprite.Sprite):
                 for height_index in range(0, room['height']):
                     temp_x = width_index * TILE_WIDTH
                     temp_y = height_index * TILE_HEIGHT
-                    room['img'].blit(self._tile_img, (temp_x, temp_y), area=None, special_flags=BLEND_TYPE)
+                    room['img'].blit(self._tile_img, (temp_x, temp_y),
+                                     area=None, special_flags=BLEND_TYPE)
 
         return rooms_list
 
@@ -177,7 +187,10 @@ class Ship(pygame.sprite.Sprite):
                 # create a new Door object for each door found, this
                 # will contain an animated sprite as well as the info
                 # we just loaded from the file
-                doors_list.append(Door(self.get_pos(), (door_x, door_y), room_left, room_right, connect, self._x_offset, self._y_offset, self._vert_offset))
+                doors_list.append(Door(self.get_pos(), (door_x, door_y),
+                                       room_left, room_right, connect,
+                                       self._x_offset, self._y_offset,
+                                       self._vert_offset))
 
         return doors_list
 
