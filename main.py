@@ -144,11 +144,6 @@ if __name__ == "__main__":
         all_sprites.update()
         sprite_rects = all_sprites.draw(window)
         
-        # instead of _not_ drawing certain areas of the border, we'll
-        # just clear the spots under the doors... after some
-        # observation, it appears that's what FTL does anyways (bg
-        # colored gaps to the left of some doors when sensors are down
-
         # if the user is currently selecting something, we should draw
         # the box now, on top of everything else
         if draw_selection:

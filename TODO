@@ -22,3 +22,7 @@
   appears that's what FTL does, anyways (BG colored gaps to the left of
   some doors when sensors are down).
 
+- Need to fix door loading... it appears to be loading correctly, but
+  this is misleading because if a room ever contains 2 horizontal or 2
+  vertical doors, we'll have 2 doors literally right on top of each
+  other. This will become important when doing the pathfinding code.
