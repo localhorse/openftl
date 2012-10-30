@@ -35,8 +35,13 @@ class Door(pygame.sprite.Sprite):
                                     (TILE_WIDTH, TILE_HEIGHT))
             upg_surf.blit(self._door_sheet, (0, 0), temp_rect, special_flags=BLEND_TYPE)
 
-            (self.image, _) = frames[0]
-            self.rect = self.image.get_rect()
+            if connect == VERTICAL:
+                reg_surf = pygame.transform.rotate(reg_surf, 90)
+                upg_surf = pygame.transform.rotate(upg_surf, 90)
+                frames[len(frames) - 1] = (reg_surf, upg_surf)
+
+        (self.image, _) = frames[0]
+        self.rect = self.image.get_rect()
             
     def update(self):
         self._test_anim()

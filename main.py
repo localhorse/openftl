@@ -28,7 +28,7 @@ if __name__ == "__main__":
     human = Person("human", (250, 250), 150, 20)
     rock = Person("rock", (300, 300), 300, 40)
     slug = Person("slug", (325, 275), 100, 15)
-    door = Door((2, 2), 0, 0, 0)
+    door = Door((2, 2), 0, 1, VERTICAL)
 
     # add all sprites into this render group, OrderedUpdates() draws
     # the sprites in the order they were added, and optionally returns
