@@ -161,15 +161,25 @@ class Person(pygame.sprite.Sprite):
     # location corresponding to the map/grid, not including the
     # offsets... either that or we need to subtract the offsets at the
     # other end --FIXME
-    def get_tile(self):
-        return (self._cur_x / TILE_WIDTH, self._cur_y / TILE_HEIGHT)
+    def cur_tile(self, ship):
+        x_offset, y_offset, vert_offset = ship.get_offsets()
+        ship_x, ship_y = ship.get_pos()
+        tile_x = self._cur_x / TILE_WIDTH - x_offset - ship_x
+        tile_y = (self._cur_y - vert_offset) / TILE_HEIGHT - y_offset - ship_y
+        return (tile_x, tile_y)
+  
+    def dst_tile(self, ship):
+        x_offset, y_offset, vert_offset = ship.get_offsets()
+        tile_x = self._dst_x / TILE_WIDTH
+        tile_y = self._dst_y / TILE_HEIGHT
+        return (tile_x, tile_y)
     
     def seek_tile(self, tile_pos):
         tile_x, tile_y = tile_pos
         if self._selected:
             self._dst_x = self._round_tile(tile_x * TILE_WIDTH)
             self._dst_y = self._round_tile(tile_y * TILE_HEIGHT)
-            
+
     def _round_tile(self, coord):
         """This method ensures that seek_pos() can't choose any old
         arbitrary coordinates... given an X or Y value, _round_tile()

@@ -76,6 +76,10 @@ class Visualizer(object):
         elif event.button == 3:
             self.goal_pos = coord
         
+        # print debug info --danny
+        self.map.printme()
+        print("\n")
+
     def _recompute_path(self):
         self.blocked_list = self.map.blocked
         

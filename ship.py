@@ -45,17 +45,16 @@ class Ship(pygame.sprite.Sprite):
         # load the doors...
         self._doors = self._load_doors()
 
-        # this next section is an attempt at constructing a grid where
-        # the only open spaces are the paths to the doors: it's a
-        # failed attempt because we end up with a grid in which there
-        # are no connections between passable nodes... not sure how to
-        # do this programmatically from the ship data file... --FIXME
+        # everything in this class that has to do with the grid is
+        # backwards in terms of coordinates... parameters are passed
+        # to the function as HEIGHT, WIDTH and Y, X coordinates... I
+        # might change GridMap because it's pissing me off --FIXME
         grid_width = 20
         grid_height = 10
-        self.map = GridMap(grid_width, grid_height)
-        for width_index in range(0, grid_width):
-            for height_index in range(0, grid_height):
-                self.map.set_blocked((width_index, height_index))
+        self.map = GridMap(grid_height, grid_width)
+        for height_index in range(0, grid_height):
+            for width_index in range(0, grid_width):
+                self.map.set_blocked((height_index, width_index))
 
         ##for door in self._doors:
         ##    door_x, door_y = door.get_pos()
@@ -64,10 +63,10 @@ class Ship(pygame.sprite.Sprite):
         # forget about the doors for now... let's make a grid where
         # every room tile is a valid, passable area
         for room in self._rooms:
-            for width_index in range(0, room['width']):
-                for height_index in range(0, room['height']):
-                    self.map.set_blocked((room['x'] + width_index, room['y'] + height_index), blocked=False)
-                                         
+            for height_index in range(0, room['height']):
+                for width_index in range(0, room['width']):
+                    self.map.set_blocked((room['y'] + height_index, room['x'] + width_index), blocked=False)
+
         # print debug info
         self.map.printme()
 
@@ -246,6 +245,9 @@ class Ship(pygame.sprite.Sprite):
         room_x = room['x'] * TILE_WIDTH + ship_x
         room_y = room['y'] * TILE_HEIGHT + ship_y
         return (room_x, room_y)
+
+    def get_offsets(self):
+        return (self._x_offset, self._y_offset, self._vert_offset)
 
 if __name__ == "__main__":
     pass
