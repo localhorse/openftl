@@ -154,6 +154,16 @@ class Person(pygame.sprite.Sprite):
     def get_pos(self):
         return (self._cur_x, self._cur_y)
 
+    def get_tile(self):
+        return (self._cur_x / TILE_WIDTH, self._cur_y / TILE_HEIGHT)
+    
+    def seek_tile(self, tile_pos):
+        tile_x, tile_y = tile_pos
+        if self._selected:
+            self._dst_x = self._round_tile(tile_x * TILE_WIDTH)
+            self._dst_y = self._round_tile(tile_y * TILE_HEIGHT)
+            
+
     def _round_tile(self, coord):
         """This method ensures that seek_pos() can't choose any old
         arbitrary coordinates... given an X or Y value, _round_tile()
