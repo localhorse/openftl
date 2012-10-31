@@ -110,6 +110,9 @@ class Door(pygame.sprite.Sprite):
         else:
             self.close_door(close_sound)
         
+    def get_pos(self):
+        return (self._cur_x, self._cur_y)
+
     def bounding_box(self, collision=False):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as

@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from door import Door
+from pathfinder.gridmap import GridMap
 
 class Ship(pygame.sprite.Sprite):
     """The ship class represents every ship in the game. The
@@ -41,8 +42,24 @@ class Ship(pygame.sprite.Sprite):
         # load the rooms from the data file
         self._rooms = self._load_rooms()
 
+        self._map_nodes = []
+
         # load the doors...
         self._doors = self._load_doors()
+
+        # this next section is an attempt at constructing a grid where
+        # the only open spaces are the paths to the doors: it's a
+        # failed attempt because (as evidenced by the printme) we end
+        # up with a grid in which there are no connections between
+        # passable nodes... not sure how to do this programmatically
+        # from the ship data file... --FIXME
+        self.map = GridMap(50, 50)
+        for width_index in range(0, 50):
+            for height_index in range(0, 50):
+                self.map.set_blocked((width_index, height_index))
+        for door in self._doors:
+            self.map.set_blocked(door.get_pos(), blocked=False)
+        self.map.printme()
 
         # draw the rooms into the main ship graphic (not to the
         # screen)
@@ -188,6 +205,11 @@ class Ship(pygame.sprite.Sprite):
                                        room_left, room_right, connect,
                                        self._x_offset, self._y_offset,
                                        self._vert_offset))
+                # append the door location to the list of valid nodes
+                # for the pathfinding, every grid location except that
+                # of the doors will be blocked! (not sure if this will
+                # work entirely but it's a good place to start)
+                self._map_nodes.append((door_x, door_y))
 
         return doors_list
 

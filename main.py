@@ -28,11 +28,13 @@ if __name__ == "__main__":
     # I'm not sure how else to do it right now --FIXME
     pygame.mixer.init()
     door_open_sound = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_open.ogg")
-    door_close_sound = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_close.ogg")
+    # "./resources/audio/waves/ui/bp_door_close.ogg" is for closing
+    # EVERY door
+    door_close_sound = door_open_sound
     
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    player_ship = Ship("circle_cruiser", (5, 4))
+    player_ship = Ship("kestral", (5, 4))
 
     human = Person("human", player_ship.get_room_pos(0), 150, 20)
     rock = Person("rock", player_ship.get_room_pos(1), 300, 40)
