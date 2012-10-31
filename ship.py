@@ -50,12 +50,28 @@ class Ship(pygame.sprite.Sprite):
         # failed attempt because we end up with a grid in which there
         # are no connections between passable nodes... not sure how to
         # do this programmatically from the ship data file... --FIXME
-        self.map = GridMap(50, 50)
-        for width_index in range(0, 50):
-            for height_index in range(0, 50):
-                self.map.set_blocked((width_index, height_index))
-        for door in self._doors:
-            self.map.set_blocked(door.get_pos(), blocked=False)
+        grid_width = 20
+        grid_height = 10
+        # this whole map is sideways and it's hurting my neck, we'll
+        # switch it around (god this is so confusing, change it in
+        # GridMap) --FIXME
+        self.map = GridMap(grid_height, grid_width)
+        for width_index in range(0, grid_width):
+            for height_index in range(0, grid_height):
+                self.map.set_blocked((height_index, width_index))
+
+        ##for door in self._doors:
+        ##    door_x, door_y = door.get_pos()
+        ##    self.map.set_blocked((door_y + 1, door_x + 1), blocked=False)
+
+        # forget about the doors for now... let's make a grid where
+        # every room tile is a valid, passable area
+        for room in self._rooms:
+            for width_index in range(0, room['width']):
+                for height_index in range(0, room['height']):
+                    self.map.set_blocked((room['y'] + height_index, room['x'] + width_index), blocked=False)
+                                         
+        self.map.printme()
 
         # draw the rooms into the main ship graphic (not to the
         # screen)

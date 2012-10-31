@@ -113,6 +113,9 @@ class Door(pygame.sprite.Sprite):
     def get_pos(self):
         return (self._cur_x, self._cur_y)
 
+    def get_connect(self):
+        return self._connect
+
     def bounding_box(self, collision=False):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as
