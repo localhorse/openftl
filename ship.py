@@ -42,8 +42,6 @@ class Ship(pygame.sprite.Sprite):
         # load the rooms from the data file
         self._rooms = self._load_rooms()
 
-        self._map_nodes = []
-
         # load the doors...
         self._doors = self._load_doors()
 
@@ -205,11 +203,6 @@ class Ship(pygame.sprite.Sprite):
                                        room_left, room_right, connect,
                                        self._x_offset, self._y_offset,
                                        self._vert_offset))
-                # append the door location to the list of valid nodes
-                # for the pathfinding, every grid location except that
-                # of the doors will be blocked! (not sure if this will
-                # work entirely but it's a good place to start)
-                self._map_nodes.append((door_x, door_y))
 
         return doors_list
 
