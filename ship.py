@@ -47,17 +47,15 @@ class Ship(pygame.sprite.Sprite):
 
         # this next section is an attempt at constructing a grid where
         # the only open spaces are the paths to the doors: it's a
-        # failed attempt because (as evidenced by the printme) we end
-        # up with a grid in which there are no connections between
-        # passable nodes... not sure how to do this programmatically
-        # from the ship data file... --FIXME
+        # failed attempt because we end up with a grid in which there
+        # are no connections between passable nodes... not sure how to
+        # do this programmatically from the ship data file... --FIXME
         self.map = GridMap(50, 50)
         for width_index in range(0, 50):
             for height_index in range(0, 50):
                 self.map.set_blocked((width_index, height_index))
         for door in self._doors:
             self.map.set_blocked(door.get_pos(), blocked=False)
-        self.map.printme()
 
         # draw the rooms into the main ship graphic (not to the
         # screen)

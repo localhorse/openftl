@@ -26,3 +26,10 @@
   this is misleading because if a room ever contains 2 horizontal or 2
   vertical doors, we'll have 2 doors literally right on top of each
   other. This will become important when doing the pathfinding code.
+
+- If we make all the tiles occupied by rooms passable, but make the
+  more costly than the door tiles, the pathfinding should work and
+  they should move between rooms only through the doors? I suppose
+  this will require modifying GridMap slightly (the move_cost() method
+  and the map which contains boolean values, we'll need at least 3
+  values).
