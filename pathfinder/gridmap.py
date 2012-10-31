@@ -8,8 +8,7 @@ class GridMap(object):
         can be blocked (by obstacles).
     """
 
-    # reversed the way this grid is represented --danny
-    def __init__(self, ncols, nrows):
+    def __init__(self, nrows, ncols):
         """ Create a new GridMap with the given amount of rows
             and columns.
         """
@@ -23,8 +22,7 @@ class GridMap(object):
         """ Set the blocked state of a coordinate. True for 
             blocked, False for unblocked.
         """
-        # part of the same reversal --danny
-        self.map[coord[1]][coord[0]] = blocked
+        self.map[coord[0]][coord[1]] = blocked
     
         if blocked:
             self.blocked[coord] = True
@@ -40,6 +38,8 @@ class GridMap(object):
         """
         return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) 
     
+    # somehow successors is returning nothing for our grid and alien
+    # position --danny
     def successors(self, c):
         """ Compute the successors of coordinate 'c': all the 
             coordinates that can be reached by one step from 'c'.

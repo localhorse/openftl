@@ -104,26 +104,24 @@ if __name__ == "__main__":
             elif event.type == MOUSEBUTTONDOWN:
                 # right mouse button (or left + ctrl for Mac users)
                 if event.button == 3 or (event.button == 1 and (lctrl_pressed or rctrl_pressed)):
-                    # put these in a sprite group instead, also
-                    # there's no reason why we're not testing for
-                    # selectedness here rather than in seek_pos()
-                    # --FIXME
+                    # put these in a sprite group instead --FIXME
                     for alien in [human, rock]:
-                        alien.seek_pos(event.pos)
-                        # let's try to test the path finder with the
-                        # map we made
-                        pf = PathFinder(player_ship.map.successors,
-                                        player_ship.map.move_cost,
-                                        player_ship.map.move_cost)
-                        test_x, test_y = event.pos
-                        # do we need to add/subtract the offsets here
-                        # before passing to PathFinder? getting late
-                        # and I'm confused --FIXME
-                        test_path = list(pf.compute_path(alien.get_tile(),
-                                                         (test_x / TILE_WIDTH,
-                                                          test_y / TILE_HEIGHT)))
-                        # print debug info
-                        print(test_path)
+                        if alien.selected():
+                            alien.seek_pos(event.pos)
+                            # let's try to test the path finder with the
+                            # map we made
+                            pf = PathFinder(player_ship.map.successors,
+                                            player_ship.map.move_cost,
+                                            player_ship.map.move_cost)
+                            test_x, test_y = event.pos
+                            # do we need to add/subtract the offsets here
+                            # before passing to PathFinder? getting late
+                            # and I'm confused --FIXME
+                            test_path = list(pf.compute_path(alien.get_tile(),
+                                                             (test_x / TILE_WIDTH,
+                                                              test_y / TILE_HEIGHT)))
+                            # print debug info
+                            ##print(test_path)
                         
                 elif event.button == 1:
                     if not select_on:
@@ -155,8 +153,6 @@ if __name__ == "__main__":
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()
-                                # print debug info
-                                print(alien.get_tile())
                         else:
                             alien.deselect()
 

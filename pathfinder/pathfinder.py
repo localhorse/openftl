@@ -57,7 +57,7 @@ class PathFinder(object):
         
         open_set = PriorityQueueSet()
         open_set.add(start_node)
-        
+
         while len(open_set) > 0:
             # Remove and get the node with the lowest f_score from 
             # the open set            
