@@ -116,9 +116,13 @@ if __name__ == "__main__":
                                         player_ship.map.move_cost,
                                         player_ship.map.move_cost)
                         test_x, test_y = event.pos
+                        # do we need to add/subtract the offsets here
+                        # before passing to PathFinder? getting late
+                        # and I'm confused --FIXME
                         test_path = list(pf.compute_path(alien.get_tile(),
                                                          (test_x / TILE_WIDTH,
                                                           test_y / TILE_HEIGHT)))
+                        # print debug info
                         print(test_path)
                         
                 elif event.button == 1:
@@ -151,6 +155,8 @@ if __name__ == "__main__":
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()
+                                # print debug info
+                                print(alien.get_tile())
                         else:
                             alien.deselect()
 

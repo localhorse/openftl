@@ -68,7 +68,8 @@ class Ship(pygame.sprite.Sprite):
                 for height_index in range(0, room['height']):
                     self.map.set_blocked((room['x'] + width_index, room['y'] + height_index), blocked=False)
                                          
-        ##self.map.printme()
+        # print debug info
+        self.map.printme()
 
         # draw the rooms into the main ship graphic (not to the
         # screen)

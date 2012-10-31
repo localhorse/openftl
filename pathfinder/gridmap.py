@@ -7,7 +7,9 @@ class GridMap(object):
         nrows X ncols coordinates (squares). Some of the squares
         can be blocked (by obstacles).
     """
-    def __init__(self, nrows, ncols):
+
+    # reversed the way this grid is represented --danny
+    def __init__(self, ncols, nrows):
         """ Create a new GridMap with the given amount of rows
             and columns.
         """
@@ -21,7 +23,8 @@ class GridMap(object):
         """ Set the blocked state of a coordinate. True for 
             blocked, False for unblocked.
         """
-        self.map[coord[0]][coord[1]] = blocked
+        # part of the same reversal --danny
+        self.map[coord[1]][coord[0]] = blocked
     
         if blocked:
             self.blocked[coord] = True

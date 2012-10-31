@@ -33,3 +33,8 @@
   this will require modifying GridMap slightly (the move_cost() method
   and the map which contains boolean values, we'll need at least 3
   values).
+
+- Simple path finding test is not working... I suspect there is some
+  discord involving those stupid offsets... go over grid coords,
+  get_tile() coords, coords being passed to PathFinder... something is
+  off and it should be easier to find in the morning.
