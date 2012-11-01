@@ -10,13 +10,6 @@
 - Added a bit of code with regards to scaling, but need to think about
   how we'll scale sprite images as well as coordinates.
 
-- Need to work on pathfinding code... this means we need a better
-  representation of the rooms/doors. I can't think of a good model at
-  the moment that would work for our purposes... basically we need
-  Ship to know where the doors will be while drawing the room borders,
-  and we need Person to know where the doors are for pathfinding
-  purposes.
-
 - Instead of _not_ drawing certain areas of the border, we'll just
   clear the spots under the doors... after some observation, it
   appears that's what FTL does, anyways (BG colored gaps to the left of
