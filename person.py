@@ -28,7 +28,7 @@ class Person(pygame.sprite.Sprite):
         self._dir = DOWN
         self._anim_frame = 0
 
-        self._path = None
+        self._path = []
         self._path_index = 0
         self._pathfinder = None
 
@@ -82,6 +82,7 @@ class Person(pygame.sprite.Sprite):
 
         if self._next_move < cur_time:
 
+            # if we're not at our destination...
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
 
                 if self._cur_x > self._dst_x:
@@ -98,6 +99,15 @@ class Person(pygame.sprite.Sprite):
                     self._cur_y += 1
                     self._dir = DOWN
 
+            else:
+                # if they ARE the same...
+                if self._path != [] and self._path != None:
+                    self.seek_tile(self._path[self._path_index])
+                    self._path_index += 1
+                    if self._path_index >= len(self._path):
+                        self._path = None
+                        self._path_index = 0
+                
             self._next_move = cur_time + self._move_delay
             self.rect = self.bounding_box()
             
@@ -191,9 +201,13 @@ class Person(pygame.sprite.Sprite):
         return (tile_y, tile_x)
 
     def seek_tile(self, tile_pos):
-        # we'll have to make this exactly like cur_tile() and
-        # dst_tile()
-        pass
+        ship_x, ship_y = self._ship.get_pos()
+        x_offset, y_offset, vert_offset = self._ship.get_offsets()
+        # we're getting this tile position from pathfinder module,
+        # it'll be in reverse
+        tile_y, tile_x = tile_pos
+        self._dst_x = (tile_x + ship_x + x_offset) * TILE_WIDTH
+        self._dst_y = (tile_y + ship_y + y_offset) * TILE_HEIGHT + vert_offset
 
     def _round_tile(self, coord):
         """This method ensures that seek_pos() can't choose any old
@@ -225,6 +239,7 @@ class Person(pygame.sprite.Sprite):
     def compute_path(self):
         self._path = list(self._pathfinder.compute_path(self.cur_tile(),
                                                         self.goal_tile()))
+        # print debug info
         print(self._path)
 
 if __name__ == "__main__":

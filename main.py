@@ -34,10 +34,10 @@ if __name__ == "__main__":
     # TILE_WIDTH would be the X screen coordinate
     player_ship = Ship("fed_cruiser", (5, 4))
 
-    human = Person("human", player_ship.get_room_pos(0), 100, 15)
+    human = Person("human", player_ship.get_room_pos(0), 100, 20)
     human.add_to_ship(player_ship)
     
-    rock = Person("rock", player_ship.get_room_pos(1), 300, 40)
+    rock = Person("rock", player_ship.get_room_pos(1), 200, 40)
     rock.add_to_ship(player_ship)
 
     # add all sprites into this render group, OrderedUpdates() draws
@@ -140,7 +140,6 @@ if __name__ == "__main__":
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()
-                                print("*** main(): %s, %s ***" % alien.cur_tile())
                         else:
                             alien.deselect()
 
