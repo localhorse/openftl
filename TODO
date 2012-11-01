@@ -35,7 +35,7 @@
   the right of or below the node.)
 
 - DOORS! Here's a simple way of breaking it down... we need to write a
-  method of the door class where we can give it two values, a start
+  method of the SHIP class where we can give it two values, a start
   and stop position. (Similar to the pathfinder.) The function will
   need to take values that are only 1 step from each other, but we
   don't need to check for that right away. Basically we ask it, "is
@@ -44,10 +44,8 @@
   the move_cost method of GridMap, we also decrease the cost of that
   travel if the result is true. In this way we should force the
   pathfinder to take a trip through the doors always if possible. If a
-  door connects horizontally, it will be halfway between the one it's
-  actually in and the one it connects to (on the left of it?). Same
-  for vertically, but halfway between the tile it's actually in, and
-  the one directly above it. So we should be able to say, given 2 tile
-  points, whether a door (or a specific door) is present between those
-  points.
+  door connects horizontally, the tile it's in and the tile to the
+  left of it should return True. If it connects vertically, the tile
+  it's in and the tile above it, if passed to this method, should
+  return True.
 

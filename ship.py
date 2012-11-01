@@ -48,6 +48,7 @@ class Ship(pygame.sprite.Sprite):
         # everything in this class that has to do with the grid is
         # backwards in terms of coordinates... parameters are passed
         # to the function as HEIGHT, WIDTH and Y, X coordinates
+        # (grid_width, grid_height may need to be changed) --FIXME?
         grid_width = 20
         grid_height = 10
         self.map = GridMap(grid_height, grid_width)
@@ -254,5 +255,24 @@ class Ship(pygame.sprite.Sprite):
     def get_offsets(self):
         return (self._x_offset, self._y_offset, self._vert_offset)
 
+    def door_present(self, tile_pos1, tile_pos2):
+        """This method will take 2 (connecting) tile positions (in the
+        form Y, X) and determine if there is a door present between
+        them."""
+        # these values are being compared with pathfinder data, so it
+        # will be Y, X
+        for door in self._doors:
+            temp_x, temp_y = door.get_pos()
+            door_pos1 = (temp_y, temp_x)
+            if door.get_connect() == HORIZONTAL:
+                temp_x -= 1
+            elif door.get_connect() == VERTICAL:
+                temp_y -= 1
+            door_pos2 = (temp_y, temp_x)
+            if (tile_pos1 == door_pos1 and tile_pos2 == door_pos2) or (tile_pos1 == door_pos2 and tile_pos2 == door_pos1):
+                return True
+
+        return False
+                
 if __name__ == "__main__":
     pass
