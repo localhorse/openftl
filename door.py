@@ -38,6 +38,9 @@ class Door(pygame.sprite.Sprite):
 
         self._connect = connect
 
+        self.room_left = room_left
+        self.room_right = room_right
+
         pygame.sprite.Sprite.__init__(self)
 
         self._door_file = "./resources/img/effects/door_sheet.png"
@@ -158,7 +161,7 @@ class Door(pygame.sprite.Sprite):
                 temp_x -= DOOR_THICKNESS / 2
                 return pygame.Rect(temp_x, temp_y, DOOR_THICKNESS,
                                    TILE_HEIGHT)
-            else:
+            elif self._connect == VERTICAL:
                 temp_y -= DOOR_THICKNESS / 2
                 return pygame.Rect((temp_x, temp_y, TILE_WIDTH,
                                     DOOR_THICKNESS))

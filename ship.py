@@ -55,16 +55,22 @@ class Ship(pygame.sprite.Sprite):
             for width_index in range(0, grid_width):
                 self.map.set_blocked((height_index, width_index))
 
-        ##for door in self._doors:
-        ##    door_x, door_y = door.get_pos()
-        ##    self.map.set_blocked((door_x, door_y), blocked=False)
+        for door in self._doors:
+            door_x, door_y = door.get_pos()
+            # what can we do with these stupid values? (room left/up)
+            # http://ftlwiki.com/wiki/Modding_Ships#TXT_File
+            temp_room_left = self.get_room(door.room_left)
+            temp_room_right = self.get_room(door.room_right)
+            # I am really not sure how to represent passable tiles
+            # based on the door information... --FIXME
 
         # forget about the doors for now... let's make a grid where
         # every room tile is a valid, passable area
-        for room in self._rooms:
-            for height_index in range(0, room['height']):
-                for width_index in range(0, room['width']):
-                    self.map.set_blocked((room['y'] + height_index, room['x'] + width_index), blocked=False)
+        if True:
+            for room in self._rooms:
+                for height_index in range(0, room['height']):
+                    for width_index in range(0, room['width']):
+                        self.map.set_blocked((room['y'] + height_index, room['x'] + width_index), blocked=False)
 
         # print debug info
         self.map.printme()

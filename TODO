@@ -33,3 +33,21 @@
   information) to tell when the character is actually passing through
   a node with a door in it. (Although I suppose that door could be to
   the right of or below the node.)
+
+- DOORS! Here's a simple way of breaking it down... we need to write a
+  method of the door class where we can give it two values, a start
+  and stop position. (Similar to the pathfinder.) The function will
+  need to take values that are only 1 step from each other, but we
+  don't need to check for that right away. Basically we ask it, "is
+  there a door between these two points?" If there is, we do 2
+  things. First, open the door briefly. Most importantly though, from
+  the move_cost method of GridMap, we also decrease the cost of that
+  travel if the result is true. In this way we should force the
+  pathfinder to take a trip through the doors always if possible. If a
+  door connects horizontally, it will be halfway between the one it's
+  actually in and the one it connects to (on the left of it?). Same
+  for vertically, but halfway between the tile it's actually in, and
+  the one directly above it. So we should be able to say, given 2 tile
+  points, whether a door (or a specific door) is present between those
+  points.
+
