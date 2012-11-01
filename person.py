@@ -164,7 +164,8 @@ class Person(pygame.sprite.Sprite):
         x_offset, y_offset, vert_offset = ship.get_offsets()
         tile_x = self._cur_x / TILE_WIDTH - ship_x - x_offset
         tile_y = self._cur_y / TILE_HEIGHT - ship_y - y_offset - vert_offset / TILE_HEIGHT
-        return (tile_x, tile_y)
+        # GridMap and PathFinder expect to see Y, X
+        return (tile_y, tile_x)
   
     def dst_tile(self, ship):
         """This method returns destination tile coordinate
@@ -174,7 +175,9 @@ class Person(pygame.sprite.Sprite):
         x_offset, y_offset, vert_offset = ship.get_offsets()
         tile_x = self._dst_x / TILE_WIDTH - ship_x - x_offset
         tile_y = self._dst_y / TILE_HEIGHT - ship_y - y_offset - vert_offset / TILE_HEIGHT
-        return (tile_x, tile_y)
+        # jesus, this is all it was... because GridMap and PathFinder
+        # expect things in Y, X format!
+        return (tile_y, tile_x)
     
     def seek_tile(self, tile_pos):
         # we'll have to make this exactly like cur_tile() and

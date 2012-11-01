@@ -34,6 +34,3 @@
   and the map which contains boolean values, we'll need at least 3
   values).
 
-- GridMap now lined up with player current position and player
-  destination at the time of mouse walk command, but PathFinder is
-  still not returning a valid list of points.
