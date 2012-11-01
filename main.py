@@ -23,7 +23,6 @@ if __name__ == "__main__":
     display_flags = pygame.DOUBLEBUF | pygame.HWSURFACE
     
     window = pygame.display.set_mode((screen_width, screen_height), display_flags, 24)
-    pygame.mixer.init()
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
