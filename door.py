@@ -155,13 +155,13 @@ class Door(pygame.sprite.Sprite):
             # doors properly, but as of right now I'm playing around
             # and it's functional --FIXME
             if self._connect == HORIZONTAL:
-                temp_x -= 4
-                return pygame.Rect(temp_x, temp_y, TILE_WIDTH / 4 + 4,
+                temp_x -= DOOR_THICKNESS / 2
+                return pygame.Rect(temp_x, temp_y, DOOR_THICKNESS,
                                    TILE_HEIGHT)
             else:
-                temp_y -= 4
+                temp_y -= DOOR_THICKNESS / 2
                 return pygame.Rect((temp_x, temp_y, TILE_WIDTH,
-                                    TILE_HEIGHT / 4 + 4))
+                                    DOOR_THICKNESS))
 
 if __name__ == "__main__":
     pass

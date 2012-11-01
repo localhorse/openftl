@@ -27,3 +27,9 @@
   and the map which contains boolean values, we'll need at least 3
   values).
 
+- Tried several ways of making the doors open when someone passes
+  through, and they all ended up triggering doors when they shouldn't
+  have. It should be fairly trivial (once the grid map contains door
+  information) to tell when the character is actually passing through
+  a node with a door in it. (Although I suppose that door could be to
+  the right of or below the node.)
