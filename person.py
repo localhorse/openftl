@@ -170,8 +170,9 @@ class Person(pygame.sprite.Sprite):
   
     def dst_tile(self, ship):
         x_offset, y_offset, vert_offset = ship.get_offsets()
-        tile_x = self._dst_x / TILE_WIDTH
-        tile_y = self._dst_y / TILE_HEIGHT
+        ship_x, ship_y = ship.get_pos()
+        tile_x = self._dst_x / TILE_WIDTH - x_offset - ship_x
+        tile_y = (self._dst_y - vert_offset) / TILE_HEIGHT - y_offset - ship_y
         return (tile_x, tile_y)
     
     def seek_tile(self, tile_pos):
