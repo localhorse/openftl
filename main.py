@@ -1,5 +1,6 @@
 import sys
 import time
+import platform
 import pygame
 from person import Person
 from ship import Ship
@@ -22,7 +23,13 @@ if __name__ == "__main__":
     screen_height = screen_width / 16 * 9
     display_flags = pygame.DOUBLEBUF | pygame.HWSURFACE
     
-    window = pygame.display.set_mode((screen_width, screen_height), display_flags, 24)
+    # for some reason 32 fails on Ryan's Mac and 24 causes my surface
+    # to not have hardware acceleration on Linux (and presumably
+    # Windows)
+    if "Darwin" in platform.system():
+        window = pygame.display.set_mode((screen_width, screen_height), display_flags, 24)
+    else:
+        window = pygame.display.set_mode((screen_width, screen_height), display_flags, 32)
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
@@ -67,7 +74,7 @@ if __name__ == "__main__":
     # and finally update the display
     while True:
 
-        clock.tick(60)
+        clock.tick(30)
 
         for event in pygame.event.get():
             if event.type == QUIT:
