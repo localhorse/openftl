@@ -49,3 +49,13 @@
   it's in and the tile above it, if passed to this method, should
   return True.
 
+- It seems as though what would be handier is
+  Ship.wall_present()... making the doors less costly had no apparent
+  effect, and removing non-door-connected tiles from the list of
+  successors obviously won't work because you can't even travel within
+  the same room in some cases. I think that it would be simple to
+  determine if 2 tile points were in 2 separate rooms, then if they
+  are, check Ship.door_present() which we already made. If there is a
+  wall present and no door, REMOVE this node completely from the list
+  of acceptable successors. If there is a door, no problem. Valid
+  node.

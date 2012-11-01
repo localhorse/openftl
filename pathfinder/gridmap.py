@@ -8,12 +8,17 @@ class GridMap(object):
         can be blocked (by obstacles).
     """
 
-    def __init__(self, nrows, ncols):
+    # this is probably a horrible idea, but I'm sending the ship class
+    # with the GridMap initialization so that we can determine of
+    # rooms are present between points --danny
+    def __init__(self, nrows, ncols, ship=None):
         """ Create a new GridMap with the given amount of rows
             and columns.
         """
         self.nrows = nrows
         self.ncols = ncols
+
+        self._ship = ship
         
         self.map = [[0] * self.ncols for i in range(self.nrows)]
         self.blocked = defaultdict(lambda: False)
@@ -41,12 +46,16 @@ class GridMap(object):
         y1, x1 = c1
         y2, x2 = c2
         if x1 == x2 or y1 == y2:
-            test_weight = 0
+            diagonal_weight = 0
         else:
-            test_weight = 10
-            
-        return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) + test_weight
+            diagonal_weight = 10
+
+        return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) + diagonal_weight
     
+    # change this method to - if self._ship is present - check c and
+    # each item in slist and see if there is a wall between them and
+    # no door... if this is the case that node must be removed from
+    # the list of successors --danny
     def successors(self, c):
         """ Compute the successors of coordinate 'c': all the 
             coordinates that can be reached by one step from 'c'.
@@ -64,7 +73,7 @@ class GridMap(object):
                         0 <= newcol <= self.ncols - 1 and
                         self.map[newrow][newcol] == 0):
                     slist.append((newrow, newcol))
-        
+
         return slist
     
     def printme(self):

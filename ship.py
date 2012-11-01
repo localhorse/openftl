@@ -51,7 +51,7 @@ class Ship(pygame.sprite.Sprite):
         # (grid_width, grid_height may need to be changed) --FIXME?
         grid_width = 20
         grid_height = 10
-        self.map = GridMap(grid_height, grid_width)
+        self.map = GridMap(grid_height, grid_width, self)
         for height_index in range(0, grid_height):
             for width_index in range(0, grid_width):
                 self.map.set_blocked((height_index, width_index))
@@ -273,6 +273,9 @@ class Ship(pygame.sprite.Sprite):
                 return True
 
         return False
+
+    def wall_present(self, tile_pos1, tile_pos2):
+        pass
                 
 if __name__ == "__main__":
     pass
