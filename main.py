@@ -8,7 +8,6 @@ from door import Door
 from constants import *
 from selection import SelectionRect
 from pygame.locals import *
-from pathfinder.pathfinder import PathFinder
 
 if __name__ == "__main__":
 
@@ -36,7 +35,10 @@ if __name__ == "__main__":
     player_ship = Ship("fed_cruiser", (5, 4))
 
     human = Person("human", player_ship.get_room_pos(0), 100, 15)
+    human.add_to_ship(player_ship)
+    
     rock = Person("rock", player_ship.get_room_pos(1), 300, 40)
+    rock.add_to_ship(player_ship)
 
     # add all sprites into this render group, OrderedUpdates() draws
     # the sprites in the order they were added, and optionally returns
@@ -105,20 +107,9 @@ if __name__ == "__main__":
                     # put these in a sprite group instead --FIXME
                     for alien in [human, rock]:
                         if alien.selected():
-                            alien.seek_pos(event.pos)
-                            # let's try to test the path finder with the
-                            # map we made
-                            pf = PathFinder(player_ship.map.successors,
-                                            player_ship.map.move_cost,
-                                            player_ship.map.move_cost)
-                            # send PathFinder the current tile and
-                            # destination tile from (0, 0)
-                            # disregarding offsets and lining up with
-                            # what's in player_ship.map
-                            test_path = list(pf.compute_path(alien.cur_tile(player_ship),
-                                                             alien.dst_tile(player_ship)))
-                            # print debug info
-                            print(test_path)
+                            # set the goal or final destination
+                            alien.set_goal(event.pos)
+                            alien.compute_path()
                         
                 elif event.button == 1:
                     if not select_on:
@@ -149,7 +140,7 @@ if __name__ == "__main__":
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()
-                                print("*** main(): %s, %s ***" % alien.cur_tile(player_ship))
+                                print("*** main(): %s, %s ***" % alien.cur_tile())
                         else:
                             alien.deselect()
 
