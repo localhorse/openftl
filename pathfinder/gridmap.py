@@ -36,10 +36,17 @@ class GridMap(object):
             
             The cost is the Euclidean distance.
         """
-        return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) 
+        # let's see if we can make it avoid using diagonal
+        # movement... --danny
+        y1, x1 = c1
+        y2, x2 = c2
+        if x1 == x2 or y1 == y2:
+            test_weight = 0
+        else:
+            test_weight = 10
+            
+        return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) + test_weight
     
-    # somehow successors is returning nothing for our grid and alien
-    # position --danny
     def successors(self, c):
         """ Compute the successors of coordinate 'c': all the 
             coordinates that can be reached by one step from 'c'.
