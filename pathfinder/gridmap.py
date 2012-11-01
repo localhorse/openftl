@@ -41,16 +41,7 @@ class GridMap(object):
             
             The cost is the Euclidean distance.
         """
-        # let's see if we can make it avoid using diagonal
-        # movement... --danny
-        y1, x1 = c1
-        y2, x2 = c2
-        if x1 == x2 or y1 == y2:
-            diagonal_weight = 0
-        else:
-            diagonal_weight = 10
-
-        return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) + diagonal_weight
+        return sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2)
     
     # change this method to - if self._ship is present - check c and
     # each item in slist and see if there is a wall between them and
@@ -61,6 +52,7 @@ class GridMap(object):
             coordinates that can be reached by one step from 'c'.
         """
         slist = []
+        temp_slist = []
         
         for drow in (-1, 0, 1):
             for dcol in (-1, 0, 1):
@@ -72,7 +64,16 @@ class GridMap(object):
                 if (    0 <= newrow <= self.nrows - 1 and
                         0 <= newcol <= self.ncols - 1 and
                         self.map[newrow][newcol] == 0):
-                    slist.append((newrow, newcol))
+                    temp_slist.append((newrow, newcol))
+
+        for c2 in temp_slist:
+            # let's see if we can make it avoid using diagonal
+            # movement _completely_ by removing those moves from the
+            # candidate list... --danny
+            y1, x1 = c
+            y2, x2 = c2
+            if x1 == x2 or y1 == y2:
+                slist.append(c2)
 
         return slist
     
