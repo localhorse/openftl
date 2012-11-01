@@ -25,11 +25,8 @@ class Person(pygame.sprite.Sprite):
         self._dir = DOWN
         self._anim_frame = 0
 
-        x, y = pos
-        self._cur_x = self._round_tile(x)
-        self._cur_y = self._round_tile(y)
-        self._dst_x = self._cur_x
-        self._dst_y = self._cur_y
+        self._cur_x, self._cur_y = self._round_tile(pos)
+        self._dst_x, self._dst_y = self._round_tile(pos)
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -125,13 +122,11 @@ class Person(pygame.sprite.Sprite):
     def seek_pos(self, pos):
         """This method simply sets a destination for our sprite, which
         will then seek that destination until it is reached."""
-        x_pos, y_pos = pos
         # make sure the actual guy ends up pretty much dead center in
         # the tile where the mouse was clicked (this behavior will
         # change)
         if self._selected:
-            self._dst_x = self._round_tile(x_pos)
-            self._dst_y = self._round_tile(y_pos)
+            self._dst_x, self._dst_y = self._round_tile(pos)
 
     def bounding_box(self):
         """This method returns a rect that represents the position and
@@ -193,7 +188,8 @@ class Person(pygame.sprite.Sprite):
         # the same, but if they ever become different, this will need
         # to be changed (not really a concern, as a LOT would need
         # changing)
-        return divmod(coord, TILE_WIDTH)[0] * TILE_WIDTH
+        x, y = coord
+        return (divmod(x, TILE_WIDTH)[0] * TILE_WIDTH, divmod(y, TILE_WIDTH)[0] * TILE_WIDTH)
 
 if __name__ == "__main__":
     pass
