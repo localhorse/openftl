@@ -22,17 +22,9 @@ if __name__ == "__main__":
     screen_height = screen_width / 16 * 9
     display_flags = pygame.DOUBLEBUF | pygame.HWSURFACE
     
-    window = pygame.display.set_mode((screen_width, screen_height), display_flags, 32)
-
-    # this should probably be linked to the Door class somehow, but I
-    # don't really want to load a sound for every instance of Door and
-    # I'm not sure how else to do it right now --FIXME
+    window = pygame.display.set_mode((screen_width, screen_height), display_flags, 24)
     pygame.mixer.init()
-    door_open_sound = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_open.ogg")
-    # "./resources/audio/waves/ui/bp_door_close.ogg" is for closing
-    # EVERY door
-    door_close_sound = door_open_sound
-    
+
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
     player_ship = Ship("kestral", (5, 4))
@@ -113,9 +105,10 @@ if __name__ == "__main__":
                             pf = PathFinder(player_ship.map.successors,
                                             player_ship.map.move_cost,
                                             player_ship.map.move_cost)
-                            # do we need to add/subtract the offsets here
-                            # before passing to PathFinder? getting late
-                            # and I'm confused --FIXME
+                            # send PathFinder the current tile and
+                            # destination tile from (0, 0)
+                            # disregarding offsets and lining up with
+                            # what's in player_ship.map
                             test_path = list(pf.compute_path(alien.cur_tile(player_ship),
                                                              alien.dst_tile(player_ship)))
                             # print debug info
@@ -143,8 +136,7 @@ if __name__ == "__main__":
                         for door in player_ship.get_doors():
                             if door.bounding_box(collision=True).colliderect(rect):
                                 door_clicked = True
-                                door.toggle_door(door_open_sound,
-                                                 door_close_sound)
+                                door.toggle_door()
 
                     # these should be in a sprite group --FIXME
                     for alien in [human, rock]:

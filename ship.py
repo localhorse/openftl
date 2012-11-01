@@ -47,8 +47,7 @@ class Ship(pygame.sprite.Sprite):
 
         # everything in this class that has to do with the grid is
         # backwards in terms of coordinates... parameters are passed
-        # to the function as HEIGHT, WIDTH and Y, X coordinates... I
-        # might change GridMap because it's pissing me off --FIXME
+        # to the function as HEIGHT, WIDTH and Y, X coordinates
         grid_width = 20
         grid_height = 10
         self.map = GridMap(grid_height, grid_width)

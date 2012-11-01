@@ -12,6 +12,12 @@ class Door(pygame.sprite.Sprite):
     from the ship file. As with ship, the positions are not pixel
     coordinates but rather tile coordinates."""
 
+    # might want to consider not having this sound stuff execute on
+    # import
+    sfx_open = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_open.ogg")
+    sfx_close = sfx_open
+    # ALL doors ("./resources/audio/waves/ui/bp_door_close.ogg")    
+
     def __init__(self, ship_pos, pos, room_left, room_right, connect,
                  x_offset, y_offset, vert_offset):
         
@@ -94,21 +100,19 @@ class Door(pygame.sprite.Sprite):
     # we'll need methods in Ship: open_all_doors(), close_all_doors()
     # --FIXME
 
-    def open_door(self, open_sound=None):
+    def open_door(self):
         self._dest_frame = DOOR_OPENED
-        if open_sound:
-            open_sound.play()
+        self.sfx_open.play()
 
-    def close_door(self, close_sound=None):
+    def close_door(self):
         self._dest_frame = DOOR_CLOSED
-        if close_sound:
-            close_sound.play()
+        self.sfx_close.play()
 
-    def toggle_door(self, open_sound, close_sound):
+    def toggle_door(self):
         if self._dest_frame == DOOR_CLOSED:
-            self.open_door(open_sound)
+            self.open_door()
         else:
-            self.close_door(close_sound)
+            self.close_door()
         
     def get_pos(self):
         return (self._cur_x, self._cur_y)
