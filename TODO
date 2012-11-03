@@ -51,3 +51,12 @@
 
 - This code needs to be profiled to see where in the game loop we're
   taking up the most time.
+
+- Player movement is MUCH faster in the original FTL.
+
+- Work on some kind of mouse-over highlighting system. For example, in
+  the original FTL game the bounding box to click on a door is much
+  larger, overlapping the players in some cases. But it seems as
+  though player characters take priority in terms of which one is
+  highlighted and therefore which one will be activated on mouse
+  click.

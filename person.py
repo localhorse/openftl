@@ -72,6 +72,10 @@ class Person(pygame.sprite.Sprite):
         self.rect = self.bounding_box()
             
     def update(self):
+        if self._cur_x != self._goal_x or self._cur_y != self._goal_y:
+            self._moving = True
+        else:
+            self._moving = False
         self._move()
         self._animate()
         self._cur_frame()
@@ -94,8 +98,6 @@ class Person(pygame.sprite.Sprite):
             # if we're not at our destination...
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
 
-                self._moving = True
-
                 if self._cur_x > self._dst_x:
                     self._cur_x -= 1
                     self._dir = LEFT
@@ -112,7 +114,6 @@ class Person(pygame.sprite.Sprite):
 
             else:
                 # if they ARE the same...
-                self._moving = False
                 if self._path != [] and self._path != None:
                     self.seek_tile(self._path[self._path_index])
                     self._path_index += 1

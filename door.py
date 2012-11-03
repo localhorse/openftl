@@ -32,7 +32,7 @@ class Door(pygame.sprite.Sprite):
         self._anim_frame = DOOR_CLOSED
         self._dest_frame = DOOR_CLOSED
         self._close_time = -1
-        self._close_delay = 2000
+        self._close_delay = 1500
 
         self._x_offset = x_offset
         self._y_offset = y_offset
