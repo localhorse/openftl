@@ -67,13 +67,16 @@ class GridMap(object):
                     temp_slist.append((newrow, newcol))
 
         for c2 in temp_slist:
-            # let's see if we can make it avoid using diagonal
-            # movement _completely_ by removing those moves from the
-            # candidate list... --danny
+            # avoid using diagonal movement, avoid passing through a
+            # wall (unless there is a door present) --danny
             y1, x1 = c
             y2, x2 = c2
             if x1 == x2 or y1 == y2:
-                slist.append(c2)
+                if self._ship.wall_present(c, c2):
+                    if self._ship.door_present(c, c2):
+                        slist.append(c2)
+                else:
+                    slist.append(c2)
 
         return slist
     

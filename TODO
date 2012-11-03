@@ -34,28 +34,3 @@
   a node with a door in it. (Although I suppose that door could be to
   the right of or below the node.)
 
-- DOORS! Here's a simple way of breaking it down... we need to write a
-  method of the SHIP class where we can give it two values, a start
-  and stop position. (Similar to the pathfinder.) The function will
-  need to take values that are only 1 step from each other, but we
-  don't need to check for that right away. Basically we ask it, "is
-  there a door between these two points?" If there is, we do 2
-  things. First, open the door briefly. Most importantly though, from
-  the move_cost method of GridMap, we also decrease the cost of that
-  travel if the result is true. In this way we should force the
-  pathfinder to take a trip through the doors always if possible. If a
-  door connects horizontally, the tile it's in and the tile to the
-  left of it should return True. If it connects vertically, the tile
-  it's in and the tile above it, if passed to this method, should
-  return True.
-
-- It seems as though what would be handier is
-  Ship.wall_present()... making the doors less costly had no apparent
-  effect, and removing non-door-connected tiles from the list of
-  successors obviously won't work because you can't even travel within
-  the same room in some cases. I think that it would be simple to
-  determine if 2 tile points were in 2 separate rooms, then if they
-  are, check Ship.door_present() which we already made. If there is a
-  wall present and no door, REMOVE this node completely from the list
-  of acceptable successors. If there is a door, no problem. Valid
-  node.

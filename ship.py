@@ -275,7 +275,19 @@ class Ship(pygame.sprite.Sprite):
         return False
 
     def wall_present(self, tile_pos1, tile_pos2):
-        pass
+        """Determine if there is a wall present between two Y, X
+        positions."""
+        for room in self._rooms:
+            # make a rect the exact size of the room
+            room_rect = pygame.Rect((room['y'], room['x']), (room['height'], room['width']))
+            # if tile_pos1 is outside the room and tile_pos2 is
+            # inside, or vice versa, then yes, there is a wall
+            if (room_rect.collidepoint(tile_pos1) and not room_rect.collidepoint(tile_pos2)) or (room_rect.collidepoint(tile_pos2) and not room_rect.collidepoint(tile_pos1)):
+                return True
+
+        # there doesn't seem to be a wall
+        return False
+
                 
 if __name__ == "__main__":
     pass
