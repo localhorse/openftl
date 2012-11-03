@@ -22,6 +22,8 @@ class Person(pygame.sprite.Sprite):
         self._next_anim = 0
         self._next_move = 0
 
+        self._moving = False
+
         self._frames = []
         frames = self._frames
 
@@ -85,6 +87,8 @@ class Person(pygame.sprite.Sprite):
             # if we're not at our destination...
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
 
+                self._moving = True
+
                 if self._cur_x > self._dst_x:
                     self._cur_x -= 1
                     self._dir = LEFT
@@ -101,6 +105,7 @@ class Person(pygame.sprite.Sprite):
 
             else:
                 # if they ARE the same...
+                self._moving = False
                 if self._path != [] and self._path != None:
                     self.seek_tile(self._path[self._path_index])
                     self._path_index += 1
@@ -241,6 +246,9 @@ class Person(pygame.sprite.Sprite):
                                                         self.goal_tile()))
         # print debug info
         print(self._path)
+
+    def is_moving(self):
+        return self._moving
 
 if __name__ == "__main__":
     pass

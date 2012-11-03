@@ -40,11 +40,10 @@ if __name__ == "__main__":
     rock = Person("rock", player_ship.get_room_pos(1), 200, 40)
     rock.add_to_ship(player_ship)
 
-    # add all sprites into this render group, OrderedUpdates() draws
-    # the sprites in the order they were added, and optionally returns
-    # a list of rects which represent where the screen needs to be
-    # redrawn
-    all_sprites = pygame.sprite.OrderedUpdates(player_ship)
+    # add all sprites into this render group, with LayeredUpdates we
+    # can move things to the front or back
+    all_sprites = pygame.sprite.LayeredUpdates(player_ship)
+    all_sprites.move_to_back(player_ship)
 
     # we need to add each item in player_ship.get_doors() to the
     # all_sprites group
@@ -147,6 +146,14 @@ if __name__ == "__main__":
 
         # we would clear here with Group.clear() if it worked (didn't
         # seem to work properly, will attempt again --FIXME
+
+        for alien in [rock, human]:
+            if alien.is_moving():
+                all_sprites.move_to_front(alien)
+            else:
+                all_sprites.move_to_back(alien)
+                all_sprites.move_to_back(player_ship)
+                
         all_sprites.update()
         sprite_rects = all_sprites.draw(window)
         
