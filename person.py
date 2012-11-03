@@ -8,6 +8,7 @@ class Person(pygame.sprite.Sprite):
     string, a tuple representing X, Y position, and an animation and
     move delay."""
 
+    # the move delays NO LONGER WORK FOR THESE SPRITES! why?
     def __init__(self, species, pos, anim_delay, move_delay):
 
         self._selected = False
@@ -74,7 +75,13 @@ class Person(pygame.sprite.Sprite):
         self._move()
         self._animate()
         self._cur_frame()
-
+        # if we're about to go through a door, open it, scheduling it
+        # for automatic shut
+        door = self._ship.door_present(self.cur_tile(), self.dst_tile())
+        if door:
+            if door.is_closed():
+                door.auto_door()
+        
     def _move(self):
         """This moves the sprite: if enough time has passed according
         to move_delay, then the sprite's position will be moved and the

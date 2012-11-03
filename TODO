@@ -27,10 +27,17 @@
   and the map which contains boolean values, we'll need at least 3
   values).
 
-- Tried several ways of making the doors open when someone passes
-  through, and they all ended up triggering doors when they shouldn't
-  have. It should be fairly trivial (once the grid map contains door
-  information) to tell when the character is actually passing through
-  a node with a door in it. (Although I suppose that door could be to
-  the right of or below the node.)
+- Doors open and close automatically, although sometimes if the guy is
+  too slow they will try to close and open again.
 
+- Major problem with the move delays on the Person sprites. I'm not
+  sure why, but I can't make them go any faster (short of moving them
+  in increments of more than 1 pixel, which would be choppy). In
+  earlier tests, drawing a smooth walk from one end of the screen to
+  another was so fast as to almost be instantaneous, and the move
+  delays should have reflected that. Now I'm taking them out and it's
+  a normal walking pace. It must be something I'm missing, because why
+  else would the animation speeds be affected by the delays? This
+  needs immediate looking into. The different races need to have very
+  well defined speeds. The human needs to be faster than my human, let
+  alone the mantis!

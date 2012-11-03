@@ -31,6 +31,8 @@ class Door(pygame.sprite.Sprite):
         self._anim_delay = 50
         self._anim_frame = DOOR_CLOSED
         self._dest_frame = DOOR_CLOSED
+        self._close_time = -1
+        self._close_delay = 2000
 
         self._x_offset = x_offset
         self._y_offset = y_offset
@@ -82,6 +84,11 @@ class Door(pygame.sprite.Sprite):
     def update(self):
         self._animate()
         self._cur_frame()
+        cur_time = pygame.time.get_ticks()
+        if self._close_time != -1:
+            if cur_time > self._close_time:
+                self._close_time = -1
+                self.close_door()            
 
     def _cur_frame(self):
         # this only needs its own method because later we'll need to
@@ -108,9 +115,25 @@ class Door(pygame.sprite.Sprite):
         self._dest_frame = DOOR_OPENED
         self.sfx_open.play()
 
+    def is_open(self):
+        if self._dest_frame == DOOR_OPENED:
+            return True
+        return False
+
+    def is_closed(self):
+        if self._dest_frame == DOOR_CLOSED:
+            return True
+        return False
+
     def close_door(self):
         self._dest_frame = DOOR_CLOSED
         self.sfx_close.play()
+
+    def auto_door(self):
+        cur_time = pygame.time.get_ticks()
+        if not self.is_open():
+            self.open_door()
+            self._close_time = cur_time + self._close_delay
 
     def toggle_door(self):
         if self._dest_frame == DOOR_CLOSED:

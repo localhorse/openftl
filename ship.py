@@ -270,7 +270,7 @@ class Ship(pygame.sprite.Sprite):
                 temp_y -= 1
             door_pos2 = (temp_y, temp_x)
             if (tile_pos1 == door_pos1 and tile_pos2 == door_pos2) or (tile_pos1 == door_pos2 and tile_pos2 == door_pos1):
-                return True
+                return door
 
         return False
 
