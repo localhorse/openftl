@@ -41,3 +41,13 @@
   needs immediate looking into. The different races need to have very
   well defined speeds. The human needs to be faster than my human, let
   alone the mantis!
+
+- We need to change the way Persons move through the rooms. Instead of
+  a destination tile, there needs to be a destination room. We also
+  need to loop through all the Persons, count the ones that have the
+  same destination room, and check if there's enough space before
+  setting a path. If there is, pick arbitrary destination tiles within
+  that room and send the selected Persons there.
+
+- This code needs to be profiled to see where in the game loop we're
+  taking up the most time.
