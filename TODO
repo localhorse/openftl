@@ -60,3 +60,7 @@
   though player characters take priority in terms of which one is
   highlighted and therefore which one will be activated on mouse
   click.
+
+- FTL doesn't actually order the sprites like I do and draw moving
+  characters over idle characters! I guess I just imagined that. Not
+  sure if I should remove it yet.
