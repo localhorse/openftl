@@ -75,3 +75,11 @@
 
 - Rooms need to have a non-sensor mode of drawing where the contents
   are obscured.
+
+* There are a lot of methods that iterate through the room dict or the
+  Door objects in Ship. A lot of the related information is called in
+  a specific code block. (For example, the recently added room
+  occupants.) What we should be doing is, given a room ID, loading a
+  bunch of information all in one shot and passing it to the code
+  block that will be using the information, so we're not looping
+  through a bunch of crap over and over for no reason.
