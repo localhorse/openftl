@@ -77,7 +77,7 @@ if __name__ == "__main__":
     # and finally update the display
     while True:
 
-        clock.tick(30)
+        clock.tick(80)
 
         for event in pygame.event.get():
             if event.type == QUIT:
