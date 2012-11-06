@@ -56,17 +56,9 @@ class Ship(pygame.sprite.Sprite):
             for width_index in range(0, grid_width):
                 self.map.set_blocked((height_index, width_index))
 
-        for door in self._doors:
-            door_x, door_y = door.get_pos()
-            # what can we do with these stupid values? (room left/up)
-            # http://ftlwiki.com/wiki/Modding_Ships#TXT_File
-            temp_room_left = self.get_room(door.room_left)
-            temp_room_right = self.get_room(door.room_right)
-            # I am really not sure how to represent passable tiles
-            # based on the door information... --FIXME
-
-        # forget about the doors for now... let's make a grid where
-        # every room tile is a valid, passable area
+        # let's make a grid where every room tile is a valid, passable
+        # area and the GridMap successors method takes care of the
+        # walls/doors
         if True:
             for room in self._rooms:
                 for height_index in range(0, room['height']):
@@ -88,6 +80,10 @@ class Ship(pygame.sprite.Sprite):
                            self._ship_width, self._ship_height)
 
     def update(self):
+        # we don't need to do anything here (YET) because once the
+        # rooms are drawn, the ship doesn't really change... but as
+        # soon as we start keeping track of oxygen levels, we will
+        # need to redraw certain rooms pink when oxygen is low --FIXME
         pass
 
     def _draw_rooms(self):
@@ -125,7 +121,7 @@ class Ship(pygame.sprite.Sprite):
         """Load the X and Y offsets from the data file. These values
         describe (supposedly) how much the rooms are offset from (0,
         0) of the ship image. Still working on getting them to line up
-        properly."""
+        properly with the ship sprite image."""
 
         ship_data = open(self._shipdata_filename, "r")
         lines = ship_data.readlines()
@@ -238,9 +234,10 @@ class Ship(pygame.sprite.Sprite):
 
         return None
 
-    # sticking our Persons in a room at creation will make the
-    # pathfinding much easier to start with!
     def get_room_pos(self, room_id):
+        """This method returns the actual screen coordinates of a
+        given room ID at 0, 0 of the room. It's used in main right
+        now to determine where to stick the Person."""
         room = self.get_room(room_id)
         ship_x, ship_y = self.get_pos()
         ship_x += self._x_offset
@@ -251,6 +248,24 @@ class Ship(pygame.sprite.Sprite):
         room_x = room['x'] * TILE_WIDTH + ship_x
         room_y = room['y'] * TILE_HEIGHT + ship_y
         return (room_x, room_y)
+
+    def get_room_rect(self, room_id):
+        """This one we're going to use to determine if we've clicked
+        in a room."""
+        pass
+
+    def get_room_capacity(self, room_id):
+        """This method will tell us (based on width * height) how many
+        people this a given room ID can hold. (Should we take into
+        account the current occupants here?) We'll need to fix this
+        later as most 2x2 rooms hold 4 characters, but it seems as
+        though others (most notably the medbay) only hold 3."""
+        pass
+
+    def get_room_empty(self, room_id):
+        """This method will return the tile coordinates of a spot in a
+        given room ID that is not occupied by a character."""
+        pass
 
     def get_offsets(self):
         return (self._x_offset, self._y_offset, self._vert_offset)

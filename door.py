@@ -13,7 +13,7 @@ class Door(pygame.sprite.Sprite):
     coordinates but rather tile coordinates."""
 
     # might want to consider not having this sound stuff execute on
-    # import!
+    # import! --FIXME
     pygame.mixer.init()
     sfx_open = pygame.mixer.Sound("./resources/audio/waves/ui/bp_door_open.ogg")
     sfx_close = sfx_open

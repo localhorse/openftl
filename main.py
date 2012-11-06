@@ -34,8 +34,6 @@ if __name__ == "__main__":
     # TILE_WIDTH would be the X screen coordinate
     player_ship = Ship("circle_cruiser", (5, 4))
 
-    # zero movement delay, and they are still slow as shit?
-
     human = Person("human", player_ship.get_room_pos(0), 100, 0)
     human.add_to_ship(player_ship)
     
@@ -77,6 +75,10 @@ if __name__ == "__main__":
     # and finally update the display
     while True:
 
+        # this is just a rough guess but 80 puts it at about mantis
+        # speed if we update the position once per sprite update... we
+        # will definitely want to do something about this later,
+        # though --FIXME
         clock.tick(80)
 
         for event in pygame.event.get():

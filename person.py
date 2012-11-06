@@ -8,7 +8,6 @@ class Person(pygame.sprite.Sprite):
     string, a tuple representing X, Y position, and an animation and
     move delay."""
 
-    # the move delays NO LONGER WORK FOR THESE SPRITES! why?
     def __init__(self, species, pos, anim_delay, move_delay):
 
         self._selected = False
@@ -49,7 +48,11 @@ class Person(pygame.sprite.Sprite):
         self._selected_sheet = pygame.image.load(self._selected_file).convert_alpha()
         self._unselected_sheet = pygame.image.load(self._unselected_file).convert_alpha()
         # go through each column in the top row of the sprite sheet,
-        # and load each walking animation for each cardinal direction
+        # and load each walking animation for each cardinal
+        # direction. we'll need to get the bottom rows soon as well,
+        # and figure out the mantis anims... we might need subclasses
+        # for different aliens, with different load/anim methods?
+        # --FIXME
         for index in range(0, ALIEN_COLS):
 
             temp_rect = pygame.Rect((index * ALIEN_WIDTH, 0),
@@ -98,6 +101,8 @@ class Person(pygame.sprite.Sprite):
             # if we're not at our destination...
             if self._cur_x != self._dst_x or self._cur_y != self._dst_y:
 
+                # move on the X and Y axes
+
                 if self._cur_x > self._dst_x:
                     self._cur_x -= 1
                     self._dir = LEFT
@@ -113,10 +118,12 @@ class Person(pygame.sprite.Sprite):
                     self._dir = DOWN
 
             else:
-                # if they ARE the same...
+                # if we ARE at our destination
                 if self._path != [] and self._path != None:
+                    # go to the next tile in the path
                     self.seek_tile(self._path[self._path_index])
                     self._path_index += 1
+                    # if we're done the path, get rid of it
                     if self._path_index >= len(self._path):
                         self._path = None
                         self._path_index = 0
@@ -243,7 +250,7 @@ class Person(pygame.sprite.Sprite):
         # pathfinder here as well - I'm not sure this is a good idea
         # and later we'll need a nicer way for the ship and crew to
         # know about each other, particularly the ship being aware of
-        # the crew on it
+        # the crew on it --FIXME
         self._ship = ship
         self._pathfinder = PathFinder(ship.map.successors,
                                       ship.map.move_cost,

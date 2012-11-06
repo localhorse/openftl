@@ -52,7 +52,11 @@
 - This code needs to be profiled to see where in the game loop we're
   taking up the most time.
 
-- Player movement is MUCH faster in the original FTL.
+- Player movement is MUCH faster in the original FTL. (This is
+  partially resolved, player movement is tied to frames per
+  second. I've temporarily increased the max FPS, but this is a really
+  bad way to do it, I think, and I'll have to increase the increments
+  with which the player X, Y are increased.
 
 - Work on some kind of mouse-over highlighting system. For example, in
   the original FTL game the bounding box to click on a door is much
