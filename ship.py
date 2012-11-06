@@ -227,12 +227,10 @@ class Ship(pygame.sprite.Sprite):
         return (self._cur_x, self._cur_y)
 
     def get_room(self, room_id):
-        """This method returns the room with ID room_id. Might
-        consider returning index for internal class use."""
+        """This method returns the room with ID room_id."""
         for index, room in enumerate(self._rooms):
             if room['id'] == room_id:
                 return room
-
         return None
 
     def get_room_pos(self, room_id):
@@ -273,9 +271,30 @@ class Ship(pygame.sprite.Sprite):
         return room['width'] * room['height']
 
     def get_room_empty(self, room_id):
-        """This method will return the screen coordinates of a spot in
-        a given room ID that is not occupied by a character."""
-        pass
+        """This method will return the screen coordinates of a
+        spot/tile in a given room ID that is not occupied by a
+        character."""
+
+        ship_x = self._cur_x
+        ship_y = self._cur_y
+        x_offset, y_offset, vert_offset = self.get_offsets()
+        occupants = self.get_room_occupants(room_id)
+        print("--- occupants: %s" % occupants)
+        room = self.get_room(room_id)
+
+        temp_x = occupants % room['width']
+        # for some ungodly reason Y can sometimes be 2 (even when I'm
+        # not adding 1)... I am not sure what's going on, might fix
+        # this tomorrow --FIXME
+        temp_y = ((occupants - temp_x) / room['width']) + 1
+        print("--- temp_x: %s, temp_y: %s" % (temp_x, temp_y))
+
+        screen_x = (temp_x + room['x'] + ship_x + x_offset) * TILE_WIDTH
+        screen_y = (temp_y + room['y'] + ship_y + y_offset) * TILE_HEIGHT + vert_offset
+
+        print("--- screen_x: %s, screen_y: %s" % (screen_x, screen_y))
+        return screen_x, screen_y
+
 
     def set_room_occupants(self, room_id, occupants):
         """Given a room ID, set the current number of occupants."""

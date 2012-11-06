@@ -243,6 +243,9 @@ class Person(pygame.sprite.Sprite):
     def set_goal(self, pos):
         """This sets our final destination that we are pathfinding to."""
 
+        print("--- event.pos: (%s, %s)" % pos)
+        print("--- cur_x: %s, cur_y: %s" % (self._cur_x, self._cur_y))
+        
         # get the current room (this is probably slow)... --FIXME
         for room in self._ship.get_rooms():
             if self._ship.get_room_rect(room['id']).collidepoint((self._cur_x, self._cur_y)):
@@ -263,7 +266,10 @@ class Person(pygame.sprite.Sprite):
         self._ship.set_room_occupants(dst_id,
                                       self._ship.get_room_occupants(dst_id) + 1)
         
-        self._goal_x, self._goal_y = self._round_tile(pos)
+        # here we need to set our destination to the proper screen
+        # coordinates based on whichever tile in our destination room
+        # is empty --FIXME
+        self._goal_x, self._goal_y = self._round_tile(self._ship.get_room_empty(dst_id))
 
     def add_to_ship(self, ship):
         # just let this class know what ship it's a part of, and give

@@ -83,3 +83,7 @@
   bunch of information all in one shot and passing it to the code
   block that will be using the information, so we're not looping
   through a bunch of crap over and over for no reason.
+
+- Implementing proper character placement in rooms, but having trouble
+  properly keeping track of room occupants. Take a closer look at the
+  code in Person tomorrow.
