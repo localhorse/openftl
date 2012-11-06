@@ -36,8 +36,7 @@ class Person(pygame.sprite.Sprite):
 
         self._cur_x, self._cur_y = self._round_tile(pos)
         self._dst_x, self._dst_y = self._round_tile(pos)
-
-        self.set_goal(pos)
+        self._goal_x, self._goal_y = self._round_tile(pos)
 
         pygame.sprite.Sprite.__init__(self)
 
@@ -242,6 +241,28 @@ class Person(pygame.sprite.Sprite):
         return (divmod(x, TILE_WIDTH)[0] * TILE_WIDTH, divmod(y, TILE_WIDTH)[0] * TILE_WIDTH)
 
     def set_goal(self, pos):
+        """This sets our final destination that we are pathfinding to."""
+
+        # get the current room (this is probably slow)... --FIXME
+        for room in self._ship.get_rooms():
+            if self._ship.get_room_rect(room['id']).collidepoint((self._cur_x, self._cur_y)):
+                cur_id = room['id']
+                break
+
+        # "subtract" ourselves from the current room
+        self._ship.set_room_occupants(cur_id,
+                                      self._ship.get_room_occupants(cur_id) - 1)
+
+        # get the destination room --FIXME (see above)
+        for room in self._ship.get_rooms():
+            if self._ship.get_room_rect(room['id']).collidepoint(pos):
+                dst_id = room['id']
+                break
+
+        # "add" ourselves to the destination room
+        self._ship.set_room_occupants(dst_id,
+                                      self._ship.get_room_occupants(dst_id) + 1)
+        
         self._goal_x, self._goal_y = self._round_tile(pos)
 
     def add_to_ship(self, ship):

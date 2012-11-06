@@ -169,7 +169,8 @@ class Ship(pygame.sprite.Sprite):
 
                 rooms_list.append({'id': room_id, 'x': room_x,
                                    'y': room_y, 'width': room_width,
-                                   'height': room_height, 'img': room_img})
+                                   'height': room_height, 'img': room_img,
+                                   'occupants': 0})
 
         # draw the tiles into each room image
         for room in rooms_list:
@@ -252,21 +253,46 @@ class Ship(pygame.sprite.Sprite):
     def get_room_rect(self, room_id):
         """This one we're going to use to determine if we've clicked
         in a room."""
-        pass
+        for temp_room in self._rooms:
+            if temp_room['id'] == room_id:
+                room = temp_room
+                break
+        return pygame.Rect(self.get_room_pos(room_id), (room['width'] * TILE_WIDTH, room['height'] * TILE_HEIGHT))
 
     def get_room_capacity(self, room_id):
         """This method will tell us (based on width * height) how many
-        people this a given room ID can hold. (Should we take into
-        account the current occupants here?) We'll need to fix this
+        people this a given room ID can hold. We'll need to fix this
         later as most 2x2 rooms hold 4 characters, but it seems as
         though others (most notably the medbay) only hold 3."""
-        pass
+
+        for temp_room in self._rooms:
+            if temp_room['id'] == room_id:
+                room = temp_room
+                break
+
+        return room['width'] * room['height']
 
     def get_room_empty(self, room_id):
-        """This method will return the tile coordinates of a spot in a
-        given room ID that is not occupied by a character."""
+        """This method will return the screen coordinates of a spot in
+        a given room ID that is not occupied by a character."""
         pass
 
+    def set_room_occupants(self, room_id, occupants):
+        """Given a room ID, set the current number of occupants."""
+        for temp_room in self._rooms:
+            if temp_room['id'] == room_id:
+                room = temp_room
+                break
+        room['occupants'] = occupants
+
+    def get_room_occupants(self, room_id):
+        """Given a room ID, return the number of occupants."""
+        for temp_room in self._rooms:
+            if temp_room['id'] == room_id:
+                room = temp_room
+                break
+        return room['occupants']
+            
     def get_offsets(self):
         return (self._x_offset, self._y_offset, self._vert_offset)
 
@@ -303,6 +329,8 @@ class Ship(pygame.sprite.Sprite):
         # there doesn't seem to be a wall
         return False
 
+    def get_rooms(self):
+        return self._rooms
                 
 if __name__ == "__main__":
     pass

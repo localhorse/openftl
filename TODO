@@ -68,3 +68,10 @@
 - FTL doesn't actually order the sprites like I do and draw moving
   characters over idle characters! I guess I just imagined that. Not
   sure if I should remove it yet.
+
+- Rooms are getting so many related methods in the Ship class that we
+  might want to look into making it into its own class! The ship class
+  will soon have more room-related things than ship-related.
+
+- Rooms need to have a non-sensor mode of drawing where the contents
+  are obscured.
