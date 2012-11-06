@@ -250,7 +250,7 @@ class Ship(pygame.sprite.Sprite):
 
     def get_room_rect(self, room_id):
         """This one we're going to use to determine if we've clicked
-        in a room."""
+        in a room. Screen X, Y."""
         for temp_room in self._rooms:
             if temp_room['id'] == room_id:
                 room = temp_room
@@ -278,16 +278,17 @@ class Ship(pygame.sprite.Sprite):
         ship_x = self._cur_x
         ship_y = self._cur_y
         x_offset, y_offset, vert_offset = self.get_offsets()
+        # we're not keeping track of occupants properly, and this is
+        # why temp_y can sometimes be bigger than the room it should
+        # be in --FIXME
         occupants = self.get_room_occupants(room_id)
         print("--- occupants: %s" % occupants)
         room = self.get_room(room_id)
 
         temp_x = occupants % room['width']
-        # for some ungodly reason Y can sometimes be 2 (even when I'm
-        # not adding 1)... I am not sure what's going on, might fix
-        # this tomorrow --FIXME
-        temp_y = ((occupants - temp_x) / room['width']) + 1
+        temp_y = ((occupants - temp_x) / room['height'])
         print("--- temp_x: %s, temp_y: %s" % (temp_x, temp_y))
+       
 
         screen_x = (temp_x + room['x'] + ship_x + x_offset) * TILE_WIDTH
         screen_y = (temp_y + room['y'] + ship_y + y_offset) * TILE_HEIGHT + vert_offset

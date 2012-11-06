@@ -34,10 +34,10 @@ if __name__ == "__main__":
     # TILE_WIDTH would be the X screen coordinate
     player_ship = Ship("circle_cruiser", (5, 4))
 
-    human = Person("human", player_ship.get_room_pos(0), 100, 0)
+    human = Person("human", 0, player_ship.get_room_pos(0), 100, 0)
     human.add_to_ship(player_ship)
     
-    engi = Person("engi", player_ship.get_room_pos(1), 200, 0)
+    engi = Person("engi", 0, player_ship.get_room_pos(1), 200, 0)
     engi.add_to_ship(player_ship)
 
     # add all sprites into this render group, with LayeredUpdates we

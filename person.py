@@ -8,7 +8,7 @@ class Person(pygame.sprite.Sprite):
     string, a tuple representing X, Y position, and an animation and
     move delay."""
 
-    def __init__(self, species, pos, anim_delay, move_delay):
+    def __init__(self, species, room, pos, anim_delay, move_delay):
 
         self._selected = False
 
@@ -33,6 +33,8 @@ class Person(pygame.sprite.Sprite):
         self._path = []
         self._path_index = 0
         self._pathfinder = None
+
+        self._cur_room = room
 
         self._cur_x, self._cur_y = self._round_tile(pos)
         self._dst_x, self._dst_y = self._round_tile(pos)
@@ -241,7 +243,8 @@ class Person(pygame.sprite.Sprite):
         return (divmod(x, TILE_WIDTH)[0] * TILE_WIDTH, divmod(y, TILE_WIDTH)[0] * TILE_WIDTH)
 
     def set_goal(self, pos):
-        """This sets our final destination that we are pathfinding to."""
+        """This sets our final destination that we are pathfinding
+        to. Returns True on success."""
 
         print("--- event.pos: (%s, %s)" % pos)
         print("--- cur_x: %s, cur_y: %s" % (self._cur_x, self._cur_y))
@@ -252,14 +255,22 @@ class Person(pygame.sprite.Sprite):
                 cur_id = room['id']
                 break
 
+        # we have to make sure we don't try to go anywhere if there's
+        # too many people in the room
+        print("--- room width: %s, room height: %s" % (room['width'], room['height']))
+        if room['occupants'] > room['width'] * room['height']:
+            print("--- Room #%s (%s, %s) is full!" % room['id'])
+            return False
+
         # "subtract" ourselves from the current room
-        self._ship.set_room_occupants(cur_id,
-                                      self._ship.get_room_occupants(cur_id) - 1)
+        self._ship.set_room_occupants(self._cur_room,
+                                      self._ship.get_room_occupants(self._cur_room) - 1)
 
         # get the destination room --FIXME (see above)
         for room in self._ship.get_rooms():
             if self._ship.get_room_rect(room['id']).collidepoint(pos):
                 dst_id = room['id']
+                self._cur_room = dst_id
                 break
 
         # "add" ourselves to the destination room
@@ -270,6 +281,7 @@ class Person(pygame.sprite.Sprite):
         # coordinates based on whichever tile in our destination room
         # is empty --FIXME
         self._goal_x, self._goal_y = self._round_tile(self._ship.get_room_empty(dst_id))
+        return True
 
     def add_to_ship(self, ship):
         # just let this class know what ship it's a part of, and give
@@ -279,6 +291,8 @@ class Person(pygame.sprite.Sprite):
         # know about each other, particularly the ship being aware of
         # the crew on it --FIXME
         self._ship = ship
+        self._ship.set_room_occupants(self._cur_room,
+                                      self._ship.get_room_occupants(self._cur_room) + 1)
         self._pathfinder = PathFinder(ship.map.successors,
                                       ship.map.move_cost,
                                       ship.map.move_cost)
