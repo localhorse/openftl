@@ -4,11 +4,6 @@
 - Added a bit of code with regards to scaling, but need to think about
   how we'll scale sprite images as well as coordinates.
 
-- Instead of _not_ drawing certain areas of the border, we'll just
-  clear the spots under the doors... after some observation, it
-  appears that's what FTL does, anyways (BG colored gaps to the left of
-  some doors when sensors are down).
-
 - Need to fix door loading... it appears to be loading correctly, but
   this is misleading because if a room ever contains 2 horizontal or 2
   vertical doors, we'll have 2 doors literally right on top of each
@@ -18,7 +13,7 @@
   too slow they will try to close and open again.
 
 - This code needs to be profiled to see where in the game loop we're
-  taking up the most time.
+  taking up the most time. (Done, but need to follow up.)
 
 - Player movement is MUCH faster in the original FTL. (This is
   partially resolved, player movement is tied to frames per
@@ -57,3 +52,12 @@
 
 - Figure out why it crashes when you compute a new path before you hit
   the old destination.
+
+* There are basically 4 types of coordinates. Relative to the screen
+  surface, relative to the ship surface, and relative to both, but a
+  35x35 grid of tiles instead of pixel coordinates. Let's make
+  functions that will convert between these coordinates. They will
+  have to be methods of Ship or have access to Ship, because that
+  class contains the necessary offsets to describe the correct
+  location (from the FTL data files). Either that or we'll have to
+  move the ship loading out of Ship class which makes less sense.

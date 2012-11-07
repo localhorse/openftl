@@ -176,7 +176,7 @@ class Door(pygame.sprite.Sprite):
             return pygame.Rect(temp_x, temp_y, TILE_WIDTH, TILE_HEIGHT)
         else:
             # this determines the bounding box for collision detection
-            # purposes (in this case the selection box) - it's all
+            # purposes (in this case of the selection box) - it's all
             # kind of a hack and will have to be changed when I do the
             # doors properly, but as of right now I'm playing around
             # and it's functional --FIXME
@@ -188,6 +188,8 @@ class Door(pygame.sprite.Sprite):
                 temp_y -= DOOR_THICKNESS / 2
                 return pygame.Rect((temp_x, temp_y, TILE_WIDTH,
                                     DOOR_THICKNESS))
+            # (we could stand to increase the collision box because
+            # it's kind of hard to click now) --FIXME
 
 if __name__ == "__main__":
     pass

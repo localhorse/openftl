@@ -42,6 +42,10 @@ class Ship(pygame.sprite.Sprite):
         # load the rooms from the data file
         self._rooms = self._load_rooms()
 
+        # draw the rooms into the main ship graphic (not to the
+        # screen)
+        self._draw_rooms()
+
         # load the doors...
         self._doors = self._load_doors()
 
@@ -67,10 +71,6 @@ class Ship(pygame.sprite.Sprite):
 
         # print debug info
         self.map.printme()
-
-        # draw the rooms into the main ship graphic (not to the
-        # screen)
-        self._draw_rooms()
 
     def bounding_box(self):
         """This method returns a rect that represents the position and
@@ -217,6 +217,32 @@ class Ship(pygame.sprite.Sprite):
                                        room_left, room_right, connect,
                                        self._x_offset, self._y_offset,
                                        self._vert_offset))
+
+                # let's erase the room borders underneath the doors
+                # now - let's also stop converting these coords every
+                # time... --FIXME
+                temp_door = doors_list[len(doors_list) - 1]
+                temp_rect = temp_door.bounding_box(collision=True)
+                temp_x, temp_y, temp_width, temp_height = temp_rect
+
+                # subtract the ship offset, since we're drawing to
+                # self.image and not the screen (the rect we have is
+                # based on screen coordinates)
+                temp_x -= self._cur_x * TILE_WIDTH
+                temp_y -= self._cur_y * TILE_HEIGHT
+
+                # adjust X and Y (just to get it to look right)
+                # depending on whether or not it's vertical.
+                if temp_door.get_connect() == VERTICAL:
+                    temp_x += 3
+                    temp_y += 1
+                    temp_width -= 6
+                else:
+                    temp_x += 1
+                    temp_y += 3
+                    temp_height -= 6
+                    
+                pygame.draw.rect(self.image, ROOM_COLOR, (temp_x, temp_y, temp_width, temp_height), 0)
 
         return doors_list
 
