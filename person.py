@@ -40,6 +40,8 @@ class Person(pygame.sprite.Sprite):
         self._dst_x, self._dst_y = self._round_tile(pos)
         self._goal_x, self._goal_y = self._round_tile(pos)
 
+        self.species = species
+
         pygame.sprite.Sprite.__init__(self)
 
         # use os.join, also make sure species is valid --FIXME
@@ -85,10 +87,13 @@ class Person(pygame.sprite.Sprite):
         self._cur_frame()
         # if we're about to go through a door, open it, scheduling it
         # for automatic shut
-        door = self._ship.door_present(self.cur_tile(), self.dst_tile())
-        if door:
-            if door.is_closed():
-                door.auto_door()
+        if self._ship:
+            door = self._ship.door_present(self.cur_tile(), self.dst_tile())
+            if door:
+                if door.is_closed():
+                    door.auto_door()
+        else:
+            print("--- %s not added to ship." % self.species)
         
     def _move(self):
         """This moves the sprite: if enough time has passed according

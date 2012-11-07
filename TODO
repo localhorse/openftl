@@ -86,4 +86,10 @@
 
 - Implementing proper character placement in rooms, but having trouble
   properly keeping track of room occupants. Take a closer look at the
-  code in Person tomorrow.
+  code in Person tomorrow. (We probably need to completely scrap the
+  way occupants are kept track of, but take a look anyways.)
+
+- 2 characters at a time can't go into the 2x1 (horizontal)
+  rooms. Sometimes sending them there sends them to another, lower
+  room. Sometimes it says there are more occupants than there actually
+  are.

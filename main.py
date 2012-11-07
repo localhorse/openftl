@@ -32,13 +32,19 @@ if __name__ == "__main__":
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    player_ship = Ship("circle_cruiser", (5, 4))
+    player_ship = Ship("fed_cruiser", (5, 4))
 
-    human = Person("human", 0, player_ship.get_room_pos(0), 100, 0)
+    human = Person("human", 0, player_ship.get_room_pos(0), 100, 12)
     human.add_to_ship(player_ship)
     
-    engi = Person("engi", 0, player_ship.get_room_pos(1), 200, 0)
+    engi = Person("engi", 1, player_ship.get_room_pos(1), 100, 12)
     engi.add_to_ship(player_ship)
+
+    slug = Person("slug", 2, player_ship.get_room_pos(2), 100, 12)
+    slug.add_to_ship(player_ship)
+
+    rock = Person("rock", 3, player_ship.get_room_pos(3), 100, 28)
+    rock.add_to_ship(player_ship)
 
     # add all sprites into this render group, with LayeredUpdates we
     # can move things to the front or back
@@ -50,7 +56,7 @@ if __name__ == "__main__":
     for door in player_ship.get_doors():
         all_sprites.add(door)
 
-    all_sprites.add((human, engi))
+    all_sprites.add((human, engi, slug, rock))
     
     clock = pygame.time.Clock()
 
@@ -108,7 +114,7 @@ if __name__ == "__main__":
                 # right mouse button (or left + ctrl for Mac users)
                 if event.button == 3 or (event.button == 1 and (lctrl_pressed or rctrl_pressed)):
                     # put these in a sprite group instead --FIXME
-                    for alien in [human, engi]:
+                    for alien in [human, engi, slug, rock]:
                         if alien.selected():
                             # set the goal or final destination
                             alien.set_goal(event.pos)
@@ -139,7 +145,7 @@ if __name__ == "__main__":
                                 door.toggle_door()
 
                     # these should be in a sprite group --FIXME
-                    for alien in [human, engi]:
+                    for alien in [human, engi, slug, rock]:
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()
