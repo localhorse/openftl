@@ -47,11 +47,11 @@
   block that will be using the information, so we're not looping
   through a bunch of crap over and over for no reason.
 
-- Make sure characters can't set_goal() to a room they are currently
-  already in.
-
-- Figure out why it crashes when you compute a new path before you hit
-  the old destination.
+- Make sure characters can't end up on the same tile. I am not
+  entirely sure why this sometimes happens. Also, since the crashing
+  issue has been fixed, I notice that sometimes crew members are not
+  able to get to the destination when they are interrupted during
+  pathfinding. This may be related...
 
 * There are basically 4 types of coordinates. Relative to the screen
   surface, relative to the ship surface, and relative to both, but a

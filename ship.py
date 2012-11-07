@@ -69,9 +69,6 @@ class Ship(pygame.sprite.Sprite):
                     for width_index in range(0, room['width']):
                         self.map.set_blocked((room['y'] + height_index, room['x'] + width_index), blocked=False)
 
-        # print debug info
-        self.map.printme()
-
     def bounding_box(self):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as
@@ -312,13 +309,10 @@ class Ship(pygame.sprite.Sprite):
 
         temp_x = occupants % room['width']
         temp_y = occupants / room['width']
-        print("--- temp_x: %s, temp_y: %s" % (temp_x, temp_y))
-       
 
         screen_x = (temp_x + room['x'] + ship_x + x_offset) * TILE_WIDTH
         screen_y = (temp_y + room['y'] + ship_y + y_offset) * TILE_HEIGHT + vert_offset
 
-        print("--- screen_x: %s, screen_y: %s" % (screen_x, screen_y))
         return screen_x, screen_y
 
 

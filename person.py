@@ -92,8 +92,6 @@ class Person(pygame.sprite.Sprite):
             if door:
                 if door.is_closed():
                     door.auto_door()
-        else:
-            print("--- %s not added to ship." % self.species)
         
     def _move(self):
         """This moves the sprite: if enough time has passed according
@@ -126,13 +124,14 @@ class Person(pygame.sprite.Sprite):
             else:
                 # if we ARE at our destination
                 if self._path != [] and self._path != None:
-                    # go to the next tile in the path
-                    self.seek_tile(self._path[self._path_index])
-                    self._path_index += 1
                     # if we're done the path, get rid of it
                     if self._path_index >= len(self._path):
                         self._path = None
                         self._path_index = 0
+                    else:
+                        # go to the next tile in the path
+                        self.seek_tile(self._path[self._path_index])
+                        self._path_index += 1
                 
             self._next_move = cur_time + self._move_delay
             self.rect = self.bounding_box()
@@ -251,9 +250,6 @@ class Person(pygame.sprite.Sprite):
         """This sets our final destination that we are pathfinding
         to. Returns True on success."""
 
-        print("--- event.pos: (%s, %s)" % pos)
-        print("--- cur_x: %s, cur_y: %s" % (self._cur_x, self._cur_y))
-        
         # get the current room (this is probably slow)... --FIXME
         for room in self._ship.get_rooms():
             if self._ship.get_room_rect(room['id']).collidepoint((self._cur_x, self._cur_y)):
@@ -274,7 +270,6 @@ class Person(pygame.sprite.Sprite):
 
         # we have to make sure we don't try to go anywhere if there's
         # too many people in the room
-        print("--- dest. room width: %s, dest. room height: %s" % (dst_room['width'], dst_room['height']))
         if dst_room['occupants'] >= dst_room['width'] * dst_room['height']:
             print("--- Room #%s is full!" % dst_room['id'])
             return False
@@ -307,6 +302,9 @@ class Person(pygame.sprite.Sprite):
     def compute_path(self):
         self._path = list(self._pathfinder.compute_path(self.cur_tile(),
                                                         self.goal_tile()))
+        if self._path == []:
+            print("*** WTF?")
+            
         # print debug info
         print(self._path)
 
