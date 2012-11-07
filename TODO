@@ -60,3 +60,6 @@
 
 - Make sure characters can't set_goal() to a room they are currently
   already in.
+
+- Figure out why it crashes when you compute a new path before you hit
+  the old destination.
