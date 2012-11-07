@@ -32,16 +32,16 @@ if __name__ == "__main__":
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    player_ship = Ship("fed_cruiser", (5, 4))
+    player_ship = Ship("circle_cruiser", (5, 4))
 
     human = Person("human", 0, player_ship.get_room_pos(0), 100, 12)
     human.add_to_ship(player_ship)
     
-    engi = Person("engi", 1, player_ship.get_room_pos(1), 100, 12)
-    engi.add_to_ship(player_ship)
+    engi_one = Person("engi", 1, player_ship.get_room_pos(1), 100, 12)
+    engi_one.add_to_ship(player_ship)
 
-    slug = Person("slug", 2, player_ship.get_room_pos(2), 100, 12)
-    slug.add_to_ship(player_ship)
+    engi_two = Person("engi", 2, player_ship.get_room_pos(2), 100, 12)
+    engi_two.add_to_ship(player_ship)
 
     rock = Person("rock", 3, player_ship.get_room_pos(3), 100, 28)
     rock.add_to_ship(player_ship)
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     for door in player_ship.get_doors():
         all_sprites.add(door)
 
-    all_sprites.add((human, engi, slug, rock))
+    all_sprites.add((human, engi_one, engi_two, rock))
     
     clock = pygame.time.Clock()
 
@@ -114,7 +114,7 @@ if __name__ == "__main__":
                 # right mouse button (or left + ctrl for Mac users)
                 if event.button == 3 or (event.button == 1 and (lctrl_pressed or rctrl_pressed)):
                     # put these in a sprite group instead --FIXME
-                    for alien in [human, engi, slug, rock]:
+                    for alien in [human, engi_one, engi_two, rock]:
                         if alien.selected():
                             # set the goal or final destination
                             alien.set_goal(event.pos)
@@ -145,7 +145,7 @@ if __name__ == "__main__":
                                 door.toggle_door()
 
                     # these should be in a sprite group --FIXME
-                    for alien in [human, engi, slug, rock]:
+                    for alien in [human, engi_one, engi_two, rock]:
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
                                 alien.select()
@@ -157,7 +157,7 @@ if __name__ == "__main__":
         # we would clear here with Group.clear() if it worked (didn't
         # seem to work properly, will attempt again --FIXME
 
-        for alien in [engi, human]:
+        for alien in [human, engi_one, engi_two, rock]:
             if alien.is_moving():
                 all_sprites.move_to_front(alien)
             else:

@@ -282,11 +282,10 @@ class Ship(pygame.sprite.Sprite):
         # why temp_y can sometimes be bigger than the room it should
         # be in --FIXME
         occupants = self.get_room_occupants(room_id)
-        print("--- occupants: %s" % occupants)
         room = self.get_room(room_id)
 
         temp_x = occupants % room['width']
-        temp_y = ((occupants - temp_x) / room['height'])
+        temp_y = occupants / room['width']
         print("--- temp_x: %s, temp_y: %s" % (temp_x, temp_y))
        
 

@@ -260,13 +260,6 @@ class Person(pygame.sprite.Sprite):
                 cur_id = room['id']
                 break
 
-        # we have to make sure we don't try to go anywhere if there's
-        # too many people in the room
-        print("--- room width: %s, room height: %s" % (room['width'], room['height']))
-        if room['occupants'] > room['width'] * room['height']:
-            print("--- Room #%s (%s, %s) is full!" % room['id'])
-            return False
-
         # "subtract" ourselves from the current room
         self._ship.set_room_occupants(self._cur_room,
                                       self._ship.get_room_occupants(self._cur_room) - 1)
@@ -276,16 +269,25 @@ class Person(pygame.sprite.Sprite):
             if self._ship.get_room_rect(room['id']).collidepoint(pos):
                 dst_id = room['id']
                 self._cur_room = dst_id
+                dst_room = room
                 break
+
+        # we have to make sure we don't try to go anywhere if there's
+        # too many people in the room
+        print("--- dest. room width: %s, dest. room height: %s" % (dst_room['width'], dst_room['height']))
+        if dst_room['occupants'] >= dst_room['width'] * dst_room['height']:
+            print("--- Room #%s is full!" % dst_room['id'])
+            return False
+
+        # here we need to set our destination to the proper screen
+        # coordinates based on whichever tile in our destination room
+        # is empty --FIXME
+        self._goal_x, self._goal_y = self._round_tile(self._ship.get_room_empty(dst_id))
 
         # "add" ourselves to the destination room
         self._ship.set_room_occupants(dst_id,
                                       self._ship.get_room_occupants(dst_id) + 1)
         
-        # here we need to set our destination to the proper screen
-        # coordinates based on whichever tile in our destination room
-        # is empty --FIXME
-        self._goal_x, self._goal_y = self._round_tile(self._ship.get_room_empty(dst_id))
         return True
 
     def add_to_ship(self, ship):

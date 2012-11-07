@@ -20,34 +20,8 @@
   vertical doors, we'll have 2 doors literally right on top of each
   other. This will become important when doing the pathfinding code.
 
-- If we make all the tiles occupied by rooms passable, but make the
-  more costly than the door tiles, the pathfinding should work and
-  they should move between rooms only through the doors? I suppose
-  this will require modifying GridMap slightly (the move_cost() method
-  and the map which contains boolean values, we'll need at least 3
-  values).
-
 - Doors open and close automatically, although sometimes if the guy is
   too slow they will try to close and open again.
-
-- Major problem with the move delays on the Person sprites. I'm not
-  sure why, but I can't make them go any faster (short of moving them
-  in increments of more than 1 pixel, which would be choppy). In
-  earlier tests, drawing a smooth walk from one end of the screen to
-  another was so fast as to almost be instantaneous, and the move
-  delays should have reflected that. Now I'm taking them out and it's
-  a normal walking pace. It must be something I'm missing, because why
-  else would the animation speeds be affected by the delays? This
-  needs immediate looking into. The different races need to have very
-  well defined speeds. The human needs to be faster than my human, let
-  alone the mantis!
-
-- We need to change the way Persons move through the rooms. Instead of
-  a destination tile, there needs to be a destination room. We also
-  need to loop through all the Persons, count the ones that have the
-  same destination room, and check if there's enough space before
-  setting a path. If there is, pick arbitrary destination tiles within
-  that room and send the selected Persons there.
 
 - This code needs to be profiled to see where in the game loop we're
   taking up the most time.
@@ -84,12 +58,5 @@
   block that will be using the information, so we're not looping
   through a bunch of crap over and over for no reason.
 
-- Implementing proper character placement in rooms, but having trouble
-  properly keeping track of room occupants. Take a closer look at the
-  code in Person tomorrow. (We probably need to completely scrap the
-  way occupants are kept track of, but take a look anyways.)
-
-- 2 characters at a time can't go into the 2x1 (horizontal)
-  rooms. Sometimes sending them there sends them to another, lower
-  room. Sometimes it says there are more occupants than there actually
-  are.
+- Make sure characters can't set_goal() to a room they are currently
+  already in.
