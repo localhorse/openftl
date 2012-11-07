@@ -148,8 +148,11 @@ if __name__ == "__main__":
                     for alien in [human, engi_one, engi_two, rock]:
                         if alien.bounding_box().colliderect(rect):
                             if not door_clicked:
-                                alien.select()
-                        else:
+                                if not lshift_pressed and not rshift_pressed:
+                                    alien.select()
+                                else:
+                                    alien.toggle_selected()
+                        elif not lshift_pressed and not rshift_pressed:
                             alien.deselect()
 
         window.fill(bg_color)
