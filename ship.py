@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from door import Door
+from BeautifulSoup import BeautifulStoneSoup
 from pathfinder.gridmap import GridMap
 
 class Ship(pygame.sprite.Sprite):
@@ -21,9 +22,9 @@ class Ship(pygame.sprite.Sprite):
         self._cur_x, self._cur_y = pos
         # just grab the width and height
         (self._ship_width, self._ship_height, _, _) = self.image.get_rect()
-        self.rect = self.bounding_box()
 
         self._shipdata_filename = "./resources/data/%s.txt" % ship_type
+        self._shipxml_filename = "./resources/data/%s.xml" % ship_type
 
         # prepare the empty room tile (just a beige box with grey
         # border)
@@ -38,6 +39,13 @@ class Ship(pygame.sprite.Sprite):
                                                                   x2, y2)))
         
         self._x_offset, self._y_offset, self._vert_offset = self._load_offsets()
+        self._img_x_offset, self._img_y_offset = self._load_img_offsets()
+        print("--- offsets... X: %s, Y: %s, VERT: %s" % (self._x_offset, self._y_offset, self._vert_offset))
+        print("--- image offsets... X: %s, Y: %s" % (self._img_x_offset, self._img_y_offset))
+
+        # we can't use self.bounding_box() until we've loaded the
+        # offsets
+        self.rect = self.bounding_box()
 
         # load the rooms from the data file
         self._rooms = self._load_rooms()
@@ -73,7 +81,8 @@ class Ship(pygame.sprite.Sprite):
         """This method returns a rect that represents the position and
         size of this sprite. We can't use Sprite.image.get_rect() as
         that returns with a starting position of (0, 0)."""
-        return pygame.Rect(self._cur_x * TILE_WIDTH, self._cur_y * TILE_HEIGHT,
+        return pygame.Rect(self._cur_x * TILE_WIDTH,
+                           self._cur_y * TILE_HEIGHT,
                            self._ship_width, self._ship_height)
 
     def update(self):
@@ -113,6 +122,22 @@ class Ship(pygame.sprite.Sprite):
             plist = [p1, p2, p2, p3, p3, p4, p4, p1]
 
             pygame.draw.lines(self.image, (0, 0, 0), True, plist, 4)
+
+    def _load_img_offsets(self):
+        """This method will load the pixel offsets from the XML
+        file. (I'm not sure why they need so many offsets in so many
+        different files.)"""
+        xml_file = open(self._shipxml_filename, "r")
+        xml_data = xml_file.read()
+        xml_file.close()
+        parsed = BeautifulStoneSoup(xml_data)
+        # this is probably not safe to do, but we can be pretty sure
+        # there's an <img> tag in the XML file... should probably
+        # error check this, though, someday when we do some
+        # housecleaning --FIXME
+        img = parsed.findAll("img")[0]
+        attrs = dict(img.attrs)
+        return int(attrs['x']), int(attrs['y'])
 
     def _load_offsets(self):
         """Load the X and Y offsets from the data file. These values

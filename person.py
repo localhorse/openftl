@@ -303,7 +303,8 @@ class Person(pygame.sprite.Sprite):
         self._path = list(self._pathfinder.compute_path(self.cur_tile(),
                                                         self.goal_tile()))
         if self._path == []:
-            print("*** WTF?")
+            # not sure what I was checking here... --FIXME
+            pass
             
         # print debug info
         print(self._path)
