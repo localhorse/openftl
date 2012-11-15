@@ -39,7 +39,9 @@ class Ship(pygame.sprite.Sprite):
                                                                   x2, y2)))
         
         self._x_offset, self._y_offset, self._vert_offset = self._load_offsets()
-        self._floor_x_offset, self._floor_y_offset = self._load_floor_offsets()
+        self._img_x_offset, self._img_y_offset = self._load_img_offsets()
+        print("--- offsets... X: %s, Y: %s, VERT: %s" % (self._x_offset, self._y_offset, self._vert_offset))
+        print("--- image offsets... X: %s, Y: %s" % (self._img_x_offset, self._img_y_offset))
 
         # we can't use self.bounding_box() until we've loaded the
         # offsets
@@ -95,8 +97,8 @@ class Ship(pygame.sprite.Sprite):
         is done only once on initialization."""
 
         for room in self._rooms:
-            temp_x = (room['x']) * TILE_WIDTH + self._floor_x_offset
-            temp_y = (room['y']) * TILE_HEIGHT + self._vert_offset + self._floor_y_offset
+            temp_x = (room['x'] + self._x_offset) * TILE_WIDTH
+            temp_y = (room['y'] + self._y_offset) * TILE_HEIGHT + self._vert_offset
 
             # draw room
             self.image.blit(room['img'], (temp_x, temp_y), area=None,
@@ -121,7 +123,7 @@ class Ship(pygame.sprite.Sprite):
 
             pygame.draw.lines(self.image, (0, 0, 0), True, plist, 4)
 
-    def _load_floor_offsets(self):
+    def _load_img_offsets(self):
         """This method will load the pixel offsets from the XML
         file. (I'm not sure why they need so many offsets in so many
         different files.)"""
@@ -135,8 +137,7 @@ class Ship(pygame.sprite.Sprite):
         # housecleaning --FIXME
         img = parsed.findAll("img")[0]
         attrs = dict(img.attrs)
-        # return positive numbers, not negative
-        return -int(attrs['x']), -int(attrs['y'])
+        return int(attrs['x']), int(attrs['y'])
 
     def _load_offsets(self):
         """Load the X and Y offsets from the data file. These values
@@ -236,11 +237,8 @@ class Ship(pygame.sprite.Sprite):
                 # we just loaded from the file
                 doors_list.append(Door(self.get_pos(), (door_x, door_y),
                                        room_left, room_right, connect,
-                                       self._x_offset,
-                                       self._y_offset,
-                                       self._vert_offset,
-                                       (self._floor_x_offset,
-                                        self._floor_y_offset)))
+                                       self._x_offset, self._y_offset,
+                                       self._vert_offset))
 
                 # let's erase the room borders underneath the doors
                 # now - let's also stop converting these coords every
@@ -289,11 +287,13 @@ class Ship(pygame.sprite.Sprite):
         now to determine where to stick the Person."""
         room = self.get_room(room_id)
         ship_x, ship_y = self.get_pos()
+        ship_x += self._x_offset
+        ship_y += self._y_offset
         ship_x *= TILE_WIDTH
         ship_y *= TILE_WIDTH
         ship_y += self._vert_offset
-        room_x = room['x'] * TILE_WIDTH + ship_x + self._floor_x_offset
-        room_y = room['y'] * TILE_HEIGHT + ship_y + self._floor_y_offset
+        room_x = room['x'] * TILE_WIDTH + ship_x
+        room_y = room['y'] * TILE_HEIGHT + ship_y
         return (room_x, room_y)
 
     def get_room_rect(self, room_id):
@@ -325,7 +325,7 @@ class Ship(pygame.sprite.Sprite):
 
         ship_x = self._cur_x
         ship_y = self._cur_y
-        x_offset, y_offset, vert_offset, floor_x_offset, floor_y_offset = self.get_offsets()
+        x_offset, y_offset, vert_offset = self.get_offsets()
         # we're not keeping track of occupants properly, and this is
         # why temp_y can sometimes be bigger than the room it should
         # be in --FIXME
@@ -358,7 +358,7 @@ class Ship(pygame.sprite.Sprite):
         return room['occupants']
             
     def get_offsets(self):
-        return (self._x_offset, self._y_offset, self._vert_offset, self._floor_x_offset, self._floor_y_offset)
+        return (self._x_offset, self._y_offset, self._vert_offset)
 
     def door_present(self, tile_pos1, tile_pos2):
         """This method will take 2 (connecting) tile positions (in the

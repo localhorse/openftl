@@ -20,7 +20,7 @@ class Door(pygame.sprite.Sprite):
     # ALL doors ("./resources/audio/waves/ui/bp_door_close.ogg")    
 
     def __init__(self, ship_pos, pos, room_left, room_right, connect,
-                 x_offset, y_offset, vert_offset, floor_offset):
+                 x_offset, y_offset, vert_offset):
         
         self._cur_x, self._cur_y = pos        
         self._ship_x, self._ship_y = ship_pos
@@ -37,8 +37,7 @@ class Door(pygame.sprite.Sprite):
         self._x_offset = x_offset
         self._y_offset = y_offset
         self._vert_offset = vert_offset
-        self._floor_x_offset, self._floor_y_offset = floor_offset
-        
+
         self._connect = connect
 
         self.room_left = room_left
@@ -155,8 +154,8 @@ class Door(pygame.sprite.Sprite):
         particular class this method also shrinks the bounding box
         below the size of the actual image, since the doors are much
         thinner than the door image."""
-        temp_x = (self._ship_x + self._cur_x) * TILE_WIDTH + self._floor_x_offset
-        temp_y = ((self._ship_y + self._cur_y) * TILE_HEIGHT) + self._vert_offset + self._floor_y_offset
+        temp_x = (self._ship_x + self._cur_x + self._x_offset) * TILE_WIDTH
+        temp_y = ((self._ship_y + self._cur_y + self._y_offset) * TILE_HEIGHT) + self._vert_offset
         # it would appear that in most cases the info in the data file
         # for the doors (specifically the ids of rooms the door is
         # connecting to) is not actually needed... in most cases the

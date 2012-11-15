@@ -196,13 +196,12 @@ class Person(pygame.sprite.Sprite):
         return self._selected
 
     def cur_tile(self):
-        """This method returns the current tile coordinate
-        corresponding to the map/grid, taking offsets and ship
-        position into account."""
+        """This method current tile coordinate corresponding to the
+        map/grid, taking offsets and ship position into account."""
         ship_x, ship_y = self._ship.get_pos()
-        x_offset, y_offset, vert_offset, floor_x_offset, floor_y_offset = self._ship.get_offsets()
-        tile_x = (self._cur_x + floor_x_offset) / TILE_WIDTH - ship_x
-        tile_y = (self._cur_y + floor_y_offset) / TILE_HEIGHT - ship_y - vert_offset / TILE_HEIGHT
+        x_offset, y_offset, vert_offset = self._ship.get_offsets()
+        tile_x = self._cur_x / TILE_WIDTH - ship_x - x_offset
+        tile_y = self._cur_y / TILE_HEIGHT - ship_y - y_offset - vert_offset / TILE_HEIGHT
         # GridMap and PathFinder expect to see Y, X
         return (tile_y, tile_x)
   
@@ -211,33 +210,29 @@ class Person(pygame.sprite.Sprite):
         corresponding to the map/grid, taking offsets and ship
         position into account."""
         ship_x, ship_y = self._ship.get_pos()
-        x_offset, y_offset, vert_offset, floor_x_offset, floor_y_offset = self._ship.get_offsets()
-        tile_x = (self._dst_x + floor_x_offset) / TILE_WIDTH - ship_x
-        tile_y = (self._dst_y + floor_y_offset) / TILE_HEIGHT - ship_y - vert_offset / TILE_HEIGHT
+        x_offset, y_offset, vert_offset = self._ship.get_offsets()
+        tile_x = self._dst_x / TILE_WIDTH - ship_x - x_offset
+        tile_y = self._dst_y / TILE_HEIGHT - ship_y - y_offset - vert_offset / TILE_HEIGHT
         # jesus, this is all it was... because GridMap and PathFinder
         # expect things in Y, X format!
         return (tile_y, tile_x)
     
     def goal_tile(self):
-        """This method sets the goal tile... the tile that we're going
-        to be setting a path to."""
         ship_x, ship_y = self._ship.get_pos()
-        x_offset, y_offset, vert_offset, floor_x_offset, floor_y_offset = self._ship.get_offsets()
-        tile_x = (self._goal_x + floor_x_offset) / TILE_WIDTH - ship_x - x_offset
-        tile_y = (self._goal_y + floor_y_offset) / TILE_HEIGHT - ship_y - vert_offset / TILE_HEIGHT
+        x_offset, y_offset, vert_offset = self._ship.get_offsets()
+        tile_x = self._goal_x / TILE_WIDTH - ship_x - x_offset
+        tile_y = self._goal_y / TILE_HEIGHT - ship_y - y_offset - vert_offset / TILE_HEIGHT
         # don't forget these are reversed in pathfinder module
         return (tile_y, tile_x)
 
     def seek_tile(self, tile_pos):
-        """This method sends a player walking straight to a particular
-        tile."""
         ship_x, ship_y = self._ship.get_pos()
-        x_offset, y_offset, vert_offset, floor_x_offset, floor_y_offset = self._ship.get_offsets()
+        x_offset, y_offset, vert_offset = self._ship.get_offsets()
         # we're getting this tile position from pathfinder module,
         # it'll be in reverse
         tile_y, tile_x = tile_pos
-        self._dst_x = (tile_x + ship_x) * TILE_WIDTH + floor_x_offset
-        self._dst_y = (tile_y + ship_y) * TILE_HEIGHT + vert_offset + floor_y_offset
+        self._dst_x = (tile_x + ship_x + x_offset) * TILE_WIDTH
+        self._dst_y = (tile_y + ship_y + y_offset) * TILE_HEIGHT + vert_offset
 
     def _round_tile(self, coord):
         """This method ensures that seek_pos() can't choose any old
