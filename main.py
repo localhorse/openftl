@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     # these coordinates are not screen coordinates, but rather X *
     # TILE_WIDTH would be the X screen coordinate
-    player_ship = Ship("fed_cruiser", (5, 4))
+    player_ship = Ship("kestral", (5, 4))
 
     human = Person("human", 0, player_ship.get_room_pos(0), 100, 12)
     human.add_to_ship(player_ship)

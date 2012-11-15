@@ -60,4 +60,11 @@
   have to be methods of Ship or have access to Ship, because that
   class contains the necessary offsets to describe the correct
   location (from the FTL data files). Either that or we'll have to
-  move the ship loading out of Ship class which makes less sense.
+  move the ship loading out of Ship class which makes less sense. (To
+  add a note regarding the issue of coordinates, we don't need to and
+  shouldn't be limiting the ship sprite to a tile position. All tile
+  positions can be relative to the ship, the ship should be able to go
+  wherever. Also, Person positions should be relative to the ship, not
+  the screen.)
+   
+- I think it's about time to "refactor"!
